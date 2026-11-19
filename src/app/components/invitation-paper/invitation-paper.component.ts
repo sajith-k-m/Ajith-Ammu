@@ -24,8 +24,12 @@ import { Component, input } from '@angular/core';
       <div class="curl-shadow curl-top" aria-hidden="true"></div>
       <div class="curl-shadow curl-bottom" aria-hidden="true"></div>
 
-      <!-- Real HTML Handwritten Text -->
-      <div class="paper-content" aria-label="Wedding Invitation Details">
+      <!-- Real HTML Handwritten Text (strictly hidden until unroll finishes) -->
+      <div
+        class="paper-content"
+        [class.show-content]="animateText() || textVisible()"
+        aria-label="Wedding Invitation Details"
+      >
         
         <!-- Block 1: Caveat narrative -->
         <div class="text-block block-1">
@@ -109,25 +113,37 @@ import { Component, input } from '@angular/core';
       filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.45));
     }
 
-    /* Soft dark gradient overlays to suggest curl during opening */
+    /* Deep curl shadows to give parchment 3D curvature at the rods */
     .curl-shadow {
       position: absolute;
       left: 0;
       right: 0;
-      height: 35px;
+      height: 48px;
       pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.5s ease-out;
+      opacity: 0.2;
+      transition: opacity 0.6s ease-out;
       z-index: 2;
 
       &.curl-top {
         top: 0;
-        background: linear-gradient(to bottom, rgba(30, 15, 10, 0.55) 0%, rgba(30, 15, 10, 0) 100%);
+        background: linear-gradient(
+          to bottom,
+          rgba(20, 8, 4, 0.75) 0%,
+          rgba(40, 18, 8, 0.45) 35%,
+          rgba(60, 30, 15, 0.15) 70%,
+          transparent 100%
+        );
       }
 
       &.curl-bottom {
         bottom: 0;
-        background: linear-gradient(to top, rgba(30, 15, 10, 0.55) 0%, rgba(30, 15, 10, 0) 100%);
+        background: linear-gradient(
+          to top,
+          rgba(20, 8, 4, 0.75) 0%,
+          rgba(40, 18, 8, 0.45) 35%,
+          rgba(60, 30, 15, 0.15) 70%,
+          transparent 100%
+        );
       }
     }
 
@@ -135,7 +151,7 @@ import { Component, input } from '@angular/core';
       opacity: 1;
     }
 
-    /* Text Container & Positioning - compact, natural handwriting without giant gaps */
+    /* Text Container & Positioning - strictly hidden until unroll is complete */
     .paper-content {
       position: absolute;
       inset: 0;
@@ -150,6 +166,14 @@ import { Component, input } from '@angular/core';
       color: rgba(59, 42, 26, 0.95);
       box-sizing: border-box;
       pointer-events: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-in, visibility 0.3s;
+
+      &.show-content {
+        opacity: 1;
+        visibility: visible;
+      }
     }
 
     .text-block {
