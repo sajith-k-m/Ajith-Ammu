@@ -71,14 +71,19 @@ type SceneStep = 'loading' | 'rolled' | 'crossfade' | 'unrolling' | 'text' | 'ca
               [class.stacked]="step() === 'crossfade'"
               [class.hidden]="step() === 'loading' || step() === 'rolled'"
             >
-              <img
-                src="assets/images/rod.webp"
-                alt=""
-                width="952"
-                height="83"
-                class="rod-img"
-                aria-hidden="true"
-              />
+              <div class="rod-roller roller-top">
+                <img
+                  src="assets/images/rod.webp"
+                  alt=""
+                  width="952"
+                  height="83"
+                  class="rod-img"
+                  aria-hidden="true"
+                />
+                <!-- Dynamic cylinder surface texture rotation effect -->
+                <div class="rod-surface-roll roll-up" [style.-webkit-mask-image]="rodMaskUrl" [style.mask-image]="rodMaskUrl" aria-hidden="true"></div>
+                <div class="rod-specular-glint glint-up" [style.-webkit-mask-image]="rodMaskUrl" [style.mask-image]="rodMaskUrl" aria-hidden="true"></div>
+              </div>
             </div>
 
             <!-- Paper with clip-path from center outward -->
@@ -103,14 +108,19 @@ type SceneStep = 'loading' | 'rolled' | 'crossfade' | 'unrolling' | 'text' | 'ca
               [class.stacked]="step() === 'crossfade'"
               [class.hidden]="step() === 'loading' || step() === 'rolled'"
             >
-              <img
-                src="assets/images/rod.webp"
-                alt=""
-                width="952"
-                height="83"
-                class="rod-img"
-                aria-hidden="true"
-              />
+              <div class="rod-roller roller-bottom">
+                <img
+                  src="assets/images/rod.webp"
+                  alt=""
+                  width="952"
+                  height="83"
+                  class="rod-img"
+                  aria-hidden="true"
+                />
+                <!-- Dynamic cylinder surface texture rotation effect -->
+                <div class="rod-surface-roll roll-down" [style.-webkit-mask-image]="rodMaskUrl" [style.mask-image]="rodMaskUrl" aria-hidden="true"></div>
+                <div class="rod-specular-glint glint-down" [style.-webkit-mask-image]="rodMaskUrl" [style.mask-image]="rodMaskUrl" aria-hidden="true"></div>
+              </div>
             </div>
 
             <!-- Rolled Scroll (Step 1 & fades out during Step 2) -->
@@ -412,11 +422,97 @@ type SceneStep = 'loading' | 'rolled' | 'crossfade' | 'unrolling' | 'text' | 'ca
         display: none;
       }
 
+      .rod-roller {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+      }
+
+      &.unrolling .roller-top {
+        animation: mechanicalRollTop 0.42s ease-in-out infinite alternate;
+      }
+
+      &.unrolling .roller-bottom {
+        animation: mechanicalRollBottom 0.42s ease-in-out infinite alternate;
+      }
+
       .rod-img {
         width: 100%;
         height: 100%;
         display: block;
         object-fit: fill;
+      }
+
+      /* Cylindrical surface shadow/highlight sweep for rolling realism */
+      .rod-surface-roll {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        -webkit-mask-size: 100% 100%;
+        mask-size: 100% 100%;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0) 0px,
+          rgba(255, 235, 180, 0.38) 10px,
+          rgba(0, 0, 0, 0) 20px,
+          rgba(25, 8, 2, 0.65) 30px,
+          rgba(0, 0, 0, 0) 40px
+        );
+        background-size: 100% 40px;
+        mix-blend-mode: overlay;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      &.unrolling .rod-surface-roll {
+        opacity: 1;
+
+        &.roll-up {
+          animation: rollTextureUp 0.32s linear infinite;
+        }
+
+        &.roll-down {
+          animation: rollTextureDown 0.32s linear infinite;
+        }
+      }
+
+      /* Specular lighting glint sweeping across turning cylinder */
+      .rod-specular-glint {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        -webkit-mask-size: 100% 100%;
+        mask-size: 100% 100%;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        background: linear-gradient(
+          to bottom,
+          transparent 0%,
+          rgba(255, 240, 200, 0.3) 30%,
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 240, 200, 0.3) 70%,
+          transparent 100%
+        );
+        background-size: 100% 24px;
+        background-repeat: no-repeat;
+        mix-blend-mode: soft-light;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      &.unrolling .rod-specular-glint {
+        opacity: 1;
+
+        &.glint-up {
+          animation: glintCycleUp 0.42s ease-in-out infinite;
+        }
+
+        &.glint-down {
+          animation: glintCycleDown 0.42s ease-in-out infinite;
+        }
       }
 
       &.rod-top {
@@ -488,6 +584,60 @@ type SceneStep = 'loading' | 'rolled' | 'crossfade' | 'unrolling' | 'text' | 'ca
       }
     }
 
+    @keyframes rollTextureUp {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 0 -40px;
+      }
+    }
+
+    @keyframes rollTextureDown {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 0 40px;
+      }
+    }
+
+    @keyframes glintCycleUp {
+      0% {
+        background-position: 0 100%;
+      }
+      100% {
+        background-position: 0 -24px;
+      }
+    }
+
+    @keyframes glintCycleDown {
+      0% {
+        background-position: 0 -24px;
+      }
+      100% {
+        background-position: 0 100%;
+      }
+    }
+
+    @keyframes mechanicalRollTop {
+      0% {
+        transform: perspective(600px) rotateX(10deg) scaleY(0.96) translateY(-0.8px);
+      }
+      100% {
+        transform: perspective(600px) rotateX(-10deg) scaleY(1.04) translateY(0.8px);
+      }
+    }
+
+    @keyframes mechanicalRollBottom {
+      0% {
+        transform: perspective(600px) rotateX(-10deg) scaleY(0.96) translateY(0.8px);
+      }
+      100% {
+        transform: perspective(600px) rotateX(10deg) scaleY(1.04) translateY(-0.8px);
+      }
+    }
+
     @keyframes cueBounce {
       0%, 100% {
         transform: translate(-50%, 0);
@@ -504,6 +654,7 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
   private readonly connectionService = inject(ConnectionService);
   readonly sceneCompleted = output<void>();
 
+  readonly rodMaskUrl = 'url("assets/images/rod.webp")';
   readonly step = signal<SceneStep>('loading');
   private mouseX = 0;
   private mouseY = 0;
