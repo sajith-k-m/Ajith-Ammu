@@ -68,7 +68,6 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
               class="rod rod-top"
               [class.unrolled]="isUnrolled()"
               [class.unrolling]="step() === 'unrolling'"
-              [class.hidden]="step() === 'loading' || step() === 'rolled'"
             >
               <div class="rod-roller roller-top">
                 <img
@@ -87,6 +86,8 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
                   aria-hidden="true"
                 ></div>
               </div>
+              <!-- Dynamic Parchment Curl Shadow traveling right under top rod -->
+              <div class="rod-curl-shadow curl-below" aria-hidden="true"></div>
             </div>
 
             <!-- Paper with clip-path from center outward -->
@@ -94,7 +95,6 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
               class="paper-reveal-window"
               [class.unrolled]="isUnrolled()"
               [class.unrolling]="step() === 'unrolling'"
-              [class.hidden]="step() === 'loading' || step() === 'rolled'"
             >
               <app-invitation-paper
                 [animateText]="step() === 'text'"
@@ -108,8 +108,9 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
               class="rod rod-bottom"
               [class.unrolled]="isUnrolled()"
               [class.unrolling]="step() === 'unrolling'"
-              [class.hidden]="step() === 'loading' || step() === 'rolled'"
             >
+              <!-- Dynamic Parchment Curl Shadow traveling right above bottom rod -->
+              <div class="rod-curl-shadow curl-above" aria-hidden="true"></div>
               <div class="rod-roller roller-bottom">
                 <img
                   src="assets/images/rod.webp"
@@ -134,7 +135,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
               class="rolled-scroll"
               [class.visible]="step() === 'rolled'"
               [class.unrolling]="step() === 'unrolling'"
-              [class.hidden]="step() !== 'rolled' && step() !== 'unrolling'"
+              [class.faded-out]="isUnrolled()"
             >
               <img
                 src="assets/images/rolled.webp"
@@ -344,7 +345,6 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       z-index: 25;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 
       &.visible {
         opacity: 1;
@@ -352,11 +352,10 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       }
 
       &.unrolling {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(1.02);
+        animation: fadeOutRolled 0.4s ease-out forwards;
       }
 
-      &.hidden {
+      &.faded-out {
         display: none;
       }
 
@@ -388,6 +387,17 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       }
     }
 
+    @keyframes fadeOutRolled {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.02);
+      }
+    }
+
     /* Paper Reveal Window (Unroll via clip-path) */
     .paper-reveal-window {
       position: absolute;
@@ -395,25 +405,33 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       width: 100%;
       height: 100%;
       z-index: 15;
-      /* Starts folded at the center horizontal line */
+      /* Initial state: completely hidden and collapsed at center */
+      opacity: 0;
       clip-path: inset(50% 0 50% 0);
 
-      &.hidden {
-        display: none;
-      }
-
       &.unrolling {
-        transition: clip-path 3.2s cubic-bezier(0.25, 1, 0.4, 1);
-        clip-path: inset(0% 0 0% 0);
+        animation: unrollPaper 2.8s cubic-bezier(0.45, 0, 0.25, 1) forwards;
       }
 
       &.unrolled {
+        opacity: 1;
         clip-path: inset(0% 0 0% 0);
       }
     }
 
     .is-animating .paper-reveal-window {
       will-change: clip-path;
+    }
+
+    @keyframes unrollPaper {
+      0% {
+        opacity: 1;
+        clip-path: inset(50% 0 50% 0);
+      }
+      100% {
+        opacity: 1;
+        clip-path: inset(0% 0 0% 0);
+      }
     }
 
     /* Rods (Top and Bottom) - Mathematically aligned to wooden shaft with 4px overlap */
@@ -423,24 +441,15 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       width: var(--rod-w);
       height: var(--rod-h);
       z-index: 20;
-
-      &.hidden {
-        display: none;
-      }
+      /* Hidden before unrolling starts - zero artifacts, no 3-roll glitch */
+      opacity: 0;
+      pointer-events: none;
 
       .rod-roller {
         position: relative;
         width: 100%;
         height: 100%;
-        transform-style: preserve-3d;
-      }
-
-      &.unrolling .roller-top {
-        animation: mechanicalRollTop 0.45s ease-in-out infinite alternate;
-      }
-
-      &.unrolling .roller-bottom {
-        animation: mechanicalRollBottom 0.45s ease-in-out infinite alternate;
+        z-index: 2;
       }
 
       .rod-img {
@@ -451,7 +460,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
         filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.4));
       }
 
-      /* Cylindrical specular highlight sweep for rolling realism */
+      /* Cylindrical specular highlight & woodgrain sweep for true rotary realism */
       .rod-surface-roll {
         position: absolute;
         inset: 0;
@@ -460,61 +469,107 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
         mask-size: 100% 100%;
         -webkit-mask-repeat: no-repeat;
         mask-repeat: no-repeat;
-        background: linear-gradient(
+        background: repeating-linear-gradient(
           to bottom,
-          transparent 0%,
-          rgba(255, 235, 180, 0.2) 25%,
-          rgba(255, 255, 255, 0.45) 50%,
-          rgba(255, 235, 180, 0.2) 75%,
-          transparent 100%
+          rgba(255, 248, 220, 0) 0px,
+          rgba(255, 240, 200, 0.22) 5px,
+          rgba(255, 255, 255, 0.65) 10px,
+          rgba(255, 240, 200, 0.25) 15px,
+          rgba(255, 248, 220, 0) 20px,
+          rgba(20, 10, 4, 0.2) 25px,
+          rgba(10, 4, 2, 0.55) 32px,
+          rgba(20, 10, 4, 0.2) 38px,
+          rgba(255, 248, 220, 0) 44px
         );
-        background-size: 100% 36px;
-        background-repeat: no-repeat;
-        mix-blend-mode: soft-light;
+        background-size: 100% 44px;
+        background-repeat: repeat-y;
+        mix-blend-mode: overlay;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.4s ease;
       }
 
       &.unrolling .rod-surface-roll {
-        opacity: 1;
+        opacity: 0.95;
 
         &.roll-up {
-          animation: rollLightUp 0.48s ease-in-out infinite;
+          animation: rollSurfaceUp 2.8s cubic-bezier(0.45, 0, 0.25, 1) forwards;
         }
 
         &.roll-down {
-          animation: rollLightDown 0.48s ease-in-out infinite;
+          animation: rollSurfaceDown 2.8s cubic-bezier(0.45, 0, 0.25, 1) forwards;
         }
       }
 
-      /* Top Rod: Wooden shaft bottom edge meets paper top with 4px overlap */
+      /* Top Rod */
       &.rod-top {
         top: 0;
         transform: translate(-50%, calc(-100% + (var(--rod-h) * 0.193) + 4px + (var(--paper-h) / 2)));
 
         &.unrolling {
-          transition: transform 3.2s cubic-bezier(0.25, 1, 0.4, 1);
-          transform: translate(-50%, calc(-100% + (var(--rod-h) * 0.193) + 4px));
+          animation: unrollTopRod 2.8s cubic-bezier(0.45, 0, 0.25, 1) forwards;
         }
 
         &.unrolled {
+          opacity: 1;
           transform: translate(-50%, calc(-100% + (var(--rod-h) * 0.193) + 4px));
         }
       }
 
-      /* Bottom Rod: Wooden shaft top edge meets paper bottom with 4px overlap */
+      /* Bottom Rod */
       &.rod-bottom {
         bottom: 0;
         transform: translate(-50%, calc(100% - (var(--rod-h) * 0.181) - 4px - (var(--paper-h) / 2)));
 
         &.unrolling {
-          transition: transform 3.2s cubic-bezier(0.25, 1, 0.4, 1);
-          transform: translate(-50%, calc(100% - (var(--rod-h) * 0.181) - 4px));
+          animation: unrollBottomRod 2.8s cubic-bezier(0.45, 0, 0.25, 1) forwards;
         }
 
         &.unrolled {
+          opacity: 1;
           transform: translate(-50%, calc(100% - (var(--rod-h) * 0.181) - 4px));
         }
+      }
+
+      /* 3D Parchment Curl Shadows moving synchronously with the rods */
+      .rod-curl-shadow {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--paper-w);
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.22;
+        transition: opacity 0.5s ease-out;
+
+        &.curl-below {
+          top: calc(var(--rod-h) * 0.807 - 2px);
+          height: 38px;
+          background: linear-gradient(
+            to bottom,
+            rgba(15, 6, 2, 0.75) 0%,
+            rgba(35, 15, 6, 0.4) 35%,
+            rgba(50, 22, 10, 0.12) 70%,
+            transparent 100%
+          );
+          filter: blur(1px);
+        }
+
+        &.curl-above {
+          bottom: calc(var(--rod-h) * 0.819 - 2px);
+          height: 38px;
+          background: linear-gradient(
+            to top,
+            rgba(15, 6, 2, 0.75) 0%,
+            rgba(35, 15, 6, 0.4) 35%,
+            rgba(50, 22, 10, 0.12) 70%,
+            transparent 100%
+          );
+          filter: blur(1px);
+        }
+      }
+
+      &.unrolling .rod-curl-shadow {
+        opacity: 1;
       }
     }
 
@@ -522,45 +577,43 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       will-change: transform;
     }
 
-    @keyframes rollLightUp {
+    @keyframes unrollTopRod {
       0% {
-        background-position: 0 100%;
+        opacity: 1;
+        transform: translate(-50%, calc(-100% + (var(--rod-h) * 0.193) + 4px + (var(--paper-h) / 2)));
       }
       100% {
-        background-position: 0 -36px;
+        opacity: 1;
+        transform: translate(-50%, calc(-100% + (var(--rod-h) * 0.193) + 4px));
       }
     }
 
-    @keyframes rollLightDown {
+    @keyframes unrollBottomRod {
       0% {
-        background-position: 0 -36px;
+        opacity: 1;
+        transform: translate(-50%, calc(100% - (var(--rod-h) * 0.181) - 4px - (var(--paper-h) / 2)));
       }
       100% {
-        background-position: 0 100%;
+        opacity: 1;
+        transform: translate(-50%, calc(100% - (var(--rod-h) * 0.181) - 4px));
       }
     }
 
-    @keyframes mechanicalRollTop {
+    @keyframes rollSurfaceUp {
       0% {
-        transform: perspective(600px) rotateX(8deg) scaleY(0.97);
-      }
-      50% {
-        transform: perspective(600px) rotateX(-8deg) scaleY(1.03);
+        background-position: 0 0px;
       }
       100% {
-        transform: perspective(600px) rotateX(8deg) scaleY(0.97);
+        background-position: 0 -264px;
       }
     }
 
-    @keyframes mechanicalRollBottom {
+    @keyframes rollSurfaceDown {
       0% {
-        transform: perspective(600px) rotateX(-8deg) scaleY(0.97);
-      }
-      50% {
-        transform: perspective(600px) rotateX(8deg) scaleY(1.03);
+        background-position: 0 0px;
       }
       100% {
-        transform: perspective(600px) rotateX(-8deg) scaleY(0.97);
+        background-position: 0 264px;
       }
     }
 
@@ -707,17 +760,17 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
       this.step.set('unrolling');
     }, 1500);
 
-    // 3. (at 4.7s) Unroll completes, rods settle, text reveals line by line
+    // 3. (at 4.3s) Unroll completes (2.8s duration), rods settle, text reveals line by line
     this.schedule(() => {
       this.step.set('text');
-    }, 4700);
+    }, 4300);
 
     // 4. (at 6.8s) Camera move: drifts up & right, zooms in
     this.schedule(() => {
       this.step.set('camera');
     }, 6800);
 
-    // 5. (~8s) Completed: unlock vertical page scroll
+    // 5. (~8.0s) Completed: unlock vertical page scroll
     this.schedule(() => {
       this.finishIntro();
     }, 8000);
