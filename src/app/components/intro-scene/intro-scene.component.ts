@@ -68,7 +68,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
               class="rod rod-top"
               [class.unrolled]="isUnrolled()"
               [class.unrolling]="step() === 'unrolling'"
-              [class.hidden]="step() === 'loading'"
+              [class.hidden]="step() === 'loading' || step() === 'rolled'"
             >
               <div class="rod-roller roller-top">
                 <img
@@ -94,7 +94,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
               class="paper-reveal-window"
               [class.unrolled]="isUnrolled()"
               [class.unrolling]="step() === 'unrolling'"
-              [class.hidden]="step() === 'loading'"
+              [class.hidden]="step() === 'loading' || step() === 'rolled'"
             >
               <app-invitation-paper
                 [animateText]="step() === 'text'"
@@ -108,7 +108,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
               class="rod rod-bottom"
               [class.unrolled]="isUnrolled()"
               [class.unrolling]="step() === 'unrolling'"
-              [class.hidden]="step() === 'loading'"
+              [class.hidden]="step() === 'loading' || step() === 'rolled'"
             >
               <div class="rod-roller roller-bottom">
                 <img
