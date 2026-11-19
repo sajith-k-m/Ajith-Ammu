@@ -1,0 +1,26 @@
+@import '@fontsource/caveat/latin-500.css';
+@import '@fontsource/caveat/latin-700.css';
+@import '@fontsource/chilanka/malayalam-400.css';
+@import '@fontsource/chilanka/latin-400.css';
+
+:root {
+  --font-caveat: 'Caveat', cursive;
+  --font-chilanka: 'Chilanka', cursive;
+  --font-invitation: 'Caveat', 'Chilanka', cursive;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background-color: #12080a;
+  color: #f7e6c4;
+  font-family: var(--font-invitation);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
