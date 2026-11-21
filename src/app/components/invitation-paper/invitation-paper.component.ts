@@ -30,7 +30,7 @@ import { Component, input } from '@angular/core';
         <!-- Block 1: Caveat narrative -->
         <div class="text-block block-1">
           <p class="reveal-line line-1">Once upon a time, Ammu met Ajith.</p>
-          <p class="reveal-line line-2">They laughed together, made thousands of little memories, annoyed each other a little,</p>
+          <p class="reveal-line line-2">They laughed together, made thousands of little memories,<br>annoyed each other a little,</p>
           <p class="reveal-line line-3">and finally decided</p>
           <p class="reveal-line line-4">&ldquo;Okay, let's do this forever.&rdquo;</p>
           <p class="reveal-line line-5">So now, with happy hearts and a whole lot of excitement</p>
@@ -99,11 +99,10 @@ import { Component, input } from '@angular/core';
       z-index: 3;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
       text-align: center;
-      padding: 8% 16%;
-      gap: clamp(14px, 4.8cqw, 32px);
+      padding: 9% 11% 8.5% 11%;
       color: #24130c;
       text-shadow: 0 0.5px 1px rgba(255, 245, 220, 0.45);
       box-sizing: border-box;
@@ -111,6 +110,7 @@ import { Component, input } from '@angular/core';
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.3s ease-in, visibility 0.3s;
+      text-wrap: balance;
 
       &.show-content {
         opacity: 1;
@@ -150,10 +150,9 @@ import { Component, input } from '@angular/core';
     /* Block 1 (Caveat) - Larger, comfortable reading */
     .block-1 {
       font-family: var(--font-caveat);
-      font-size: clamp(15px, 4.7cqw, 23px);
-      line-height: 1.25;
+      font-size: clamp(15px, 5.1cqw, 24px);
+      line-height: 1.32;
       font-weight: 600;
-      gap: 0.15cqw;
     }
 
     /* Block 2 (Caveat) - Prominent hero names */
@@ -161,16 +160,16 @@ import { Component, input } from '@angular/core';
       font-family: var(--font-caveat);
 
       .names-title {
-        font-size: clamp(30px, 9.8cqw, 48px);
+        font-size: clamp(32px, 11cqw, 60px);
         font-weight: 700;
         line-height: 1.05;
       }
 
       .getting-married {
-        font-size: clamp(15.5px, 5.2cqw, 25px);
+        font-size: clamp(15.5px, 5.2cqw, 26px);
         font-weight: 600;
-        line-height: 1.2;
-        margin-top: 0.15cqw;
+        line-height: 1.22;
+        margin-top: 0.3cqw;
       }
     }
 
@@ -179,9 +178,10 @@ import { Component, input } from '@angular/core';
       font-family: var(--font-caveat);
 
       .sign-off {
-        margin-top: 0.2cqw;
         font-weight: 700;
-        font-size: clamp(21px, 7.5cqw, 38px);
+        font-size: clamp(19.5px, 7.2cqw, 38px);
+        line-height: 1.15;
+        white-space: nowrap;
       }
     }
 

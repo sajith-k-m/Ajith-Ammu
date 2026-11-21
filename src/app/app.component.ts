@@ -84,7 +84,7 @@ import { DetailsSectionComponent } from './components/details-section/details-se
 
     .suspended-details-wrapper {
       position: absolute;
-      top: 36%;
+      top: 48%;
       left: 0;
       right: 0;
       width: 100%;
@@ -100,7 +100,7 @@ import { DetailsSectionComponent } from './components/details-section/details-se
       }
 
       @media (min-width: 768px) {
-        top: 37%;
+        top: 46.5%;
       }
     }
 

@@ -189,34 +189,51 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
       overflow: hidden;
 
       /* Mathematical sizing calculations based on royal scroll proportions */
-      --scroll-w: min(92vw, calc(82vh * 924 / 1212), 640px);
+      /* Mobile / Portrait: Rod is 92vw (handles clear edges with 4vw margin), height fits comfortably */
+      --scroll-w: min(92vw, calc(85vh * 924 / 1200), 520px);
       --rod-w: var(--scroll-w);
       --paper-w: calc(var(--scroll-w) * 664 / 924);
       --paper-h: calc(var(--paper-w) * 914 / 664);
       --rod-top-h: calc(var(--scroll-w) * 160 / 924);
       --rod-bot-h: calc(var(--scroll-w) * 138 / 924);
       --overlap: calc(var(--scroll-w) * 6 / 924);
+
+      /* Desktop / Laptop screens (769px and above): Scroll scales grandly to fill viewport height elegantly up to 740px */
+      @media (min-width: 769px) {
+        --scroll-w: min(88vw, calc(88vh * 924 / 1200), 740px);
+      }
+
+      /* Large desktop monitors (1440p and 4K): Expand up to 800px */
+      @media (min-width: 1440px) {
+        --scroll-w: min(85vw, calc(89vh * 924 / 1200), 800px);
+      }
     }
 
     /* Background Aesthetics */
     .bg-vignette {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 48%, rgba(42, 18, 12, 0.92) 0%, #12080a 75%, #080304 100%);
+      background: radial-gradient(ellipse 70% 65% at 50% 50%, rgba(52, 22, 16, 0.95) 0%, rgba(32, 14, 12, 0.9) 45%, #14080a 75%, #080304 100%);
       pointer-events: none;
       z-index: 1;
     }
 
     .golden-glow {
       position: absolute;
-      width: min(85vw, 650px);
-      height: min(85vh, 700px);
+      width: min(90vw, 850px);
+      height: min(90vh, 850px);
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: radial-gradient(circle, rgba(212, 165, 90, 0.22) 0%, rgba(212, 165, 90, 0.08) 50%, transparent 75%);
+      background: radial-gradient(circle, rgba(212, 165, 90, 0.25) 0%, rgba(212, 165, 90, 0.1) 45%, transparent 75%);
       pointer-events: none;
       z-index: 2;
+
+      @media (min-width: 769px) {
+        width: min(90vw, 1100px);
+        height: min(92vh, 1000px);
+        background: radial-gradient(ellipse 65% 60% at 50% 50%, rgba(220, 170, 95, 0.28) 0%, rgba(212, 165, 90, 0.12) 48%, transparent 75%);
+      }
     }
 
     .bg-grain {
@@ -430,24 +447,24 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
     /* Scroll Cue */
     .scroll-cue {
       position: absolute;
-      bottom: 20px;
+      bottom: clamp(10px, 1.8vh, 18px);
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 2px;
       color: rgba(212, 165, 90, 0.7);
       font-family: var(--font-caveat);
-      font-size: 19px;
+      font-size: clamp(16px, 2.2cqw, 18px);
       letter-spacing: 0.04em;
       animation: cueBounce 2.2s ease-in-out infinite;
       z-index: 30;
       pointer-events: none;
 
       .cue-arrow {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
       }
     }
 
