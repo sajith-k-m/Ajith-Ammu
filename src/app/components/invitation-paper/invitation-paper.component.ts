@@ -79,9 +79,7 @@ import { Component, input } from '@angular/core';
 
         <!-- Block 5: Caveat Closing -->
         <div class="text-block block-5">
-          <p class="reveal-line line-13">We'd love to have you there to celebrate, and let's take silly pictures.</p>
-          <p class="reveal-line line-14">Bring your biggest smile, and a little space for Payasam.</p>
-          <p class="reveal-line line-15 sign-off">With love, Ammu &amp; Ajith</p>
+          <p class="reveal-line line-13 sign-off">With love, Ammu &amp; Ajith</p>
         </div>
 
       </div>
@@ -162,7 +160,7 @@ import { Component, input } from '@angular/core';
       align-items: center;
       text-align: center;
       padding: 5.5cqw 5.5cqw;
-      gap: 2.2cqw;
+      gap: 2.8cqw;
       color: rgba(59, 42, 26, 0.95);
       box-sizing: border-box;
       pointer-events: auto;
@@ -272,15 +270,11 @@ import { Component, input } from '@angular/core';
     /* Block 5 (Caveat) - Warm invitation sign-off */
     .block-5 {
       font-family: var(--font-caveat);
-      font-size: clamp(13px, 4.3cqw, 20.5px);
-      line-height: 1.22;
-      font-weight: 500;
-      gap: 0.15cqw;
 
       .sign-off {
-        margin-top: 0.35cqw;
+        margin-top: 0.2cqw;
         font-weight: 700;
-        font-size: clamp(16.5px, 5.8cqw, 28px);
+        font-size: clamp(17.5px, 6.2cqw, 30px);
       }
     }
 
@@ -315,8 +309,6 @@ import { Component, input } from '@angular/core';
       .line-11 { animation-delay: 1.40s; }
       .line-12 { animation-delay: 1.54s; }
       .line-13 { animation-delay: 1.68s; }
-      .line-14 { animation-delay: 1.82s; }
-      .line-15 { animation-delay: 1.96s; }
     }
 
     @keyframes handwritingReveal {
