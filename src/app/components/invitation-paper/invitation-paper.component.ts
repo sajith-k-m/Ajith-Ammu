@@ -44,17 +44,16 @@ import { Component, input } from '@angular/core';
         <div class="text-block block-2">
           <h1 class="reveal-line line-6 names-title">
             Ammu
-            <span class="heart-gold" aria-hidden="true">
-              <svg viewBox="0 0 24 24" class="gold-heart-svg">
+            <span class="heart-wine" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="wine-heart-svg">
                 <defs>
-                  <linearGradient id="goldHeartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#fae09a"/>
-                    <stop offset="35%" stop-color="#dfb25d"/>
-                    <stop offset="70%" stop-color="#c6953f"/>
-                    <stop offset="100%" stop-color="#8d621b"/>
+                  <linearGradient id="wineHeartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#992332"/>
+                    <stop offset="50%" stop-color="#761621"/>
+                    <stop offset="100%" stop-color="#540f17"/>
                   </linearGradient>
                 </defs>
-                <path fill="url(#goldHeartGrad)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                <path fill="url(#wineHeartGrad)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
               </svg>
             </span>
             Ajith
@@ -67,9 +66,9 @@ import { Component, input } from '@angular/core';
           <h2 class="reveal-line line-8 mal-sub">മീനത്തിൽ താലികെട്ട്</h2>
           <h1 class="reveal-line line-9 mal-names">
             അമ്മു
-            <span class="heart-gold" aria-hidden="true">
-              <svg viewBox="0 0 24 24" class="gold-heart-svg">
-                <path fill="url(#goldHeartGrad)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            <span class="heart-wine" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="wine-heart-svg">
+                <path fill="url(#wineHeartGrad)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
               </svg>
             </span>
             അജിത്ത്
@@ -211,19 +210,19 @@ import { Component, input } from '@angular/core';
       letter-spacing: 0.01em;
     }
 
-    .heart-gold {
+    .heart-wine {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      vertical-align: -0.06em;
-      margin: 0 0.22em;
+      vertical-align: -0.05em;
+      margin: 0 0.2em;
       line-height: 1;
 
-      .gold-heart-svg {
+      .wine-heart-svg {
         width: 0.74em;
         height: 0.74em;
         display: block;
-        filter: drop-shadow(0 1px 2px rgba(120, 80, 20, 0.38));
+        filter: drop-shadow(0 1.2px 2px rgba(60, 10, 15, 0.35));
       }
     }
 
