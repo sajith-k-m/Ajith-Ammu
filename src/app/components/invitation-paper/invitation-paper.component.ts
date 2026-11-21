@@ -20,10 +20,6 @@ import { Component, input } from '@angular/core';
         fetchpriority="high"
       />
 
-      <!-- Soft dark gradient curl overlays during unrolling -->
-      <div class="curl-shadow curl-top" aria-hidden="true"></div>
-      <div class="curl-shadow curl-bottom" aria-hidden="true"></div>
-
       <!-- Real HTML Handwritten Text (strictly hidden until unroll finishes) -->
       <div
         class="paper-content"
@@ -95,43 +91,6 @@ import { Component, input } from '@angular/core';
       filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.45));
     }
 
-    /* Deep curl shadows to give parchment 3D curvature at the rods */
-    .curl-shadow {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 48px;
-      pointer-events: none;
-      opacity: 0.2;
-      transition: opacity 0.6s ease-out;
-      z-index: 2;
-
-      &.curl-top {
-        top: 0;
-        background: linear-gradient(
-          to bottom,
-          rgba(20, 8, 4, 0.75) 0%,
-          rgba(40, 18, 8, 0.45) 35%,
-          rgba(60, 30, 15, 0.15) 70%,
-          transparent 100%
-        );
-      }
-
-      &.curl-bottom {
-        bottom: 0;
-        background: linear-gradient(
-          to top,
-          rgba(20, 8, 4, 0.75) 0%,
-          rgba(40, 18, 8, 0.45) 35%,
-          rgba(60, 30, 15, 0.15) 70%,
-          transparent 100%
-        );
-      }
-    }
-
-    .paper-container.curling .curl-shadow {
-      opacity: 1;
-    }
 
     /* Text Container & Positioning - framed within the baroque flourishes */
     .paper-content {

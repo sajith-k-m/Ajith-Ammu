@@ -2,7 +2,6 @@ import {
   Component,
   OnInit,
   OnDestroy,
-  ElementRef,
   inject,
   signal,
   computed,
@@ -14,7 +13,7 @@ import { CommonModule } from '@angular/common';
 import { InvitationPaperComponent } from '../invitation-paper/invitation-paper.component';
 import { ConnectionService } from '../../services/connection.service';
 
-type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'completed';
+type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
 
 @Component({
   selector: 'app-intro-scene',
@@ -43,33 +42,31 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
         </button>
       }
 
-      <!-- Tiny Centered Loader (Step 0) -->
+      <!-- Centered Minimal Loader -->
       @if (step() === 'loading') {
         <div class="loader-overlay" aria-live="polite" aria-label="Loading invitation">
           <div class="spinner"></div>
         </div>
       }
 
-      <!-- Camera Rig (moves the whole scene during Step 5 or rolls up) -->
+      <!-- Camera Rig (moves scene up slightly during user scroll) -->
       <div
         class="camera-rig"
-        [class.camera-shifted]="isCameraShifted()"
-        [class.camera-moving]="step() === 'camera'"
         [style.transform]="cameraTransform()"
       >
-        <!-- Desktop Tilt / Mobile Sway Container -->
+        <!-- Desktop Tilt Stage -->
         <div
           class="tilt-stage"
           [style.transform]="tiltTransform()"
         >
-          <!-- Scroll Assembly (Paper + Rods + Rolled) -->
+          <!-- Scroll Assembly (Paper + Rods) -->
           <div class="scroll-assembly">
 
             <!-- Top Rod -->
             <div
               class="rod rod-top"
-              [class.unrolled]="isUnrolled()"
-              [class.unrolling]="step() === 'unrolling'"
+              [style.transform]="topRodTransform()"
+              [style.opacity]="rodsOpacity()"
             >
               <div class="rod-roller roller-top">
                 <img
@@ -81,14 +78,15 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
                   aria-hidden="true"
                 />
               </div>
+              <!-- Dynamic Parchment Curl Shadow traveling synchronously under top rod -->
+              <div class="rod-curl-shadow curl-below" aria-hidden="true"></div>
             </div>
 
-            <!-- Paper with clip-path from center outward and scroll-up roll from bottom -->
+            <!-- Paper with synchronized clip-path from center outward and scroll-up roll from bottom -->
             <div
               class="paper-reveal-window"
-              [class.unrolled]="isUnrolled()"
-              [class.unrolling]="step() === 'unrolling'"
               [style.clip-path]="paperClipPath()"
+              [style.opacity]="rodsOpacity()"
             >
               <app-invitation-paper
                 [animateText]="step() === 'text'"
@@ -100,10 +98,12 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
             <!-- Bottom Rod (rolls back up on user scroll) -->
             <div
               class="rod rod-bottom"
-              [class.unrolled]="isUnrolled()"
-              [class.unrolling]="step() === 'unrolling'"
               [style.transform]="bottomRodTransform()"
+              [style.opacity]="rodsOpacity()"
             >
+              <!-- Dynamic Parchment Curl Shadow traveling synchronously above bottom rod -->
+              <div class="rod-curl-shadow curl-above" aria-hidden="true"></div>
+
               <div class="rod-roller roller-bottom">
                 <img
                   src="assets/images/scroll-rod-bottom.webp"
@@ -118,7 +118,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
               <!-- Royal Golden Rope hanging from bottom rod center -->
               <div
                 class="golden-rope-container"
-                [style.transform]="'translateX(-50%) scaleY(' + ropeProgress() + ')'"
+                [style.transform]="goldenRopeTransform()"
                 [style.opacity]="ropeProgress()"
                 aria-hidden="true"
               >
@@ -147,23 +147,6 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
                   <line x1="53" y1="68" x2="53" y2="72" stroke="url(#ropeGrad)" stroke-width="1.2" stroke-linecap="round"/>
                 </svg>
               </div>
-            </div>
-
-            <!-- Rolled Scroll (Visible during initial bob, fades out seamlessly as unrolling begins) -->
-            <div
-              class="rolled-scroll"
-              [class.visible]="step() === 'rolled'"
-              [class.unrolling]="step() === 'unrolling'"
-              [class.faded-out]="isUnrolled()"
-            >
-              <img
-                src="assets/images/scroll-rolled.webp"
-                alt="Ammu & Ajith Wedding Scroll"
-                width="924"
-                height="330"
-                class="rolled-img"
-                fetchpriority="high"
-              />
             </div>
 
           </div>
@@ -205,14 +188,14 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       justify-content: center;
       overflow: hidden;
 
-      /* Sizing calculations based on royal scroll proportions */
+      /* Mathematical sizing calculations based on royal scroll proportions */
       --scroll-w: min(92vw, calc(82vh * 924 / 1248), 640px);
       --rod-w: var(--scroll-w);
       --paper-w: calc(var(--scroll-w) * 664 / 924);
       --paper-h: calc(var(--paper-w) * 914 / 664);
       --rod-top-h: calc(var(--scroll-w) * 174 / 924);
       --rod-bot-h: calc(var(--scroll-w) * 160 / 924);
-      --rolled-h: calc(var(--scroll-w) * 330 / 924);
+      --overlap: calc(var(--scroll-w) * 14 / 924);
     }
 
     /* Background Aesthetics */
@@ -236,7 +219,6 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       z-index: 2;
     }
 
-    /* Tiny static SVG feTurbulence grain data-URI (opacity 0.05, not animated) */
     .bg-grain {
       position: absolute;
       inset: 0;
@@ -262,7 +244,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       border-radius: 20px;
       cursor: pointer;
       backdrop-filter: blur(4px);
-      transition: opacity 0.3s ease, transform 0.2s ease;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
       display: flex;
       align-items: center;
       gap: 4px;
@@ -274,7 +256,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       }
     }
 
-    /* Tiny Centered Loader */
+    /* Centered Minimal Loader */
     .loader-overlay {
       position: absolute;
       inset: 0;
@@ -298,32 +280,17 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       to { transform: rotate(360deg); }
     }
 
-    /* Camera Rig (Handles Step 5 camera move) */
+    /* Camera Rig */
     .camera-rig {
       position: relative;
       z-index: 10;
       display: flex;
       align-items: center;
       justify-content: center;
-      transform: translate(0, 0) scale(1);
-      transition: transform 1s ease-out;
-
-      &.camera-shifted {
-        transform: translate(-3%, 4%) scale(0.94);
-        transition: none;
-      }
-
-      &.camera-moving {
-        transform: translate(0, 0) scale(1);
-        transition: transform 1s ease-out;
-      }
-    }
-
-    .is-animating .camera-rig {
       will-change: transform;
     }
 
-    /* Tilt Stage (Handles mouse tilt on desktop, idle sway on mobile) */
+    /* Tilt Stage */
     .tilt-stage {
       position: relative;
       display: flex;
@@ -358,116 +325,36 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.6));
     }
 
-    /* Rolled Scroll (Step 1: 0 to 1.5s, top-down view, floating bob) */
-    .rolled-scroll {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: var(--rod-w);
-      height: var(--rolled-h);
-      transform: translate(-50%, -50%);
-      z-index: 25;
-      opacity: 0;
-      pointer-events: none;
-
-      &.visible {
-        opacity: 1;
-        animation: rolledIn 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, bobFloat 2.6s ease-in-out infinite alternate;
-      }
-
-      &.unrolling {
-        animation: fadeOutRolled 0.4s ease-out forwards;
-      }
-
-      &.faded-out {
-        display: none;
-      }
-
-      .rolled-img {
-        width: 100%;
-        height: 100%;
-        display: block;
-        object-fit: fill;
-      }
-    }
-
-    @keyframes rolledIn {
-      0% {
-        transform: translate(-50%, -50%) scale(0.96);
-        opacity: 0;
-      }
-      100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-      }
-    }
-
-    @keyframes bobFloat {
-      0% {
-        transform: translate(-50%, calc(-50% - 3px));
-      }
-      100% {
-        transform: translate(-50%, calc(-50% + 3px));
-      }
-    }
-
-    @keyframes fadeOutRolled {
-      0% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(1.02);
-      }
-    }
-
-    /* Paper Reveal Window (Unroll via clip-path) */
+    /* Paper Reveal Window */
     .paper-reveal-window {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 15;
-      /* Initial state: completely hidden and collapsed at center */
-      opacity: 0;
-      clip-path: inset(50% 0 50% 0);
-
-      &.unrolling {
-        animation: unrollPaper 2.8s cubic-bezier(0.45, 0, 0.25, 1) forwards;
-      }
-
-      &.unrolled {
-        opacity: 1;
-        clip-path: inset(0% 0 0% 0);
-      }
-    }
-
-    .is-animating .paper-reveal-window {
+      z-index: 10;
+      transition: opacity 0.3s ease;
       will-change: clip-path;
     }
 
-    @keyframes unrollPaper {
-      0% {
-        opacity: 1;
-        clip-path: inset(50% 0 50% 0);
-      }
-      100% {
-        opacity: 1;
-        clip-path: inset(0% 0 0% 0);
-      }
-    }
-
-    /* Rods (Top and Bottom) - Mathematically aligned to wooden shaft with 4px overlap */
+    /* Rods (Top and Bottom) */
     .rod {
       position: absolute;
       left: 50%;
       width: var(--rod-w);
-      height: var(--rod-h);
       z-index: 20;
-      /* Hidden before unrolling starts - zero artifacts, no 3-roll glitch */
-      opacity: 0;
       pointer-events: none;
+      transition: opacity 0.3s ease;
+      will-change: transform;
+
+      &.rod-top {
+        top: 0;
+        height: var(--rod-top-h);
+      }
+
+      &.rod-bottom {
+        bottom: 0;
+        height: var(--rod-bot-h);
+      }
 
       .rod-roller {
         position: relative;
@@ -484,78 +371,6 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
         filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.4));
       }
 
-      /* Cylindrical specular highlight & woodgrain sweep for true rotary realism */
-      .rod-surface-roll {
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        -webkit-mask-size: 100% 100%;
-        mask-size: 100% 100%;
-        -webkit-mask-repeat: no-repeat;
-        mask-repeat: no-repeat;
-        background: repeating-linear-gradient(
-          to bottom,
-          rgba(255, 248, 220, 0) 0px,
-          rgba(255, 240, 200, 0.22) 5px,
-          rgba(255, 255, 255, 0.65) 10px,
-          rgba(255, 240, 200, 0.25) 15px,
-          rgba(255, 248, 220, 0) 20px,
-          rgba(20, 10, 4, 0.2) 25px,
-          rgba(10, 4, 2, 0.55) 32px,
-          rgba(20, 10, 4, 0.2) 38px,
-          rgba(255, 248, 220, 0) 44px
-        );
-        background-size: 100% 44px;
-        background-repeat: repeat-y;
-        mix-blend-mode: overlay;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-      }
-
-      &.unrolling .rod-surface-roll {
-        opacity: 0.95;
-
-        &.roll-up {
-          animation: rollSurfaceUp 2.8s cubic-bezier(0.45, 0, 0.25, 1) forwards;
-        }
-
-        &.roll-down {
-          animation: rollSurfaceDown 2.8s cubic-bezier(0.45, 0, 0.25, 1) forwards;
-        }
-      }
-
-      /* Top Rod */
-      &.rod-top {
-        top: 0;
-        height: var(--rod-top-h);
-        transform: translate(-50%, calc(-100% + 4px + (var(--paper-h) / 2)));
-
-        &.unrolling {
-          animation: unrollTopRod 2.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        &.unrolled {
-          opacity: 1;
-          transform: translate(-50%, calc(-100% + 4px));
-        }
-      }
-
-      /* Bottom Rod */
-      &.rod-bottom {
-        bottom: 0;
-        height: var(--rod-bot-h);
-        transform: translate(-50%, calc(100% - 4px - (var(--paper-h) / 2)));
-
-        &.unrolling {
-          animation: unrollBottomRod 2.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        &.unrolled {
-          opacity: 1;
-          transform: translate(-50%, calc(100% - 4px));
-        }
-      }
-
       /* 3D Parchment Curl Shadows moving synchronously with the rods */
       .rod-curl-shadow {
         position: absolute;
@@ -564,11 +379,9 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
         width: var(--paper-w);
         pointer-events: none;
         z-index: 1;
-        opacity: 0.22;
-        transition: opacity 0.5s ease-out;
 
         &.curl-below {
-          top: calc(var(--rod-h) * 0.807 - 2px);
+          top: calc(100% - var(--overlap));
           height: 38px;
           background: linear-gradient(
             to bottom,
@@ -581,7 +394,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
         }
 
         &.curl-above {
-          bottom: calc(var(--rod-h) * 0.819 - 2px);
+          bottom: calc(100% - var(--overlap));
           height: 38px;
           background: linear-gradient(
             to top,
@@ -593,53 +406,24 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
           filter: blur(1px);
         }
       }
-
-      &.unrolling .rod-curl-shadow {
-        opacity: 1;
-      }
     }
 
-    .is-animating .rod {
-      will-change: transform;
-    }
+    /* Royal Golden Rope Hanging from Bottom Roller */
+    .golden-rope-container {
+      position: absolute;
+      top: calc(100% - 10px);
+      left: 50%;
+      transform-origin: top center;
+      transform: translateX(-50%) scaleY(0);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+      transition: opacity 0.1s ease-out;
 
-    @keyframes unrollTopRod {
-      0% {
-        opacity: 1;
-        transform: translate(-50%, calc(-100% + 4px + (var(--paper-h) / 2)));
-      }
-      100% {
-        opacity: 1;
-        transform: translate(-50%, calc(-100% + 4px));
-      }
-    }
-
-    @keyframes unrollBottomRod {
-      0% {
-        opacity: 1;
-        transform: translate(-50%, calc(100% - 4px - (var(--paper-h) / 2)));
-      }
-      100% {
-        opacity: 1;
-        transform: translate(-50%, calc(100% - 4px));
-      }
-    }
-
-    @keyframes rollSurfaceUp {
-      0% {
-        background-position: 0 0px;
-      }
-      100% {
-        background-position: 0 -264px;
-      }
-    }
-
-    @keyframes rollSurfaceDown {
-      0% {
-        background-position: 0 0px;
-      }
-      100% {
-        background-position: 0 264px;
+      .golden-rope-svg {
+        display: block;
+        margin: 0 auto;
       }
     }
 
@@ -677,25 +461,6 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
         opacity: 1;
       }
     }
-
-    /* Royal Golden Rope Hanging from Bottom Roller */
-    .golden-rope-container {
-      position: absolute;
-      top: calc(100% - 10px);
-      left: 50%;
-      transform-origin: top center;
-      transform: translateX(-50%) scaleY(0);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 10;
-      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
-      transition: opacity 0.1s ease-out;
-
-      .golden-rope-svg {
-        display: block;
-        margin: 0 auto;
-      }
-    }
   `]
 })
 export class IntroSceneComponent implements OnInit, OnDestroy {
@@ -707,75 +472,81 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
   readonly ropeProgress = input<number>(0);
   readonly isScrolled = input<boolean>(false);
 
-  readonly rodMaskUrl = 'url("assets/images/rod.webp")';
   readonly step = signal<SceneStep>('loading');
+  readonly unrollProgress = signal<number>(0);
+
   private mouseX = 0;
   private mouseY = 0;
   readonly tiltX = signal<number>(0);
   readonly tiltY = signal<number>(0);
 
   private timers: number[] = [];
+  private unrollAnimId: number | null = null;
 
   readonly isAnimating = computed(() => {
-    const s = this.step();
-    return s !== 'loading' && s !== 'completed';
+    return this.step() === 'unrolling';
   });
 
   readonly isUnrolled = computed(() => {
-    const s = this.step();
-    return s === 'text' || s === 'camera' || s === 'completed';
+    return this.step() === 'text' || this.step() === 'completed';
   });
 
   readonly isTextVisible = computed(() => {
-    const s = this.step();
-    return s === 'text' || s === 'camera' || s === 'completed';
+    return this.step() === 'text' || this.step() === 'completed';
   });
 
-  readonly isCameraShifted = computed(() => {
-    const s = this.step();
-    return s === 'rolled' || s === 'unrolling';
+  readonly rodsOpacity = computed(() => {
+    return this.step() === 'loading' ? 0 : 1;
   });
 
   readonly cameraTransform = computed(() => {
     if (this.step() === 'completed' && this.scrollRoll() > 0) {
-      return `translate(0, ${this.scrollRoll() * -80}px)`;
+      return `translate(0, ${(this.scrollRoll() * -80).toFixed(2)}px)`;
     }
     return null;
   });
 
   readonly paperClipPath = computed(() => {
+    if (this.step() === 'loading' || this.step() === 'rolled') {
+      return 'inset(50% 0 50% 0)';
+    }
+    if (this.step() === 'unrolling') {
+      const insetY = ((1 - this.unrollProgress()) * 50).toFixed(4);
+      return `inset(${insetY}% 0 ${insetY}% 0)`;
+    }
     if (this.step() === 'completed' && this.scrollRoll() > 0) {
-      return `inset(0% 0% ${this.scrollRoll() * 100}% 0%)`;
+      return `inset(0% 0% ${(this.scrollRoll() * 100).toFixed(4)}% 0%)`;
     }
     return null;
+  });
+
+  readonly topRodTransform = computed(() => {
+    if (this.step() === 'loading' || this.step() === 'rolled') {
+      return `translate(-50%, calc(-100% + var(--overlap) + (var(--paper-h) / 2)))`;
+    }
+    if (this.step() === 'unrolling') {
+      const offset = (1 - this.unrollProgress()).toFixed(4);
+      return `translate(-50%, calc(-100% + var(--overlap) + ${offset} * (var(--paper-h) / 2)))`;
+    }
+    return `translate(-50%, calc(-100% + var(--overlap)))`;
   });
 
   readonly bottomRodTransform = computed(() => {
+    if (this.step() === 'loading' || this.step() === 'rolled') {
+      return `translate(-50%, calc(100% - var(--overlap) - (var(--paper-h) / 2)))`;
+    }
+    if (this.step() === 'unrolling') {
+      const offset = (1 - this.unrollProgress()).toFixed(4);
+      return `translate(-50%, calc(100% - var(--overlap) - ${offset} * (var(--paper-h) / 2)))`;
+    }
     if (this.step() === 'completed' && this.scrollRoll() > 0) {
-      return `translate(-50%, calc(100% - 4px - (${this.scrollRoll()} * var(--paper-h))))`;
+      return `translate(-50%, calc(100% - var(--overlap) - (${this.scrollRoll().toFixed(4)} * var(--paper-h))))`;
     }
-    return null;
+    return `translate(-50%, calc(100% - var(--overlap)))`;
   });
 
-  readonly bottomSurfacePos = computed(() => {
-    if (this.step() === 'completed' && this.scrollRoll() > 0) {
-      return `0 ${this.scrollRoll() * -500}px`;
-    }
-    return null;
-  });
-
-  readonly bottomSurfaceOpacity = computed(() => {
-    if (this.step() === 'completed' && this.scrollRoll() > 0.01) {
-      return '0.95';
-    }
-    return null;
-  });
-
-  readonly cueOpacity = computed(() => {
-    if (this.scrollRoll() > 0) {
-      return Math.max(0, 1 - this.scrollRoll() * 10);
-    }
-    return null;
+  readonly goldenRopeTransform = computed(() => {
+    return `translateX(-50%) scaleY(${this.ropeProgress()})`;
   });
 
   readonly tiltTransform = computed(() => {
@@ -794,10 +565,14 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.preloadInitialAsset();
+    this.preloadInitialAssets();
   }
 
   ngOnDestroy(): void {
+    if (this.unrollAnimId) {
+      cancelAnimationFrame(this.unrollAnimId);
+      this.unrollAnimId = null;
+    }
     this.clearAllTimers();
   }
 
@@ -813,66 +588,85 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
     this.tiltY.set(Math.max(-3, Math.min(3, this.mouseX * 3)));
   }
 
-  private preloadInitialAsset(): void {
+  private preloadInitialAssets(): void {
     if (typeof window === 'undefined') {
       this.skip();
       return;
     }
 
-    const rolledImg = new Image();
-    rolledImg.src = 'assets/images/scroll-rolled.webp';
+    let loadedCount = 0;
+    const requiredImages = [
+      'assets/images/scroll-rod-top.webp',
+      'assets/images/scroll-rod-bottom.webp',
+      'assets/images/scroll-paper.webp'
+    ];
 
-    const onRolledReady = () => {
-      const rodTopImg = new Image();
-      rodTopImg.src = 'assets/images/scroll-rod-top.webp';
-
-      const rodBotImg = new Image();
-      rodBotImg.src = 'assets/images/scroll-rod-bottom.webp';
-
-      const paperImg = new Image();
-      paperImg.src = 'assets/images/scroll-paper.webp';
-
-      this.startSequence();
+    const checkReady = () => {
+      loadedCount++;
+      if (loadedCount >= requiredImages.length) {
+        this.startSequence();
+      }
     };
 
-    if (rolledImg.complete) {
-      onRolledReady();
-    } else {
-      rolledImg.onload = onRolledReady;
-      rolledImg.onerror = () => {
-        this.skip();
-      };
-    }
+    requiredImages.forEach(src => {
+      const img = new Image();
+      img.src = src;
+      if (img.complete) {
+        checkReady();
+      } else {
+        img.onload = checkReady;
+        img.onerror = () => {
+          this.skip();
+        };
+      }
+    });
   }
 
   private startSequence(): void {
-    // 1. (0 to 1.5s) Rolled scroll centred, fading in with gentle scale & bob
+    // 1. Initial State: Closed scroll at center (rods touching)
     this.step.set('rolled');
+    this.unrollProgress.set(0);
 
-    // 2. (at 1.5s) Unroll begins directly from the rolled scroll:
-    // the rods move apart and the parchment unrolls between them with realistic physics
+    // 2. Start unrolling after brief 350ms settle
     this.schedule(() => {
       this.step.set('unrolling');
-    }, 1500);
+      this.startUnrollAnimation();
+    }, 350);
+  }
 
-    // 3. (at 4.3s) Unroll completes (2.8s duration), rods settle, text reveals line by line
-    this.schedule(() => {
-      this.step.set('text');
-    }, 4300);
+  private startUnrollAnimation(): void {
+    const duration = 1500;
+    const startTime = performance.now();
 
-    // 4. (at 6.3s) Camera move: drifts up & right, zooms in
-    this.schedule(() => {
-      this.step.set('camera');
-    }, 6300);
+    const animateFrame = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const t = Math.min(1, elapsed / duration);
+      // Physical cubic ease-out
+      const p = 1 - Math.pow(1 - t, 3);
+      this.unrollProgress.set(p);
 
-    // 5. (~7.3s) Completed: unlock vertical page scroll
-    this.schedule(() => {
-      this.finishIntro();
-    }, 7300);
+      if (t < 1) {
+        this.unrollAnimId = requestAnimationFrame(animateFrame);
+      } else {
+        this.unrollProgress.set(1);
+        this.step.set('text');
+        // Allow text reveal to complete (1200ms) before unlocking scroll
+        this.schedule(() => {
+          this.finishIntro();
+        }, 1200);
+      }
+    };
+
+    this.unrollAnimId = requestAnimationFrame(animateFrame);
   }
 
   skip(): void {
+    if (this.unrollAnimId) {
+      cancelAnimationFrame(this.unrollAnimId);
+      this.unrollAnimId = null;
+    }
     this.clearAllTimers();
+    this.unrollProgress.set(1);
     this.finishIntro();
   }
 
