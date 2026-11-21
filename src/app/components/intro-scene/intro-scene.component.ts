@@ -73,7 +73,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
                   src="assets/images/scroll-rod-top.webp"
                   alt=""
                   width="924"
-                  height="174"
+                  height="160"
                   class="rod-img"
                   aria-hidden="true"
                 />
@@ -109,7 +109,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
                   src="assets/images/scroll-rod-bottom.webp"
                   alt=""
                   width="924"
-                  height="160"
+                  height="138"
                   class="rod-img"
                   aria-hidden="true"
                 />
@@ -189,13 +189,13 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
       overflow: hidden;
 
       /* Mathematical sizing calculations based on royal scroll proportions */
-      --scroll-w: min(92vw, calc(82vh * 924 / 1248), 640px);
+      --scroll-w: min(92vw, calc(82vh * 924 / 1212), 640px);
       --rod-w: var(--scroll-w);
       --paper-w: calc(var(--scroll-w) * 664 / 924);
       --paper-h: calc(var(--paper-w) * 914 / 664);
-      --rod-top-h: calc(var(--scroll-w) * 174 / 924);
-      --rod-bot-h: calc(var(--scroll-w) * 160 / 924);
-      --overlap: calc(var(--scroll-w) * 14 / 924);
+      --rod-top-h: calc(var(--scroll-w) * 160 / 924);
+      --rod-bot-h: calc(var(--scroll-w) * 138 / 924);
+      --overlap: calc(var(--scroll-w) * 6 / 924);
     }
 
     /* Background Aesthetics */
