@@ -7,7 +7,8 @@ import {
   signal,
   computed,
   HostListener,
-  output
+  output,
+  input
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InvitationPaperComponent } from '../invitation-paper/invitation-paper.component';
@@ -49,11 +50,12 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
         </div>
       }
 
-      <!-- Camera Rig (moves the whole scene during Step 5) -->
+      <!-- Camera Rig (moves the whole scene during Step 5 or rolls up) -->
       <div
         class="camera-rig"
         [class.camera-shifted]="isCameraShifted()"
         [class.camera-moving]="step() === 'camera'"
+        [style.transform]="cameraTransform()"
       >
         <!-- Desktop Tilt / Mobile Sway Container -->
         <div
@@ -90,11 +92,12 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
               <div class="rod-curl-shadow curl-below" aria-hidden="true"></div>
             </div>
 
-            <!-- Paper with clip-path from center outward -->
+            <!-- Paper with clip-path from center outward and scroll-up roll from bottom -->
             <div
               class="paper-reveal-window"
               [class.unrolled]="isUnrolled()"
               [class.unrolling]="step() === 'unrolling'"
+              [style.clip-path]="paperClipPath()"
             >
               <app-invitation-paper
                 [animateText]="step() === 'text'"
@@ -103,11 +106,12 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
               />
             </div>
 
-            <!-- Bottom Rod (reusing the same rod.webp image) -->
+            <!-- Bottom Rod (rolls back up on user scroll) -->
             <div
               class="rod rod-bottom"
               [class.unrolled]="isUnrolled()"
               [class.unrolling]="step() === 'unrolling'"
+              [style.transform]="bottomRodTransform()"
             >
               <!-- Dynamic Parchment Curl Shadow traveling right above bottom rod -->
               <div class="rod-curl-shadow curl-above" aria-hidden="true"></div>
@@ -125,8 +129,43 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
                   class="rod-surface-roll roll-down"
                   [style.-webkit-mask-image]="rodMaskUrl"
                   [style.mask-image]="rodMaskUrl"
+                  [style.background-position]="bottomSurfacePos()"
+                  [style.opacity]="bottomSurfaceOpacity()"
                   aria-hidden="true"
                 ></div>
+              </div>
+
+              <!-- Royal Golden Rope hanging from bottom rod center -->
+              <div
+                class="golden-rope-container"
+                [style.transform]="'translateX(-50%) scaleY(' + ropeProgress() + ')'"
+                [style.opacity]="ropeProgress()"
+                aria-hidden="true"
+              >
+                <svg viewBox="0 0 100 70" width="100" height="70" class="golden-rope-svg">
+                  <defs>
+                    <linearGradient id="ropeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#fae09a"/>
+                      <stop offset="35%" stop-color="#dfb25d"/>
+                      <stop offset="70%" stop-color="#c6953f"/>
+                      <stop offset="100%" stop-color="#8d621b"/>
+                    </linearGradient>
+                  </defs>
+                  <!-- Twin looped braided cords around rod shaft -->
+                  <path d="M30 0 C30 16 46 22 50 28" stroke="url(#ropeGrad)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  <path d="M70 0 C70 16 54 22 50 28" stroke="url(#ropeGrad)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  <!-- Antique golden knot ring -->
+                  <circle cx="50" cy="30" r="4.5" fill="url(#ropeGrad)"/>
+                  <circle cx="50" cy="30" r="2.2" fill="#1e0c0e"/>
+                  <!-- Hanging stem cord -->
+                  <path d="M50 34.5 L50 56" stroke="url(#ropeGrad)" stroke-width="3" stroke-linecap="round"/>
+                  <!-- Golden tassel bell -->
+                  <path d="M46 56 C46 54.5 54 54.5 54 56 L56 68 C56 69.5 44 69.5 44 68 Z" fill="url(#ropeGrad)"/>
+                  <!-- Tassel silk fringe -->
+                  <line x1="47" y1="68" x2="47" y2="72" stroke="url(#ropeGrad)" stroke-width="1.2" stroke-linecap="round"/>
+                  <line x1="50" y1="68" x2="50" y2="73.5" stroke="url(#ropeGrad)" stroke-width="1.4" stroke-linecap="round"/>
+                  <line x1="53" y1="68" x2="53" y2="72" stroke="url(#ropeGrad)" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
               </div>
             </div>
 
@@ -151,9 +190,12 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
         </div>
       </div>
 
-      <!-- Scroll Down Indicator when completed -->
-      @if (step() === 'completed') {
-        <div class="scroll-cue" aria-hidden="true">
+      <!-- Scroll Down Indicator when completed (hides immediately on scroll) -->
+      @if (step() === 'completed' && scrollRoll() <= 0.01) {
+        <div
+          class="scroll-cue"
+          aria-hidden="true"
+        >
           <span>Scroll to explore</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="cue-arrow">
             <path d="M7 10l5 5 5-5" />
@@ -651,11 +693,35 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
         opacity: 1;
       }
     }
+
+    /* Royal Golden Rope Hanging from Bottom Roller */
+    .golden-rope-container {
+      position: absolute;
+      top: calc(100% - 10px);
+      left: 50%;
+      transform-origin: top center;
+      transform: translateX(-50%) scaleY(0);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+      transition: opacity 0.1s ease-out;
+
+      .golden-rope-svg {
+        display: block;
+        margin: 0 auto;
+      }
+    }
   `]
 })
 export class IntroSceneComponent implements OnInit, OnDestroy {
   private readonly connectionService = inject(ConnectionService);
   readonly sceneCompleted = output<void>();
+
+  // Scroll interactive inputs
+  readonly scrollRoll = input<number>(0);
+  readonly ropeProgress = input<number>(0);
+  readonly isScrolled = input<boolean>(false);
 
   readonly rodMaskUrl = 'url("assets/images/rod.webp")';
   readonly step = signal<SceneStep>('loading');
@@ -684,6 +750,48 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
   readonly isCameraShifted = computed(() => {
     const s = this.step();
     return s === 'rolled' || s === 'unrolling';
+  });
+
+  readonly cameraTransform = computed(() => {
+    if (this.step() === 'completed' && this.scrollRoll() > 0) {
+      return `translate(0, ${this.scrollRoll() * -80}px)`;
+    }
+    return null;
+  });
+
+  readonly paperClipPath = computed(() => {
+    if (this.step() === 'completed' && this.scrollRoll() > 0) {
+      return `inset(0% 0% ${this.scrollRoll() * 100}% 0%)`;
+    }
+    return null;
+  });
+
+  readonly bottomRodTransform = computed(() => {
+    if (this.step() === 'completed' && this.scrollRoll() > 0) {
+      return `translate(-50%, calc(100% - (var(--rod-h) * 0.181) - 4px - (${this.scrollRoll()} * var(--paper-h))))`;
+    }
+    return null;
+  });
+
+  readonly bottomSurfacePos = computed(() => {
+    if (this.step() === 'completed' && this.scrollRoll() > 0) {
+      return `0 ${this.scrollRoll() * -500}px`;
+    }
+    return null;
+  });
+
+  readonly bottomSurfaceOpacity = computed(() => {
+    if (this.step() === 'completed' && this.scrollRoll() > 0.01) {
+      return '0.95';
+    }
+    return null;
+  });
+
+  readonly cueOpacity = computed(() => {
+    if (this.scrollRoll() > 0) {
+      return Math.max(0, 1 - this.scrollRoll() * 10);
+    }
+    return null;
   });
 
   readonly tiltTransform = computed(() => {

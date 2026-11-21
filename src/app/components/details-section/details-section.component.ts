@@ -91,15 +91,15 @@ import { INVITE_CONFIG } from '../../invite.config';
 
     .details-section {
       width: 100%;
-      max-width: 600px;
+      max-width: 580px;
       margin: 0 auto;
-      padding: 40px 24px 80px;
+      padding: 6px 20px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       box-sizing: border-box;
-      gap: 36px;
+      gap: 20px;
     }
 
     /* Decorative Divider */
@@ -243,16 +243,10 @@ import { INVITE_CONFIG } from '../../invite.config';
       }
     }
 
-    /* Intersection Observer Fade & Rise */
+    /* Suspended elements fade & rise with scroll intensity */
     .reveal-on-scroll {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-
-      &.is-visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      opacity: 1;
+      transform: none;
     }
   `]
 })

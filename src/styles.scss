@@ -18,6 +18,7 @@
 html, body {
   width: 100%;
   min-height: 100%;
+  overflow-x: clip;
   background-color: #12080a;
   color: #f7e6c4;
   font-family: var(--font-invitation);
