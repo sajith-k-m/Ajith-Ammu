@@ -49,10 +49,12 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
         </div>
       }
 
-      <!-- Camera Rig (moves scene up slightly during user scroll) -->
+      <!-- Camera Rig (moves scene up smoothly and exits off top screen during scroll transition) -->
       <div
         class="camera-rig"
         [style.transform]="cameraTransform()"
+        [style.visibility]="exitProgress() >= 1 ? 'hidden' : 'visible'"
+        [style.pointer-events]="exitProgress() >= 1 ? 'none' : 'auto'"
       >
         <!-- Desktop Tilt Stage -->
         <div
@@ -486,6 +488,7 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
 
   // Scroll interactive inputs
   readonly scrollRoll = input<number>(0);
+  readonly exitProgress = input<number>(0);
   readonly ropeProgress = input<number>(0);
   readonly isScrolled = input<boolean>(false);
 
@@ -517,8 +520,15 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
   });
 
   readonly cameraTransform = computed(() => {
-    if (this.step() === 'completed' && this.scrollRoll() > 0) {
-      return `translate(0, ${(this.scrollRoll() * -80).toFixed(2)}px)`;
+    if (this.step() === 'completed') {
+      const exit = this.exitProgress();
+      if (exit > 0) {
+        // Smoothly glides upwards in tandem with the rising elements and exits off top screen
+        return `translate3d(0, ${(-exit * 52).toFixed(2)}vh, 0)`;
+      }
+      if (this.scrollRoll() > 0) {
+        return `translate3d(0, ${(this.scrollRoll() * -20).toFixed(2)}px, 0)`;
+      }
     }
     return null;
   });

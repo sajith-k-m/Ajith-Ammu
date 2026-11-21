@@ -11,26 +11,24 @@ import { DetailsSectionComponent } from './components/details-section/details-se
     <main class="page-wrapper" [class.scroll-unlocked]="isScrollUnlocked()">
       <div class="scroll-track" [style.height]="trackHeight()">
         <div class="sticky-viewport">
-          <!-- Intro Scene with Scroll Unrolling, Roll-up & Golden Rope -->
+          <!-- Intro Scene with Scroll Unrolling, Roll-up & Smooth Top Exit -->
           <app-intro-scene
             [scrollRoll]="scrollRoll()"
+            [exitProgress]="exitProgress()"
             [ropeProgress]="ropeProgress()"
             [isScrolled]="scrollY() > 10"
             (sceneCompleted)="onSceneCompleted()"
           />
 
-          <!-- Details Section Suspended Like a Rope of the Letter -->
+          <!-- Full Screen Details Presentation (Rises from below as letter exits top) -->
           <div
-            class="suspended-details-wrapper"
+            class="details-page-wrapper"
             [class.interactive]="detailsInteractive()"
             [style.opacity]="detailsOpacity()"
             [style.transform]="detailsTransform()"
+            [style.pointer-events]="detailsInteractive() ? 'auto' : 'none'"
+            [style.visibility]="detailsProgress() > 0 ? 'visible' : 'hidden'"
           >
-            <!-- Hanging Golden Silk Cord Connector -->
-            <div class="suspension-cord" aria-hidden="true">
-              <div class="cord-thread"></div>
-            </div>
-
             <!-- Event Details (Countdown, Location, RSVP, Footer) -->
             <app-details-section />
           </div>
@@ -82,48 +80,24 @@ import { DetailsSectionComponent } from './components/details-section/details-se
       overflow: hidden;
     }
 
-    .suspended-details-wrapper {
+    .details-page-wrapper {
       position: absolute;
-      top: 48%;
-      left: 0;
-      right: 0;
+      inset: 0;
       width: 100%;
+      height: 100vh;
+      height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       z-index: 35;
+      padding: 24px 20px;
+      box-sizing: border-box;
+      will-change: transform, opacity;
       pointer-events: none;
-      transition: opacity 0.15s ease-out;
 
       &.interactive {
         pointer-events: auto;
-      }
-
-      @media (min-width: 768px) {
-        top: 46.5%;
-      }
-    }
-
-    .suspension-cord {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      height: 26px;
-      margin-top: -8px;
-      margin-bottom: -6px;
-
-      .cord-thread {
-        width: 2.2px;
-        height: 100%;
-        background: linear-gradient(
-          to bottom,
-          #fae09a 0%,
-          #dfb25d 30%,
-          #c6953f 70%,
-          #8d621b 100%
-        );
-        box-shadow: 0 0 6px rgba(223, 178, 93, 0.4);
       }
     }
   `]
@@ -132,56 +106,78 @@ export class AppComponent {
   readonly isScrollUnlocked = signal<boolean>(false);
   readonly scrollY = signal<number>(0);
 
-  // Maximum scroll range for roll-up & details reveal
-  private readonly ROLL_END_Y = 350;      // 0 to 350px -> 0.0 to 0.75 (3/4 portion)
-  private readonly ROPE_START_Y = 220;    // 220px to 360px -> rope extends
-  private readonly ROPE_END_Y = 360;
-  private readonly DETAILS_START_Y = 340; // 340px to 700px -> details glide up & emerge
-  private readonly DETAILS_END_Y = 700;
+  // Scroll phase choreography
+  private readonly ROLL_3_4_Y = 380;     // 0 to 380px -> paper rolls up from 0% to 75% (3/4 portion)
+  private readonly EXIT_END_Y = 850;     // 380px to 850px -> balance 1/4 rolls up (0.75 -> 1.0), letter exits off top, details enters
 
   readonly trackHeight = computed(() => {
-    return this.isScrollUnlocked() ? '250vh' : '100vh';
+    return this.isScrollUnlocked() ? '240vh' : '100vh';
   });
 
+  // Paper roll: 0.0 to 0.75 in Phase 1 (0..380px), then 0.75 to 1.0 in Phase 2 (380..850px)
   readonly scrollRoll = computed(() => {
     const y = this.scrollY();
     if (y <= 0) return 0;
-    if (y >= this.ROLL_END_Y) return 0.75;
-    return (y / this.ROLL_END_Y) * 0.75;
+    if (y < this.ROLL_3_4_Y) {
+      return (y / this.ROLL_3_4_Y) * 0.75;
+    }
+    if (y >= this.EXIT_END_Y) {
+      return 1.0;
+    }
+    const phase2Progress = (y - this.ROLL_3_4_Y) / (this.EXIT_END_Y - this.ROLL_3_4_Y);
+    return 0.75 + (phase2Progress * 0.25);
+  });
+
+  // Rolled letter exit progress: 0.0 during Phase 1, then 0.0 to 1.0 during Phase 2
+  readonly exitProgress = computed(() => {
+    const y = this.scrollY();
+    if (y <= this.ROLL_3_4_Y) return 0;
+    if (y >= this.EXIT_END_Y) return 1;
+    return (y - this.ROLL_3_4_Y) / (this.EXIT_END_Y - this.ROLL_3_4_Y);
+  });
+
+  // Details section entry progress: 0.0 to 1.0 from 380px to 850px
+  readonly detailsProgress = computed(() => {
+    const y = this.scrollY();
+    if (y <= this.ROLL_3_4_Y) return 0;
+    if (y >= this.EXIT_END_Y) return 1;
+    return (y - this.ROLL_3_4_Y) / (this.EXIT_END_Y - this.ROLL_3_4_Y);
+  });
+
+  readonly detailsOpacity = computed(() => {
+    const p = this.detailsProgress();
+    if (p <= 0) return 0;
+    return Math.min(1, p * 1.5);
+  });
+
+  readonly detailsInteractive = computed(() => {
+    return this.detailsProgress() >= 0.85;
   });
 
   readonly ropeProgress = computed(() => {
     const y = this.scrollY();
-    if (y <= this.ROPE_START_Y) return 0;
-    if (y >= this.ROPE_END_Y) return 1;
-    return (y - this.ROPE_START_Y) / (this.ROPE_END_Y - this.ROPE_START_Y);
-  });
-
-  readonly detailsProgress = computed(() => {
-    const y = this.scrollY();
-    if (y <= this.DETAILS_START_Y) return 0;
-    if (y >= this.DETAILS_END_Y) return 1;
-    return (y - this.DETAILS_START_Y) / (this.DETAILS_END_Y - this.DETAILS_START_Y);
-  });
-
-  readonly detailsOpacity = computed(() => {
-    return this.detailsProgress();
-  });
-
-  readonly detailsInteractive = computed(() => {
-    return this.detailsProgress() > 0.4;
+    if (y <= 180) return 0;
+    if (y >= this.ROLL_3_4_Y) return 1;
+    return (y - 180) / (this.ROLL_3_4_Y - 180);
   });
 
   readonly detailsTransform = computed(() => {
     const p = this.detailsProgress();
     const y = this.scrollY();
-    // Glide up from 80px offset to 0 as detailsProgress goes from 0 to 1
-    const baseOffset = (1 - p) * 80;
-    // Extra scroll beyond DETAILS_END_Y for comfortable reading on short mobile screens
-    const extraScroll = Math.max(0, y - this.DETAILS_END_Y);
-    const extraOffset = Math.min(180, extraScroll * 0.45);
-    const finalY = baseOffset - extraOffset;
-    return `translate3d(0, ${finalY}px, 0)`;
+    if (p <= 0) {
+      return 'translate3d(0, 70vh, 0)';
+    }
+    // Rises smoothly from 70vh below to 0vh (exact full screen center) as p goes 0 to 1
+    const baseTranslateVh = (1 - p) * 70;
+    
+    // Once fully in view (y > EXIT_END_Y), allow gentle upward scrolling for natural browsing
+    let extraOffsetPx = 0;
+    if (y > this.EXIT_END_Y) {
+      const extra = y - this.EXIT_END_Y;
+      extraOffsetPx = Math.min(160, extra * 0.45);
+    }
+    
+    return `translate3d(0, calc(${baseTranslateVh.toFixed(2)}vh - ${extraOffsetPx.toFixed(1)}px), 0)`;
   });
 
   private targetY = 0;
