@@ -184,11 +184,34 @@ export class AppComponent {
     return `translate3d(0, ${finalY}px, 0)`;
   });
 
+  private targetY = 0;
+  private currentY = 0;
+  private isTicking = false;
+
   @HostListener('window:scroll')
   onWindowScroll(): void {
     if (typeof window !== 'undefined' && this.isScrollUnlocked()) {
-      this.scrollY.set(window.scrollY);
+      this.targetY = window.scrollY;
+      if (!this.isTicking) {
+        this.isTicking = true;
+        requestAnimationFrame(() => this.smoothScrollStep());
+      }
     }
+  }
+
+  private smoothScrollStep(): void {
+    const diff = this.targetY - this.currentY;
+    if (Math.abs(diff) < 0.3) {
+      this.currentY = this.targetY;
+      this.scrollY.set(this.currentY);
+      this.isTicking = false;
+      return;
+    }
+
+    // Smooth responsive lerp for high-FPS, zero-stutter feel
+    this.currentY += diff * 0.28;
+    this.scrollY.set(this.currentY);
+    requestAnimationFrame(() => this.smoothScrollStep());
   }
 
   onSceneCompleted(): void {

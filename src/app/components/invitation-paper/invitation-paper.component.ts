@@ -10,13 +10,13 @@ import { Component, input } from '@angular/core';
       [class.text-visible]="textVisible()"
       [class.curling]="curling()"
     >
-      <!-- Paper Background Image -->
+      <!-- Paper Background Image with Baroque Flourishes -->
       <img
         class="paper-bg"
-        src="assets/images/paper.webp"
-        alt="Wedding invitation parchment"
-        width="527"
-        height="903"
+        src="assets/images/scroll-paper.webp"
+        alt="Royal wedding invitation parchment"
+        width="664"
+        height="914"
         fetchpriority="high"
       />
 
@@ -81,7 +81,7 @@ import { Component, input } from '@angular/core';
       position: relative;
       width: var(--paper-w);
       height: var(--paper-h);
-      aspect-ratio: 527 / 903;
+      aspect-ratio: 664 / 914;
       user-select: text;
     }
 
@@ -133,7 +133,7 @@ import { Component, input } from '@angular/core';
       opacity: 1;
     }
 
-    /* Text Container & Positioning - strictly hidden until unroll is complete */
+    /* Text Container & Positioning - framed within the baroque flourishes */
     .paper-content {
       position: absolute;
       inset: 0;
@@ -143,9 +143,10 @@ import { Component, input } from '@angular/core';
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 6.5cqw 5.5cqw;
-      gap: clamp(18px, 5.5cqw, 38px);
-      color: rgba(59, 42, 26, 0.95);
+      padding: 8% 16%;
+      gap: clamp(14px, 4.8cqw, 32px);
+      color: #24130c;
+      text-shadow: 0 0.5px 1px rgba(255, 245, 220, 0.45);
       box-sizing: border-box;
       pointer-events: auto;
       opacity: 0;
@@ -168,7 +169,7 @@ import { Component, input } from '@angular/core';
     /* Common handwriting style */
     p, h1, h2, span {
       margin: 0;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.015em;
     }
 
     .heart-wine {
@@ -176,7 +177,7 @@ import { Component, input } from '@angular/core';
       align-items: center;
       justify-content: center;
       vertical-align: -0.05em;
-      margin: 0 0.2em;
+      margin: 0 0.22em;
       line-height: 1;
 
       .wine-heart-svg {
@@ -190,9 +191,9 @@ import { Component, input } from '@angular/core';
     /* Block 1 (Caveat) - Larger, comfortable reading */
     .block-1 {
       font-family: var(--font-caveat);
-      font-size: clamp(13.5px, 4.3cqw, 21.5px);
-      line-height: 1.22;
-      font-weight: 500;
+      font-size: clamp(15px, 4.7cqw, 23px);
+      line-height: 1.25;
+      font-weight: 600;
       gap: 0.15cqw;
     }
 
@@ -201,14 +202,14 @@ import { Component, input } from '@angular/core';
       font-family: var(--font-caveat);
 
       .names-title {
-        font-size: clamp(28px, 9.4cqw, 46px);
+        font-size: clamp(30px, 9.8cqw, 48px);
         font-weight: 700;
         line-height: 1.05;
       }
 
       .getting-married {
-        font-size: clamp(14.5px, 5.1cqw, 24px);
-        font-weight: 500;
+        font-size: clamp(15.5px, 5.2cqw, 25px);
+        font-weight: 600;
         line-height: 1.2;
         margin-top: 0.15cqw;
       }
@@ -221,7 +222,7 @@ import { Component, input } from '@angular/core';
       .sign-off {
         margin-top: 0.2cqw;
         font-weight: 700;
-        font-size: clamp(20px, 7.2cqw, 36px);
+        font-size: clamp(21px, 7.5cqw, 38px);
       }
     }
 

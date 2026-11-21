@@ -73,23 +73,14 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
             >
               <div class="rod-roller roller-top">
                 <img
-                  src="assets/images/rod.webp"
+                  src="assets/images/scroll-rod-top.webp"
                   alt=""
-                  width="952"
-                  height="83"
+                  width="924"
+                  height="174"
                   class="rod-img"
                   aria-hidden="true"
                 />
-                <!-- Cylindrical surface highlight sweep for rolling realism -->
-                <div
-                  class="rod-surface-roll roll-up"
-                  [style.-webkit-mask-image]="rodMaskUrl"
-                  [style.mask-image]="rodMaskUrl"
-                  aria-hidden="true"
-                ></div>
               </div>
-              <!-- Dynamic Parchment Curl Shadow traveling right under top rod -->
-              <div class="rod-curl-shadow curl-below" aria-hidden="true"></div>
             </div>
 
             <!-- Paper with clip-path from center outward and scroll-up roll from bottom -->
@@ -113,26 +104,15 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
               [class.unrolling]="step() === 'unrolling'"
               [style.transform]="bottomRodTransform()"
             >
-              <!-- Dynamic Parchment Curl Shadow traveling right above bottom rod -->
-              <div class="rod-curl-shadow curl-above" aria-hidden="true"></div>
               <div class="rod-roller roller-bottom">
                 <img
-                  src="assets/images/rod.webp"
+                  src="assets/images/scroll-rod-bottom.webp"
                   alt=""
-                  width="952"
-                  height="83"
+                  width="924"
+                  height="160"
                   class="rod-img"
                   aria-hidden="true"
                 />
-                <!-- Cylindrical surface highlight sweep for rolling realism -->
-                <div
-                  class="rod-surface-roll roll-down"
-                  [style.-webkit-mask-image]="rodMaskUrl"
-                  [style.mask-image]="rodMaskUrl"
-                  [style.background-position]="bottomSurfacePos()"
-                  [style.opacity]="bottomSurfaceOpacity()"
-                  aria-hidden="true"
-                ></div>
               </div>
 
               <!-- Royal Golden Rope hanging from bottom rod center -->
@@ -177,10 +157,10 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
               [class.faded-out]="isUnrolled()"
             >
               <img
-                src="assets/images/rolled.webp"
+                src="assets/images/scroll-rolled.webp"
                 alt="Ammu & Ajith Wedding Scroll"
-                width="990"
-                height="120"
+                width="924"
+                height="330"
                 class="rolled-img"
                 fetchpriority="high"
               />
@@ -225,12 +205,14 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       justify-content: center;
       overflow: hidden;
 
-      /* Sizing calculations based on 55% rod shaft width and trimmed dimensions */
-      --paper-w: min(85vw, calc(84vh * 527 / 903), 520px);
-      --paper-h: calc(var(--paper-w) * 903 / 527);
-      --rod-w: calc(var(--paper-w) / 0.55);
-      --rod-h: calc(var(--rod-w) * 83 / 952);
-      --rolled-h: calc(var(--rod-w) * 120 / 990);
+      /* Sizing calculations based on royal scroll proportions */
+      --scroll-w: min(92vw, calc(82vh * 924 / 1248), 640px);
+      --rod-w: var(--scroll-w);
+      --paper-w: calc(var(--scroll-w) * 664 / 924);
+      --paper-h: calc(var(--paper-w) * 914 / 664);
+      --rod-top-h: calc(var(--scroll-w) * 174 / 924);
+      --rod-bot-h: calc(var(--scroll-w) * 160 / 924);
+      --rolled-h: calc(var(--scroll-w) * 330 / 924);
     }
 
     /* Background Aesthetics */
@@ -545,30 +527,32 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
       /* Top Rod */
       &.rod-top {
         top: 0;
-        transform: translate(-50%, calc(-100% + (var(--rod-h) * 0.193) + 4px + (var(--paper-h) / 2)));
+        height: var(--rod-top-h);
+        transform: translate(-50%, calc(-100% + 4px + (var(--paper-h) / 2)));
 
         &.unrolling {
-          animation: unrollTopRod 2.8s cubic-bezier(0.45, 0, 0.25, 1) forwards;
+          animation: unrollTopRod 2.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         &.unrolled {
           opacity: 1;
-          transform: translate(-50%, calc(-100% + (var(--rod-h) * 0.193) + 4px));
+          transform: translate(-50%, calc(-100% + 4px));
         }
       }
 
       /* Bottom Rod */
       &.rod-bottom {
         bottom: 0;
-        transform: translate(-50%, calc(100% - (var(--rod-h) * 0.181) - 4px - (var(--paper-h) / 2)));
+        height: var(--rod-bot-h);
+        transform: translate(-50%, calc(100% - 4px - (var(--paper-h) / 2)));
 
         &.unrolling {
-          animation: unrollBottomRod 2.8s cubic-bezier(0.45, 0, 0.25, 1) forwards;
+          animation: unrollBottomRod 2.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         &.unrolled {
           opacity: 1;
-          transform: translate(-50%, calc(100% - (var(--rod-h) * 0.181) - 4px));
+          transform: translate(-50%, calc(100% - 4px));
         }
       }
 
@@ -622,22 +606,22 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'camera' | 'compl
     @keyframes unrollTopRod {
       0% {
         opacity: 1;
-        transform: translate(-50%, calc(-100% + (var(--rod-h) * 0.193) + 4px + (var(--paper-h) / 2)));
+        transform: translate(-50%, calc(-100% + 4px + (var(--paper-h) / 2)));
       }
       100% {
         opacity: 1;
-        transform: translate(-50%, calc(-100% + (var(--rod-h) * 0.193) + 4px));
+        transform: translate(-50%, calc(-100% + 4px));
       }
     }
 
     @keyframes unrollBottomRod {
       0% {
         opacity: 1;
-        transform: translate(-50%, calc(100% - (var(--rod-h) * 0.181) - 4px - (var(--paper-h) / 2)));
+        transform: translate(-50%, calc(100% - 4px - (var(--paper-h) / 2)));
       }
       100% {
         opacity: 1;
-        transform: translate(-50%, calc(100% - (var(--rod-h) * 0.181) - 4px));
+        transform: translate(-50%, calc(100% - 4px));
       }
     }
 
@@ -768,7 +752,7 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
 
   readonly bottomRodTransform = computed(() => {
     if (this.step() === 'completed' && this.scrollRoll() > 0) {
-      return `translate(-50%, calc(100% - (var(--rod-h) * 0.181) - 4px - (${this.scrollRoll()} * var(--paper-h))))`;
+      return `translate(-50%, calc(100% - 4px - (${this.scrollRoll()} * var(--paper-h))))`;
     }
     return null;
   });
@@ -836,14 +820,17 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
     }
 
     const rolledImg = new Image();
-    rolledImg.src = 'assets/images/rolled.webp';
+    rolledImg.src = 'assets/images/scroll-rolled.webp';
 
     const onRolledReady = () => {
-      const rodImg = new Image();
-      rodImg.src = 'assets/images/rod.webp';
+      const rodTopImg = new Image();
+      rodTopImg.src = 'assets/images/scroll-rod-top.webp';
+
+      const rodBotImg = new Image();
+      rodBotImg.src = 'assets/images/scroll-rod-bottom.webp';
 
       const paperImg = new Image();
-      paperImg.src = 'assets/images/paper.webp';
+      paperImg.src = 'assets/images/scroll-paper.webp';
 
       this.startSequence();
     };
