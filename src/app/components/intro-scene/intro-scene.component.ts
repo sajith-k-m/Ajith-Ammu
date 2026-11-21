@@ -873,15 +873,15 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
       this.step.set('text');
     }, 4300);
 
-    // 4. (at 6.8s) Camera move: drifts up & right, zooms in
+    // 4. (at 6.3s) Camera move: drifts up & right, zooms in
     this.schedule(() => {
       this.step.set('camera');
-    }, 6800);
+    }, 6300);
 
-    // 5. (~8.0s) Completed: unlock vertical page scroll
+    // 5. (~7.3s) Completed: unlock vertical page scroll
     this.schedule(() => {
       this.finishIntro();
-    }, 8000);
+    }, 7300);
   }
 
   skip(): void {

@@ -61,48 +61,9 @@ import { Component, input } from '@angular/core';
           <p class="reveal-line line-7 getting-married">Yesss... We are getting married</p>
         </div>
 
-        <!-- Block 3: Chilanka Malayalam Heading -->
-        <div class="text-block block-3">
-          <h2 class="reveal-line line-8 mal-sub">മീനത്തിൽ താലികെട്ട്</h2>
-          <h1 class="reveal-line line-9 mal-names">
-            അമ്മു
-            <span class="heart-wine" aria-hidden="true">
-              <svg viewBox="0 0 24 24" class="wine-heart-svg">
-                <path fill="url(#wineHeartGrad)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-              </svg>
-            </span>
-            അജിത്ത്
-          </h1>
-        </div>
-
-        <!-- Block 4: Chilanka Details with SVG Icons -->
-        <div class="text-block block-4">
-          <p class="reveal-line line-10 detail-line">
-            <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            <span>മീനം 21 &middot; 4 ഏപ്രിൽ 2027, ഞായർ</span>
-          </p>
-
-          <p class="reveal-line line-11 detail-line">
-            <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-            <span>St പോൾസ് ഓഡിറ്റോറിയം, പുത്തൂർ, കൊട്ടാരക്കര</span>
-          </p>
-
-          <p class="reveal-line line-12 detail-line muhurtham">
-            <span>മുഹൂർത്തം: പകൽ 10.15നും 10.45നും മദ്ധ്യേ</span>
-          </p>
-        </div>
-
-        <!-- Block 5: Caveat Closing -->
+        <!-- Block 3: Caveat Closing -->
         <div class="text-block block-5">
-          <p class="reveal-line line-13 sign-off">With love, Ammu &amp; Ajith</p>
+          <p class="reveal-line line-8 sign-off">With love, Ammu &amp; Ajith</p>
         </div>
 
       </div>
@@ -182,8 +143,8 @@ import { Component, input } from '@angular/core';
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 5.5cqw 5.5cqw;
-      gap: 2.8cqw;
+      padding: 6.5cqw 5.5cqw;
+      gap: clamp(18px, 5.5cqw, 38px);
       color: rgba(59, 42, 26, 0.95);
       box-sizing: border-box;
       pointer-events: auto;
@@ -253,52 +214,6 @@ import { Component, input } from '@angular/core';
       }
     }
 
-    /* Block 3 (Chilanka) - Prominent Malayalam calligraphy */
-    .block-3 {
-      font-family: var(--font-chilanka);
-
-      .mal-sub {
-        font-size: clamp(17.5px, 6.2cqw, 30px);
-        font-weight: 400;
-        line-height: 1.2;
-      }
-
-      .mal-names {
-        font-size: clamp(23.5px, 8.6cqw, 42px);
-        font-weight: 400;
-        line-height: 1.15;
-        margin-top: 0.2cqw;
-      }
-    }
-
-    /* Block 4 (Chilanka with icons) - Clear event information */
-    .block-4 {
-      font-family: var(--font-chilanka);
-      font-size: clamp(13px, 4.5cqw, 21.5px);
-      line-height: 1.28;
-      gap: 0.4cqw;
-
-      .detail-line {
-        display: block;
-        text-align: center;
-      }
-
-      .detail-icon {
-        display: inline-block;
-        width: 1.15em;
-        height: 1.15em;
-        vertical-align: -0.16em;
-        margin-right: 0.28em;
-        color: rgba(59, 42, 26, 0.92);
-        stroke-width: 2.2;
-      }
-
-      .muhurtham {
-        margin-top: 0.15cqw;
-        font-weight: 400;
-      }
-    }
-
     /* Block 5 (Caveat) - Warm invitation sign-off */
     .block-5 {
       font-family: var(--font-caveat);
@@ -306,7 +221,7 @@ import { Component, input } from '@angular/core';
       .sign-off {
         margin-top: 0.2cqw;
         font-weight: 700;
-        font-size: clamp(17.5px, 6.2cqw, 30px);
+        font-size: clamp(20px, 7.2cqw, 36px);
       }
     }
 
@@ -328,19 +243,14 @@ import { Component, input } from '@angular/core';
     }
 
     .paper-container.animate-text {
-      .line-1  { animation-delay: 0.00s; }
-      .line-2  { animation-delay: 0.14s; }
-      .line-3  { animation-delay: 0.28s; }
-      .line-4  { animation-delay: 0.42s; }
-      .line-5  { animation-delay: 0.56s; }
-      .line-6  { animation-delay: 0.70s; }
-      .line-7  { animation-delay: 0.84s; }
-      .line-8  { animation-delay: 0.98s; }
-      .line-9  { animation-delay: 1.12s; }
-      .line-10 { animation-delay: 1.26s; }
-      .line-11 { animation-delay: 1.40s; }
-      .line-12 { animation-delay: 1.54s; }
-      .line-13 { animation-delay: 1.68s; }
+      .line-1 { animation-delay: 0.00s; }
+      .line-2 { animation-delay: 0.15s; }
+      .line-3 { animation-delay: 0.30s; }
+      .line-4 { animation-delay: 0.45s; }
+      .line-5 { animation-delay: 0.60s; }
+      .line-6 { animation-delay: 0.80s; }
+      .line-7 { animation-delay: 1.00s; }
+      .line-8 { animation-delay: 1.25s; }
     }
 
     @keyframes handwritingReveal {
