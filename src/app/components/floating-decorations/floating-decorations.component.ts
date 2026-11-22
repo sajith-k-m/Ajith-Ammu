@@ -50,8 +50,8 @@ interface FloatingElement {
       <div class="ambient-orb orb-2" [style.transform]="orb2Transform()"></div>
       <div class="ambient-orb orb-3" [style.transform]="orb3Transform()"></div>
 
-      <!-- Layered 3D Floating Particles -->
-      @for (el of elements; track el.id) {
+      <!-- Layered 3D Floating Particles (Adaptive count: 9 on mobile, 22 on desktop) -->
+      @for (el of visibleElements(); track el.id) {
         <div
           class="floating-node depth-{{ Math.round(el.depth * 2) }}"
           [style.left.%]="el.leftPercent"
@@ -204,52 +204,56 @@ interface FloatingElement {
       pointer-events: none;
     }
 
-    /* ReactBits Aurora Atmospheric Shimmer Wave (Continuous Crossfade without Blend Mode Snapping) */
+    /* ReactBits Aurora Atmospheric Shimmer Wave (Hardware-friendly multi-stop radial gradients) */
     .reactbits-aurora-layer {
       position: absolute;
-      inset: -20%;
-      width: 140%;
-      height: 140%;
-      filter: blur(60px);
+      inset: -15%;
+      width: 130%;
+      height: 130%;
       mix-blend-mode: screen;
       pointer-events: none;
-      will-change: transform, opacity;
+      will-change: opacity;
       transition: opacity 0.2s linear;
 
       &.aurora-dark {
-        background: radial-gradient(ellipse at 25% 35%, rgba(223, 178, 93, 0.16) 0%, transparent 50%),
-                    radial-gradient(ellipse at 75% 25%, rgba(163, 29, 58, 0.18) 0%, transparent 45%),
-                    radial-gradient(ellipse at 35% 75%, rgba(37, 162, 107, 0.12) 0%, transparent 45%),
-                    radial-gradient(ellipse at 70% 65%, rgba(250, 224, 154, 0.14) 0%, transparent 50%);
-        animation: auroraMorph 18s ease-in-out infinite alternate;
+        background: radial-gradient(ellipse at 25% 35%, rgba(223, 178, 93, 0.16) 0%, transparent 55%),
+                    radial-gradient(ellipse at 75% 25%, rgba(163, 29, 58, 0.18) 0%, transparent 50%),
+                    radial-gradient(ellipse at 35% 75%, rgba(37, 162, 107, 0.12) 0%, transparent 50%),
+                    radial-gradient(ellipse at 70% 65%, rgba(250, 224, 154, 0.14) 0%, transparent 55%);
+        animation: auroraMorph 24s ease-in-out infinite alternate;
       }
 
       &.aurora-peach {
-        background: radial-gradient(ellipse at 25% 35%, rgba(223, 178, 93, 0.22) 0%, transparent 50%),
-                    radial-gradient(ellipse at 75% 25%, rgba(245, 170, 145, 0.28) 0%, transparent 45%),
-                    radial-gradient(ellipse at 35% 75%, rgba(255, 205, 175, 0.2) 0%, transparent 45%),
-                    radial-gradient(ellipse at 70% 65%, rgba(254, 230, 185, 0.22) 0%, transparent 50%);
-        animation: auroraMorph 22s ease-in-out infinite alternate-reverse;
+        background: radial-gradient(ellipse at 25% 35%, rgba(223, 178, 93, 0.22) 0%, transparent 55%),
+                    radial-gradient(ellipse at 75% 25%, rgba(245, 170, 145, 0.28) 0%, transparent 50%),
+                    radial-gradient(ellipse at 35% 75%, rgba(255, 205, 175, 0.2) 0%, transparent 50%),
+                    radial-gradient(ellipse at 70% 65%, rgba(254, 230, 185, 0.22) 0%, transparent 55%);
+        animation: auroraMorph 28s ease-in-out infinite alternate-reverse;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .reactbits-aurora-layer {
+        animation: none !important;
       }
     }
 
     @keyframes auroraMorph {
       0% {
-        transform: rotate(0deg) scale(1) translate(0, 0);
+        transform: rotate(0deg) scale(1);
       }
       50% {
-        transform: rotate(4deg) scale(1.08) translate(-2%, 3%);
+        transform: rotate(3deg) scale(1.04);
       }
       100% {
-        transform: rotate(-3deg) scale(0.96) translate(3%, -2%);
+        transform: rotate(-2deg) scale(0.98);
       }
     }
 
-    /* Ambient Glowing Bokeh Orbs */
+    /* Ambient Glowing Bokeh Orbs (Naturally soft gradients without GPU blur convolution overhead) */
     .ambient-orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
       opacity: 0.38;
       mix-blend-mode: screen;
       pointer-events: none;
@@ -257,27 +261,27 @@ interface FloatingElement {
     }
 
     .orb-1 {
-      width: 550px;
-      height: 550px;
+      width: 500px;
+      height: 500px;
       top: 15%;
       left: -8%;
-      background: radial-gradient(circle, rgba(223, 178, 93, 0.32) 0%, rgba(138, 90, 24, 0.15) 50%, transparent 75%);
+      background: radial-gradient(circle at center, rgba(223, 178, 93, 0.3) 0%, rgba(138, 90, 24, 0.12) 40%, transparent 68%);
     }
 
     .orb-2 {
-      width: 650px;
-      height: 650px;
+      width: 580px;
+      height: 580px;
       top: 55%;
       right: -10%;
-      background: radial-gradient(circle, rgba(163, 29, 58, 0.35) 0%, rgba(84, 15, 23, 0.18) 50%, transparent 75%);
+      background: radial-gradient(circle at center, rgba(163, 29, 58, 0.32) 0%, rgba(84, 15, 23, 0.14) 40%, transparent 68%);
     }
 
     .orb-3 {
-      width: 480px;
-      height: 480px;
+      width: 440px;
+      height: 440px;
       bottom: -10%;
       left: 30%;
-      background: radial-gradient(circle, rgba(250, 224, 154, 0.22) 0%, rgba(37, 162, 107, 0.15) 45%, transparent 70%);
+      background: radial-gradient(circle at center, rgba(250, 224, 154, 0.2) 0%, rgba(37, 162, 107, 0.12) 38%, transparent 68%);
     }
 
     /* Floating Nodes */
@@ -448,9 +452,32 @@ export class FloatingDecorationsComponent implements OnInit, OnDestroy {
     { id: 22, type: 'coin', depth: 0.6, leftPercent: 88, topPercent: 80, sizePx: 26, rotationDeg: -18, driftDurationSec: 8.2, delaySec: 2.1, colorGrad: 'gold' }
   ];
 
+  readonly isMobile = signal<boolean>(false);
+
+  readonly visibleElements = computed(() => {
+    if (this.isMobile()) {
+      return this.elements.filter(el =>
+        el.id === 1 ||  // Sparkle
+        el.id === 2 ||  // Rose petal
+        el.id === 3 ||  // Jasmine petal
+        el.id === 6 ||  // Sparkle
+        el.id === 8 ||  // Jasmine petal
+        el.id === 19 || // Kerala Diya
+        el.id === 20 || // Kerala Diya
+        el.id === 21 || // Kerala Gold Coin
+        el.id === 22    // Kerala Gold Coin
+      );
+    }
+    return this.elements;
+  });
+
+  private isParallaxRunning = false;
+  readonly smoothMouseXSignal = signal<number>(0);
+  readonly smoothMouseYSignal = signal<number>(0);
+
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
-      this.startParallaxLoop();
+      this.checkMobile();
     }
   }
 
@@ -460,56 +487,94 @@ export class FloatingDecorationsComponent implements OnInit, OnDestroy {
     }
   }
 
+  @HostListener('window:resize')
+  onResize(): void {
+    this.checkMobile();
+  }
+
+  private checkMobile(): void {
+    if (typeof window !== 'undefined') {
+      this.isMobile.set(window.innerWidth <= 768);
+    }
+  }
+
   @HostListener('window:mousemove', ['$event'])
   onMouseMove(e: MouseEvent): void {
+    if (this.isMobile()) return;
     const w = window.innerWidth || 1;
     const h = window.innerHeight || 1;
     this.mouseX.set(((e.clientX / w) - 0.5) * 2);
     this.mouseY.set(((e.clientY / h) - 0.5) * 2);
+
+    if (!this.isParallaxRunning) {
+      this.isParallaxRunning = true;
+      this.animFrameId = requestAnimationFrame(() => this.stepParallax());
+    }
   }
 
-  private startParallaxLoop(): void {
-    const loop = () => {
-      // Lerp mouse
-      this.smoothMouseX += (this.mouseX() - this.smoothMouseX) * 0.08;
-      this.smoothMouseY += (this.mouseY() - this.smoothMouseY) * 0.08;
-      this.animFrameId = requestAnimationFrame(loop);
-    };
-    this.animFrameId = requestAnimationFrame(loop);
+  private stepParallax(): void {
+    const targetX = this.mouseX();
+    const targetY = this.mouseY();
+    const diffX = targetX - this.smoothMouseX;
+    const diffY = targetY - this.smoothMouseY;
+
+    if (Math.abs(diffX) < 0.005 && Math.abs(diffY) < 0.005) {
+      this.smoothMouseX = targetX;
+      this.smoothMouseY = targetY;
+      this.smoothMouseXSignal.set(targetX);
+      this.smoothMouseYSignal.set(targetY);
+      this.isParallaxRunning = false;
+      return;
+    }
+
+    this.smoothMouseX += diffX * 0.12;
+    this.smoothMouseY += diffY * 0.12;
+    this.smoothMouseXSignal.set(this.smoothMouseX);
+    this.smoothMouseYSignal.set(this.smoothMouseY);
+
+    this.animFrameId = requestAnimationFrame(() => this.stepParallax());
   }
 
   readonly stageParallaxTransform = computed(() => {
-    // Stage rotates subtly with mouse to create stereoscopic depth
-    const rx = (-this.smoothMouseY * 4).toFixed(2);
-    const ry = (this.smoothMouseX * 4).toFixed(2);
+    if (this.isMobile()) return '';
+    const sx = this.smoothMouseXSignal();
+    const sy = this.smoothMouseYSignal();
+    const rx = (-sy * 4).toFixed(2);
+    const ry = (sx * 4).toFixed(2);
     return `rotateX(${rx}deg) rotateY(${ry}deg)`;
   });
 
   readonly orb1Transform = computed(() => {
-    const ox = (this.smoothMouseX * -40).toFixed(1);
-    const oy = (this.smoothMouseY * -30).toFixed(1);
-    const sy = ((this.scrollY() * 0.12) % 300).toFixed(1);
-    return `translate3d(${ox}px, calc(${oy}px - ${sy}px), 0)`;
+    const sx = this.smoothMouseXSignal();
+    const sy = this.smoothMouseYSignal();
+    const ox = (sx * -40).toFixed(1);
+    const oy = (sy * -30).toFixed(1);
+    const syScroll = ((this.scrollY() * 0.12) % 300).toFixed(1);
+    return `translate3d(${ox}px, calc(${oy}px - ${syScroll}px), 0)`;
   });
 
   readonly orb2Transform = computed(() => {
-    const ox = (this.smoothMouseX * 35).toFixed(1);
-    const oy = (this.smoothMouseY * 25).toFixed(1);
-    const sy = ((this.scrollY() * 0.18) % 350).toFixed(1);
-    return `translate3d(${ox}px, calc(${oy}px - ${sy}px), 0)`;
+    const sx = this.smoothMouseXSignal();
+    const sy = this.smoothMouseYSignal();
+    const ox = (sx * 35).toFixed(1);
+    const oy = (sy * 25).toFixed(1);
+    const syScroll = ((this.scrollY() * 0.18) % 350).toFixed(1);
+    return `translate3d(${ox}px, calc(${oy}px - ${syScroll}px), 0)`;
   });
 
   readonly orb3Transform = computed(() => {
-    const ox = (this.smoothMouseX * -20).toFixed(1);
-    const oy = (this.smoothMouseY * -15).toFixed(1);
+    const sx = this.smoothMouseXSignal();
+    const sy = this.smoothMouseYSignal();
+    const ox = (sx * -20).toFixed(1);
+    const oy = (sy * -15).toFixed(1);
     return `translate3d(${ox}px, ${oy}px, 0)`;
   });
 
   getNodeTransform(el: FloatingElement): string {
     const d = el.depth;
-    // Mouse parallax based on depth
-    const mx = (this.smoothMouseX * d * 32).toFixed(1);
-    const my = (this.smoothMouseY * d * 32).toFixed(1);
+    // Mouse parallax based on depth (skipped on mobile)
+    const mx = !this.isMobile() ? (this.smoothMouseX * d * 32).toFixed(1) : '0';
+    const my = !this.isMobile() ? (this.smoothMouseY * d * 32).toFixed(1) : '0';
 
     // Kinetic scroll velocity wind physics
     const vel = this.scrollVelocity();

@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InvitationPaperComponent } from '../invitation-paper/invitation-paper.component';
-import { ConnectionService } from '../../services/connection.service';
 
 type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
 
@@ -551,7 +550,6 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
   `]
 })
 export class IntroSceneComponent implements OnInit, OnDestroy {
-  private readonly connectionService = inject(ConnectionService);
   readonly sceneCompleted = output<void>();
 
   // Scroll interactive inputs
@@ -709,11 +707,6 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
-    if (this.connectionService.shouldReduceOrSkip()) {
-      this.skip();
-      return;
-    }
-
     this.startPhysicsLoop();
     this.preloadInitialAssets();
   }
@@ -812,9 +805,19 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
 
   private preloadInitialAssets(): void {
     if (typeof window === 'undefined') {
-      this.skip();
+      this.finishIntro();
       return;
     }
+
+    let started = false;
+    const triggerStart = () => {
+      if (started) return;
+      started = true;
+      this.startSequence();
+    };
+
+    // Safety timeout: start sequence within 400ms even on slow networks
+    const fallbackTimer = window.setTimeout(triggerStart, 400);
 
     let loadedCount = 0;
     const requiredImages = [
@@ -826,7 +829,8 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
     const checkReady = () => {
       loadedCount++;
       if (loadedCount >= requiredImages.length) {
-        this.startSequence();
+        clearTimeout(fallbackTimer);
+        triggerStart();
       }
     };
 
@@ -838,7 +842,8 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
       } else {
         img.onload = checkReady;
         img.onerror = () => {
-          this.skip();
+          // Never skip on image error: proceed so letter renders gracefully
+          checkReady();
         };
       }
     });
@@ -922,6 +927,11 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
   }
 
   private stepPhysics(dt: number, now: number): void {
+    // When scene has completely exited off top of screen, pause physics calculation to save CPU/GPU
+    if (this.exitProgress() >= 1) {
+      return;
+    }
+
     // 1. Unfurl progress when unrolling
     if (this.step() === 'unrolling') {
       const u = this.unrollProgress();

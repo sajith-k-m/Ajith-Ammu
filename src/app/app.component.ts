@@ -55,34 +55,26 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
                   <stop offset="40%" stop-color="#fdf5ef" stop-opacity="1" />
                   <stop offset="100%" stop-color="#fdf5ef" stop-opacity="1" />
                 </linearGradient>
-                <filter id="goldBeamGlow" x="-20%" y="-50%" width="140%" height="200%">
-                  <feGaussianBlur stdDeviation="5" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
               </defs>
               <!-- Filled Liquid Wave Curve -->
               <path
                 d="M0,45 C320,85 480,10 720,50 C960,90 1120,15 1440,45 L1440,122 L0,122 Z"
                 fill="url(#veilPeachSilkFill)"
               />
-              <!-- Wide Warm Golden Bloom -->
+              <!-- Wide Warm Golden Halo Beam (Hardware-accelerated CSS stroke instead of live SVG filter) -->
               <path
                 d="M0,45 C320,85 480,10 720,50 C960,90 1120,15 1440,45"
                 fill="none"
-                stroke="rgba(245, 158, 11, 0.45)"
-                stroke-width="8"
-                filter="url(#goldBeamGlow)"
+                stroke="rgba(245, 158, 11, 0.4)"
+                stroke-width="7"
+                stroke-linecap="round"
               />
               <!-- Crisp 24K Gold Foil Filament Beam -->
               <path
                 d="M0,45 C320,85 480,10 720,50 C960,90 1120,15 1440,45"
                 fill="none"
                 stroke="url(#crestGoldBeam)"
-                stroke-width="2.8"
+                stroke-width="2.6"
               />
             </svg>
             <div class="crest-sparkles">
@@ -103,12 +95,14 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
           </div>
         </div>
 
-        <!-- ReactBits Pro: Radiant Golden Dawn Bloom (peaking in mid-transition) -->
-        <div
-          class="golden-dawn-radiance-bloom"
-          [style.opacity]="dawnBloomOpacity()"
-          [style.transform]="dawnBloomTransform()"
-        ></div>
+        <!-- ReactBits Pro: Radiant Golden Dawn Bloom (peaking in mid-transition, hidden when settled) -->
+        @if (isTransitionActive()) {
+          <div
+            class="golden-dawn-radiance-bloom"
+            [style.opacity]="dawnBloomOpacity()"
+            [style.transform]="dawnBloomTransform()"
+          ></div>
+        }
       </div>
 
       <!-- Interactive 3D Floating Elements & Ambient Bokeh Engine (reacts to scroll & mouse) -->
@@ -287,16 +281,15 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       .peach-silk-wave {
         position: absolute;
         pointer-events: none;
-        filter: blur(60px);
         border-radius: 50%;
-        will-change: transform, opacity;
+        will-change: transform;
         
         &.wave-1 {
           top: -15%;
           left: -10%;
           width: 80vw;
           height: 60vh;
-          background: radial-gradient(ellipse at center, rgba(255, 235, 224, 0.75) 0%, rgba(254, 215, 198, 0.45) 50%, transparent 75%);
+          background: radial-gradient(ellipse at center, rgba(255, 235, 224, 0.68) 0%, rgba(254, 215, 198, 0.38) 45%, transparent 68%);
           animation: silkWaveDrift1 22s ease-in-out infinite alternate;
         }
 
@@ -305,7 +298,7 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
           right: -15%;
           width: 85vw;
           height: 70vh;
-          background: radial-gradient(ellipse at center, rgba(252, 218, 201, 0.7) 0%, rgba(246, 195, 175, 0.35) 55%, transparent 75%);
+          background: radial-gradient(ellipse at center, rgba(252, 218, 201, 0.62) 0%, rgba(246, 195, 175, 0.28) 48%, transparent 68%);
           animation: silkWaveDrift2 26s ease-in-out infinite alternate;
         }
       }
@@ -337,13 +330,12 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 900px;
-      height: 900px;
-      margin-top: -450px;
-      margin-left: -450px;
+      width: 720px;
+      height: 720px;
+      margin-top: -360px;
+      margin-left: -360px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 238, 190, 0.7) 0%, rgba(245, 175, 120, 0.35) 45%, rgba(223, 140, 95, 0.12) 65%, transparent 80%);
-      filter: blur(80px);
+      background: radial-gradient(circle at center, rgba(255, 238, 190, 0.65) 0%, rgba(245, 175, 120, 0.3) 35%, rgba(223, 140, 95, 0.08) 55%, transparent 70%);
       mix-blend-mode: screen;
       pointer-events: none;
       z-index: 2;
@@ -483,6 +475,11 @@ export class AppComponent {
     return `scale(${scale})`;
   });
 
+  readonly isTransitionActive = computed(() => {
+    const p = this.peachTransitionProgress();
+    return p > 0.02 && p < 0.98;
+  });
+
   readonly detailsOpacity = computed(() => {
     const p = this.detailsProgress();
     if (p <= 0) return 0;
@@ -527,7 +524,28 @@ export class AppComponent {
   @HostListener('window:scroll')
   onWindowScroll(): void {
     if (typeof window !== 'undefined' && this.isScrollUnlocked()) {
-      this.targetY = window.scrollY;
+      const scrollY = window.scrollY;
+      this.targetY = scrollY;
+
+      // On mobile screens or touch devices, synchronize directly for 0ms lag
+      if (window.innerWidth <= 768) {
+        this.currentY = scrollY;
+        this.scrollY.set(scrollY);
+
+        const now = performance.now();
+        const dt = Math.max(16, now - this.lastScrollTime);
+        const rawDy = scrollY - this.lastScrollY;
+        const instantVel = Math.max(-100, Math.min(100, (rawDy / dt) * 60));
+        const prevVel = this.scrollVelocity();
+        const smoothedVel = prevVel + (instantVel - prevVel) * 0.45;
+        this.scrollVelocity.set(Math.abs(smoothedVel) < 0.1 ? 0 : smoothedVel);
+
+        this.lastScrollY = scrollY;
+        this.lastScrollTime = now;
+        return;
+      }
+
+      // On desktop mouse wheels, use snappy responsive RAF interpolation
       if (!this.isTicking) {
         this.isTicking = true;
         this.lastScrollTime = performance.now();
@@ -541,8 +559,8 @@ export class AppComponent {
     const now = performance.now();
     const dt = Math.max(16, now - this.lastScrollTime);
 
-    // Smooth responsive lerp for high-FPS, zero-stutter feel
-    this.currentY += diff * 0.28;
+    // Responsive snappy lerp (0.52 for immediate responsive feel with smooth physics)
+    this.currentY += diff * 0.52;
     this.scrollY.set(this.currentY);
 
     // Instantaneous velocity with direction
@@ -551,14 +569,14 @@ export class AppComponent {
 
     // Smooth physical momentum filter (liquid inertial damping)
     const prevVel = this.scrollVelocity();
-    const smoothedVel = prevVel + (instantVel - prevVel) * 0.35;
+    const smoothedVel = prevVel + (instantVel - prevVel) * 0.4;
     this.scrollVelocity.set(Math.abs(smoothedVel) < 0.05 ? 0 : smoothedVel);
 
     this.lastScrollY = this.currentY;
     this.lastScrollTime = now;
 
     // Check if both position and velocity have smoothly settled to rest
-    if (Math.abs(diff) < 0.3 && Math.abs(this.scrollVelocity()) < 0.1) {
+    if (Math.abs(diff) < 0.5 && Math.abs(this.scrollVelocity()) < 0.1) {
       this.currentY = this.targetY;
       this.scrollY.set(this.currentY);
       this.scrollVelocity.set(0);

@@ -3618,7 +3618,24 @@ interface Blessing {
       height: 0;
     }
 
-    /* Comprehensive Mobile Responsive Polish */
+    /* Mobile High-Performance & Responsive Polish */
+    @media (max-width: 768px) {
+      .chronometer-card,
+      .suite-card,
+      .photo-frame-card,
+      .story-card,
+      .audio-toggle-btn,
+      .cathedral-arch-dial,
+      .guestbook-note-card,
+      .itinerary-timeline-card,
+      .rsvp-suite-card,
+      .venue-suite-card {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(255, 255, 255, 0.96) !important;
+      }
+    }
+
     @media (max-width: 640px) {
       .chronometer-card {
         padding: 32px 14px 28px;
