@@ -34,7 +34,7 @@ interface Blessing {
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <section class="luxury-details-container" aria-label="Event Details, Countdown & Gallery">
+    <section class="luxury-details-container" [style.--scroll-vel]="scrollVelocity()" aria-label="Event Details, Countdown & Gallery">
 
       <!-- Ambient Audio Controller Pill (Top Floating) -->
       <div class="audio-control-bar">
@@ -212,6 +212,27 @@ interface Blessing {
         </div>
       </div>
 
+      <!-- ReactBits Kinetic ScrollVelocity Royal Silk Ribbon Banner -->
+      <div class="royal-velocity-ribbon-stage" aria-hidden="true">
+        <div class="ribbon-glow-line top-line"></div>
+        
+        <div class="velocity-track track-1" [style.transform]="velocityTrack1Transform()">
+          <div class="track-inner">
+            <span class="ribbon-phrase">✦ AMMU &amp; AJITH ✦ APRIL 4, 2027 ✦ MEENAM 21 ✦ KOTTARAKKARA ✦ A CELEBRATION OF ETERNAL LOVE ✦ ശുഭ മുഹൂർത്തം ✦ TWO HEARTS BECOMING ONE ✦</span>
+            <span class="ribbon-phrase">✦ AMMU &amp; AJITH ✦ APRIL 4, 2027 ✦ MEENAM 21 ✦ KOTTARAKKARA ✦ A CELEBRATION OF ETERNAL LOVE ✦ ശുഭ മുഹൂർത്തം ✦ TWO HEARTS BECOMING ONE ✦</span>
+          </div>
+        </div>
+
+        <div class="velocity-track track-2" [style.transform]="velocityTrack2Transform()">
+          <div class="track-inner">
+            <span class="ribbon-phrase sub-phrase">🕊️ WITH ROYAL BLESSINGS ✦ ST. PAUL'S AUDITORIUM ✦ 24-DISH KERALA SADHYA ✦ TWO SOULS UNITED ✦ SAVING THE AUSPICIOUS DATE ✦ ETERNAL DEVOTION ✦</span>
+            <span class="ribbon-phrase sub-phrase">🕊️ WITH ROYAL BLESSINGS ✦ ST. PAUL'S AUDITORIUM ✦ 24-DISH KERALA SADHYA ✦ TWO SOULS UNITED ✦ SAVING THE AUSPICIOUS DATE ✦ ETERNAL DEVOTION ✦</span>
+          </div>
+        </div>
+
+        <div class="ribbon-glow-line bottom-line"></div>
+      </div>
+
       <!-- Section 3: Redesigned Action Suite (Imperial Wax-Sealed RSVP Missive & Cathedral Sanctuary) -->
       <div class="action-suite-grid reveal-item">
         
@@ -230,8 +251,8 @@ interface Blessing {
           <!-- 3D Sculpted Royal Wax Seal & Silk Ribbon Tails -->
           <div class="wax-seal-ornament" aria-hidden="true">
             <div class="wax-seal-ribbons">
-              <span class="wax-ribbon ribbon-left"></span>
-              <span class="wax-ribbon ribbon-right"></span>
+              <span class="wax-ribbon ribbon-left" [style.transform]="waxRibbonLeftTransform()"></span>
+              <span class="wax-ribbon ribbon-right" [style.transform]="waxRibbonRightTransform()"></span>
             </div>
             <div class="wax-seal-stamp">
               <div class="wax-outer-rim"></div>
@@ -1437,7 +1458,8 @@ interface Blessing {
       backdrop-filter: blur(24px);
       text-align: center;
       transform-style: preserve-3d;
-      transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+      transform: perspective(1000px) rotateX(calc(var(--scroll-vel, 0) * -0.06deg)) translateY(calc(var(--scroll-vel, 0) * 0.12px));
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease-out;
 
       &:hover {
         box-shadow: 0 32px 80px rgba(184, 107, 88, 0.24), 0 0 50px rgba(223, 178, 93, 0.28);
@@ -1518,11 +1540,25 @@ interface Blessing {
       display: flex;
       flex-direction: column;
       align-items: center;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
 
       &.seconds-box {
         border-color: rgba(212, 155, 80, 0.7);
         background: linear-gradient(180deg, #ffffff 0%, #ffefe6 100%);
       }
+    }
+
+    .dials-grid .dial-box:nth-child(1) {
+      transform: perspective(600px) translateY(calc(var(--scroll-vel, 0) * 0.08px));
+    }
+    .dials-grid .dial-box:nth-child(3) {
+      transform: perspective(600px) translateY(calc(var(--scroll-vel, 0) * 0.14px));
+    }
+    .dials-grid .dial-box:nth-child(5) {
+      transform: perspective(600px) translateY(calc(var(--scroll-vel, 0) * 0.20px));
+    }
+    .dials-grid .dial-box:nth-child(7) {
+      transform: perspective(600px) translateY(calc(var(--scroll-vel, 0) * 0.26px));
     }
 
     .arch-apex-crest {
@@ -1661,6 +1697,76 @@ interface Blessing {
       }
     }
 
+    /* ========================================================
+       ReactBits Kinetic ScrollVelocity Royal Silk Ribbon Banner
+       - Infinite Counter-Scrolling Silk Ribbons
+       - Reacts to Scroll Velocity: accelerates and skews dynamically
+       ======================================================== */
+    .royal-velocity-ribbon-stage {
+      position: relative;
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      overflow: hidden;
+      padding: 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: linear-gradient(90deg, rgba(254, 224, 210, 0.45) 0%, rgba(255, 245, 238, 0.88) 50%, rgba(254, 224, 210, 0.45) 100%);
+      border-top: 1px solid rgba(212, 155, 80, 0.35);
+      border-bottom: 1px solid rgba(212, 155, 80, 0.35);
+      box-shadow: 0 4px 24px rgba(184, 107, 88, 0.08), inset 0 1px 0 #ffffff;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+
+      .ribbon-glow-line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, #dfb25d 30%, #fff3c4 50%, #dfb25d 70%, transparent 100%);
+        opacity: 0.75;
+
+        &.top-line { top: 0; }
+        &.bottom-line { bottom: 0; }
+      }
+
+      .velocity-track {
+        display: flex;
+        white-space: nowrap;
+        will-change: transform;
+        user-select: none;
+        pointer-events: none;
+        transition: transform 0.08s linear;
+
+        .track-inner {
+          display: flex;
+          flex-shrink: 0;
+          gap: 32px;
+        }
+
+        .ribbon-phrase {
+          font-family: var(--font-royal);
+          font-size: clamp(12.5px, 1.6vw, 15px);
+          font-weight: 700;
+          letter-spacing: 0.24em;
+          text-transform: uppercase;
+          color: #6e2333;
+          text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8), 0 0 12px rgba(223, 178, 93, 0.25);
+
+          &.sub-phrase {
+            font-family: var(--font-sans);
+            font-size: clamp(11px, 1.3vw, 13px);
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            color: #944d5c;
+          }
+        }
+      }
+    }
+
     /* Section 3: Redesigned Action Suite */
     .action-suite-grid {
       display: grid;
@@ -1680,13 +1786,14 @@ interface Blessing {
       text-align: left;
       backdrop-filter: blur(24px);
       transform-style: preserve-3d;
-      transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease-out;
       position: relative;
 
       &.rsvp-suite-card {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 248, 242, 0.88) 100%);
         border: 1.5px solid rgba(26, 115, 76, 0.38);
         box-shadow: 0 24px 54px rgba(184, 107, 88, 0.15), 0 8px 24px rgba(26, 115, 76, 0.08), inset 0 1.5px 0 #ffffff;
+        transform: perspective(1000px) rotateX(calc(var(--scroll-vel, 0) * -0.05deg)) translateY(calc(var(--scroll-vel, 0) * 0.09px));
 
         &:hover {
           box-shadow: 0 30px 72px rgba(184, 107, 88, 0.22), 0 0 40px rgba(46, 196, 134, 0.25);
@@ -1698,6 +1805,7 @@ interface Blessing {
         border: 1.5px solid rgba(212, 155, 80, 0.45);
         border-radius: 44px 44px 28px 28px;
         box-shadow: 0 24px 54px rgba(184, 107, 88, 0.16), inset 0 1.5px 0 #ffffff;
+        transform: perspective(1000px) rotateX(calc(var(--scroll-vel, 0) * -0.05deg)) translateY(calc(var(--scroll-vel, 0) * 0.13px));
 
         &:hover {
           box-shadow: 0 30px 72px rgba(184, 107, 88, 0.24), 0 0 40px rgba(223, 178, 93, 0.25);
@@ -1783,12 +1891,11 @@ interface Blessing {
         background: linear-gradient(180deg, #750f24 0%, #4a0614 100%);
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
         clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 80%, 0% 100%);
+        transform-origin: top center;
+        will-change: transform;
+        transition: transform 0.08s linear;
 
-        &.ribbon-left {
-          transform: rotate(-14deg);
-        }
         &.ribbon-right {
-          transform: rotate(14deg);
           background: linear-gradient(180deg, #8a152d 0%, #540817 100%);
         }
       }
@@ -2557,6 +2664,16 @@ interface Blessing {
       gap: 28px;
       width: 100%;
       position: relative;
+
+      .photo-card:nth-child(odd) {
+        transform: translateY(calc(var(--scroll-vel, 0) * -0.07px));
+        transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .photo-card:nth-child(even) {
+        transform: translateY(calc(var(--scroll-vel, 0) * 0.07px));
+        transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+      }
 
       &.has-hover .photo-card.blurred {
         filter: blur(2.5px) grayscale(15%);
@@ -3612,6 +3729,40 @@ export class DetailsSectionComponent implements OnInit, OnDestroy {
   readonly mapsUrl = signal<string>(INVITE_CONFIG.mapsUrl || 'https://maps.google.com/?q=St+Pauls+Auditorium+Puthoor+Kottarakkara');
   readonly defaultWhatsappUrl = signal<string>(INVITE_CONFIG.whatsappRsvpUrl || 'https://wa.me/?text=Congratulations%20Ammu%20and%20Ajith!%20Delighted%20to%20attend.');
 
+  // ReactBits ScrollVelocity kinetic horizontal ribbon transforms
+  readonly velocityTrack1Transform = computed(() => {
+    const y = this.scrollY();
+    const vel = this.scrollVelocity();
+    const offset = ((y * 0.75) % 1400);
+    const skew = (-vel * 0.12).toFixed(2);
+    return `translate3d(${-offset}px, 0, 0) skewX(${skew}deg)`;
+  });
+
+  readonly velocityTrack2Transform = computed(() => {
+    const y = this.scrollY();
+    const vel = this.scrollVelocity();
+    const offset = ((y * 0.62) % 1400);
+    const skew = (vel * 0.12).toFixed(2);
+    return `translate3d(${offset - 700}px, 0, 0) skewX(${skew}deg)`;
+  });
+
+  // 3D Sculpted Wax Seal silk ribbon wind flutter physics
+  readonly waxRibbonLeftTransform = computed(() => {
+    const vel = this.scrollVelocity();
+    const sway = Math.sin(this.scrollY() * 0.05) * 3;
+    const rot = -14 + (vel * 0.45) + sway;
+    const skew = (-vel * 0.2).toFixed(1);
+    return `rotate(${rot.toFixed(1)}deg) skewX(${skew}deg)`;
+  });
+
+  readonly waxRibbonRightTransform = computed(() => {
+    const vel = this.scrollVelocity();
+    const sway = Math.cos(this.scrollY() * 0.05) * 3;
+    const rot = 14 + (vel * 0.55) + sway;
+    const skew = (-vel * 0.25).toFixed(1);
+    return `rotate(${rot.toFixed(1)}deg) skewX(${skew}deg)`;
+  });
+
   // Live countdown state
   private readonly diffMs = signal<number>(0);
   readonly days = computed(() => Math.max(0, Math.floor(this.diffMs() / (1000 * 60 * 60 * 24))));
@@ -3817,7 +3968,7 @@ export class DetailsSectionComponent implements OnInit, OnDestroy {
 
   onCardLeave(cardEl: HTMLElement): void {
     if (!cardEl) return;
-    cardEl.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    cardEl.style.transform = '';
   }
 
   // ReactBits Crest Interactive 3D Perspective Tilt
@@ -3853,7 +4004,7 @@ export class DetailsSectionComponent implements OnInit, OnDestroy {
 
   onDialLeave(dialEl: HTMLElement): void {
     if (!dialEl) return;
-    dialEl.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+    dialEl.style.transform = '';
   }
 
   // ReactBits Magnetic CTA Button Attraction

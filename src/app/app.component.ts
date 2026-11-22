@@ -336,25 +336,33 @@ export class AppComponent {
 
   private smoothScrollStep(): void {
     const diff = this.targetY - this.currentY;
-    if (Math.abs(diff) < 0.3) {
+    const now = performance.now();
+    const dt = Math.max(16, now - this.lastScrollTime);
+
+    // Smooth responsive lerp for high-FPS, zero-stutter feel
+    this.currentY += diff * 0.28;
+    this.scrollY.set(this.currentY);
+
+    // Instantaneous velocity with direction
+    const rawDy = this.currentY - this.lastScrollY;
+    const instantVel = Math.max(-100, Math.min(100, (rawDy / dt) * 60));
+
+    // Smooth physical momentum filter (liquid inertial damping)
+    const prevVel = this.scrollVelocity();
+    const smoothedVel = prevVel + (instantVel - prevVel) * 0.35;
+    this.scrollVelocity.set(Math.abs(smoothedVel) < 0.05 ? 0 : smoothedVel);
+
+    this.lastScrollY = this.currentY;
+    this.lastScrollTime = now;
+
+    // Check if both position and velocity have smoothly settled to rest
+    if (Math.abs(diff) < 0.3 && Math.abs(this.scrollVelocity()) < 0.1) {
       this.currentY = this.targetY;
       this.scrollY.set(this.currentY);
       this.scrollVelocity.set(0);
       this.isTicking = false;
       return;
     }
-
-    // Smooth responsive lerp for high-FPS, zero-stutter feel
-    this.currentY += diff * 0.28;
-    this.scrollY.set(this.currentY);
-
-    const now = performance.now();
-    const dt = Math.max(16, now - this.lastScrollTime);
-    const dy = Math.abs(this.currentY - this.lastScrollY);
-    const vel = Math.min(100, (dy / dt) * 60);
-    this.scrollVelocity.set(vel);
-    this.lastScrollY = this.currentY;
-    this.lastScrollTime = now;
 
     requestAnimationFrame(() => this.smoothScrollStep());
   }
