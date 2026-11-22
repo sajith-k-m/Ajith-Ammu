@@ -6,7 +6,8 @@ import {
   signal,
   computed,
   input,
-  HostListener
+  HostListener,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -33,8 +34,9 @@ interface Blessing {
   selector: 'app-details-section',
   standalone: true,
   imports: [CommonModule, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="luxury-details-container" [style.--scroll-vel]="scrollVelocity()" aria-label="Event Details, Countdown & Gallery">
+    <section class="luxury-details-container" aria-label="Event Details, Countdown & Gallery">
 
       <!-- Ambient Audio Controller Pill (Top Floating) -->
       <div class="audio-control-bar">
@@ -216,14 +218,14 @@ interface Blessing {
       <div class="royal-velocity-ribbon-stage" aria-hidden="true">
         <div class="ribbon-glow-line top-line"></div>
         
-        <div class="velocity-track track-1" [style.transform]="velocityTrack1Transform()">
+        <div class="velocity-track track-1">
           <div class="track-inner">
             <span class="ribbon-phrase">✦ AMMU &amp; AJITH ✦ APRIL 4, 2027 ✦ MEENAM 21 ✦ KOTTARAKKARA ✦ A CELEBRATION OF ETERNAL LOVE ✦ ശുഭ മുഹൂർത്തം ✦ TWO HEARTS BECOMING ONE ✦</span>
             <span class="ribbon-phrase">✦ AMMU &amp; AJITH ✦ APRIL 4, 2027 ✦ MEENAM 21 ✦ KOTTARAKKARA ✦ A CELEBRATION OF ETERNAL LOVE ✦ ശുഭ മുഹൂർത്തം ✦ TWO HEARTS BECOMING ONE ✦</span>
           </div>
         </div>
 
-        <div class="velocity-track track-2" [style.transform]="velocityTrack2Transform()">
+        <div class="velocity-track track-2">
           <div class="track-inner">
             <span class="ribbon-phrase sub-phrase">🕊️ WITH ROYAL BLESSINGS ✦ ST. PAUL'S AUDITORIUM ✦ 24-DISH KERALA SADHYA ✦ TWO SOULS UNITED ✦ SAVING THE AUSPICIOUS DATE ✦ ETERNAL DEVOTION ✦</span>
             <span class="ribbon-phrase sub-phrase">🕊️ WITH ROYAL BLESSINGS ✦ ST. PAUL'S AUDITORIUM ✦ 24-DISH KERALA SADHYA ✦ TWO SOULS UNITED ✦ SAVING THE AUSPICIOUS DATE ✦ ETERNAL DEVOTION ✦</span>
@@ -251,8 +253,8 @@ interface Blessing {
           <!-- 3D Sculpted Royal Wax Seal & Silk Ribbon Tails -->
           <div class="wax-seal-ornament" aria-hidden="true">
             <div class="wax-seal-ribbons">
-              <span class="wax-ribbon ribbon-left" [style.transform]="waxRibbonLeftTransform()"></span>
-              <span class="wax-ribbon ribbon-right" [style.transform]="waxRibbonRightTransform()"></span>
+              <span class="wax-ribbon ribbon-left"></span>
+              <span class="wax-ribbon ribbon-right"></span>
             </div>
             <div class="wax-seal-stamp">
               <div class="wax-outer-rim"></div>
@@ -1317,7 +1319,15 @@ interface Blessing {
       background-size: 250% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: shinyTextSweep 5s ease-in-out infinite;
+      background-position: 50% center;
+
+      &.couple-title {
+        animation: shinyTextSweep 6s ease-in-out infinite;
+      }
+
+      &:not(.couple-title):hover {
+        animation: shinyTextSweep 3s ease-in-out infinite;
+      }
     }
 
     @keyframes shinyTextSweep {
@@ -1350,14 +1360,12 @@ interface Blessing {
         );
         transform: skewX(-22deg);
         pointer-events: none;
-        animation: btnShineSweep 4s ease-in-out infinite;
+        transition: left 0.65s cubic-bezier(0.16, 1, 0.3, 1);
       }
-    }
 
-    @keyframes btnShineSweep {
-      0% { left: -120%; }
-      30% { left: 180%; }
-      100% { left: 180%; }
+      &:hover .btn-shine-sweep {
+        left: 180%;
+      }
     }
 
     /* ReactBits Star Border Glowing Orbit */
@@ -1458,7 +1466,6 @@ interface Blessing {
       backdrop-filter: blur(24px);
       text-align: center;
       transform-style: preserve-3d;
-      transform: perspective(1000px) rotateX(calc(var(--scroll-vel, 0) * -0.06deg)) translateY(calc(var(--scroll-vel, 0) * 0.12px));
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease-out;
 
       &:hover {
@@ -1546,19 +1553,6 @@ interface Blessing {
         border-color: rgba(212, 155, 80, 0.7);
         background: linear-gradient(180deg, #ffffff 0%, #ffefe6 100%);
       }
-    }
-
-    .dials-grid .dial-box:nth-child(1) {
-      transform: perspective(600px) translateY(calc(var(--scroll-vel, 0) * 0.08px));
-    }
-    .dials-grid .dial-box:nth-child(3) {
-      transform: perspective(600px) translateY(calc(var(--scroll-vel, 0) * 0.14px));
-    }
-    .dials-grid .dial-box:nth-child(5) {
-      transform: perspective(600px) translateY(calc(var(--scroll-vel, 0) * 0.20px));
-    }
-    .dials-grid .dial-box:nth-child(7) {
-      transform: perspective(600px) translateY(calc(var(--scroll-vel, 0) * 0.26px));
     }
 
     .arch-apex-crest {
@@ -1736,15 +1730,22 @@ interface Blessing {
       .velocity-track {
         display: flex;
         white-space: nowrap;
-        will-change: transform;
         user-select: none;
         pointer-events: none;
-        transition: transform 0.08s linear;
+        overflow: hidden;
 
-        .track-inner {
+        &.track-1 .track-inner {
           display: flex;
           flex-shrink: 0;
           gap: 32px;
+          animation: marqueeLeft 34s linear infinite;
+        }
+
+        &.track-2 .track-inner {
+          display: flex;
+          flex-shrink: 0;
+          gap: 32px;
+          animation: marqueeRight 38s linear infinite;
         }
 
         .ribbon-phrase {
@@ -1765,6 +1766,16 @@ interface Blessing {
           }
         }
       }
+    }
+
+    @keyframes marqueeLeft {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+
+    @keyframes marqueeRight {
+      0% { transform: translate3d(-50%, 0, 0); }
+      100% { transform: translate3d(0, 0, 0); }
     }
 
     /* Section 3: Redesigned Action Suite */
@@ -1793,7 +1804,6 @@ interface Blessing {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 248, 242, 0.88) 100%);
         border: 1.5px solid rgba(26, 115, 76, 0.38);
         box-shadow: 0 24px 54px rgba(184, 107, 88, 0.15), 0 8px 24px rgba(26, 115, 76, 0.08), inset 0 1.5px 0 #ffffff;
-        transform: perspective(1000px) rotateX(calc(var(--scroll-vel, 0) * -0.05deg)) translateY(calc(var(--scroll-vel, 0) * 0.09px));
 
         &:hover {
           box-shadow: 0 30px 72px rgba(184, 107, 88, 0.22), 0 0 40px rgba(46, 196, 134, 0.25);
@@ -1805,7 +1815,6 @@ interface Blessing {
         border: 1.5px solid rgba(212, 155, 80, 0.45);
         border-radius: 44px 44px 28px 28px;
         box-shadow: 0 24px 54px rgba(184, 107, 88, 0.16), inset 0 1.5px 0 #ffffff;
-        transform: perspective(1000px) rotateX(calc(var(--scroll-vel, 0) * -0.05deg)) translateY(calc(var(--scroll-vel, 0) * 0.13px));
 
         &:hover {
           box-shadow: 0 30px 72px rgba(184, 107, 88, 0.24), 0 0 40px rgba(223, 178, 93, 0.25);
@@ -1892,12 +1901,29 @@ interface Blessing {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
         clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 80%, 0% 100%);
         transform-origin: top center;
-        will-change: transform;
-        transition: transform 0.08s linear;
+
+        &.ribbon-left {
+          transform: rotate(-14deg);
+          animation: ribbonFlutterLeft 4.5s ease-in-out infinite alternate;
+        }
 
         &.ribbon-right {
           background: linear-gradient(180deg, #8a152d 0%, #540817 100%);
+          transform: rotate(14deg);
+          animation: ribbonFlutterRight 5s ease-in-out infinite alternate;
         }
+      }
+
+      @keyframes ribbonFlutterLeft {
+        0% { transform: rotate(-14deg); }
+        50% { transform: rotate(-9deg) skewX(2deg); }
+        100% { transform: rotate(-16deg) skewX(-2deg); }
+      }
+
+      @keyframes ribbonFlutterRight {
+        0% { transform: rotate(14deg); }
+        50% { transform: rotate(18deg) skewX(-2deg); }
+        100% { transform: rotate(11deg) skewX(2deg); }
       }
     }
 
@@ -2665,13 +2691,7 @@ interface Blessing {
       width: 100%;
       position: relative;
 
-      .photo-card:nth-child(odd) {
-        transform: translateY(calc(var(--scroll-vel, 0) * -0.07px));
-        transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      .photo-card:nth-child(even) {
-        transform: translateY(calc(var(--scroll-vel, 0) * 0.07px));
+      .photo-card {
         transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
       }
 
@@ -3634,6 +3654,15 @@ interface Blessing {
         -webkit-backdrop-filter: none !important;
         background: rgba(255, 255, 255, 0.96) !important;
       }
+
+      .star-border-beam,
+      .border-beam-ring {
+        display: none !important;
+      }
+
+      .shiny-text {
+        animation: none !important;
+      }
     }
 
     @media (max-width: 640px) {
@@ -3736,49 +3765,12 @@ interface Blessing {
   `]
 })
 export class DetailsSectionComponent implements OnInit, OnDestroy {
-  readonly scrollY = input<number>(0);
-  readonly scrollVelocity = input<number>(0);
-
   private timerId: number | null = null;
   private audioCtx: AudioContext | null = null;
   private audioIntervalId: number | null = null;
 
   readonly mapsUrl = signal<string>(INVITE_CONFIG.mapsUrl || 'https://maps.google.com/?q=St+Pauls+Auditorium+Puthoor+Kottarakkara');
   readonly defaultWhatsappUrl = signal<string>(INVITE_CONFIG.whatsappRsvpUrl || 'https://wa.me/?text=Congratulations%20Ammu%20and%20Ajith!%20Delighted%20to%20attend.');
-
-  // ReactBits ScrollVelocity kinetic horizontal ribbon transforms
-  readonly velocityTrack1Transform = computed(() => {
-    const y = this.scrollY();
-    const vel = this.scrollVelocity();
-    const offset = ((y * 0.75) % 1400);
-    const skew = (-vel * 0.12).toFixed(2);
-    return `translate3d(${-offset}px, 0, 0) skewX(${skew}deg)`;
-  });
-
-  readonly velocityTrack2Transform = computed(() => {
-    const y = this.scrollY();
-    const vel = this.scrollVelocity();
-    const offset = ((y * 0.62) % 1400);
-    const skew = (vel * 0.12).toFixed(2);
-    return `translate3d(${offset - 700}px, 0, 0) skewX(${skew}deg)`;
-  });
-
-  // 3D Sculpted Wax Seal silk ribbon wind flutter physics
-  readonly waxRibbonLeftTransform = computed(() => {
-    const vel = this.scrollVelocity();
-    const sway = Math.sin(this.scrollY() * 0.05) * 3;
-    const rot = -14 + (vel * 0.45) + sway;
-    const skew = (-vel * 0.2).toFixed(1);
-    return `rotate(${rot.toFixed(1)}deg) skewX(${skew}deg)`;
-  });
-
-  readonly waxRibbonRightTransform = computed(() => {
-    const vel = this.scrollVelocity();
-    const sway = Math.cos(this.scrollY() * 0.05) * 3;
-    const rot = 14 + (vel * 0.55) + sway;
-    const skew = (-vel * 0.25).toFixed(1);
-    return `rotate(${rot.toFixed(1)}deg) skewX(${skew}deg)`;
-  });
 
   // Live countdown state
   private readonly diffMs = signal<number>(0);

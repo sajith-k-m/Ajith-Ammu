@@ -5,7 +5,8 @@ import {
   HostListener,
   input,
   computed,
-  signal
+  signal,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -26,6 +27,7 @@ interface FloatingElement {
   selector: 'app-floating-decorations',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
       class="floating-3d-stage"
@@ -50,7 +52,7 @@ interface FloatingElement {
       <div class="ambient-orb orb-2" [style.transform]="orb2Transform()"></div>
       <div class="ambient-orb orb-3" [style.transform]="orb3Transform()"></div>
 
-      <!-- Layered 3D Floating Particles (Adaptive count: 9 on mobile, 22 on desktop) -->
+      <!-- Layered 3D Floating Particles (Compositor-only hardware acceleration) -->
       @for (el of visibleElements(); track el.id) {
         <div
           class="floating-node depth-{{ Math.round(el.depth * 2) }}"
@@ -60,7 +62,6 @@ interface FloatingElement {
           [style.height.px]="el.sizePx"
           [style.animation-duration.s]="el.driftDurationSec"
           [style.animation-delay.s]="el.delaySec"
-          [style.transform]="getNodeTransform(el)"
         >
           <!-- SVG element based on type -->
           @switch (el.type) {
@@ -107,8 +108,8 @@ interface FloatingElement {
             }
             @case ('diya') {
               <svg viewBox="0 0 36 36" class="svg-diya" fill="none">
-                <!-- Glowing Flame that leans with scroll velocity wind -->
-                <g class="diya-flame" [style.transform]="getDiyaFlameTransform()">
+                <!-- Glowing Kerala Bronze Lamp Flame -->
+                <g class="diya-flame">
                   <ellipse cx="18" cy="9" rx="4" ry="7" fill="url(#flameGrad)" />
                   <ellipse cx="18" cy="9.5" rx="2" ry="4" fill="#ffffff" />
                   <circle cx="18" cy="9" r="8" fill="url(#flameGlowGrad)" opacity="0.65" />
@@ -255,9 +256,7 @@ interface FloatingElement {
       position: absolute;
       border-radius: 50%;
       opacity: 0.38;
-      mix-blend-mode: screen;
       pointer-events: none;
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .orb-1 {
@@ -284,7 +283,7 @@ interface FloatingElement {
       background: radial-gradient(circle at center, rgba(250, 224, 154, 0.2) 0%, rgba(37, 162, 107, 0.12) 38%, transparent 68%);
     }
 
-    /* Floating Nodes */
+    /* Floating Nodes (100% GPU compositor acceleration, zero CPU transform churn) */
     .floating-node {
       position: absolute;
       display: flex;
@@ -292,45 +291,41 @@ interface FloatingElement {
       justify-content: center;
       pointer-events: none;
       animation: floatDrift linear infinite alternate;
-      will-change: transform;
 
-      &.depth-1 { filter: blur(2.5px); opacity: 0.45; }
-      &.depth-2 { filter: blur(1.2px); opacity: 0.7; }
-      &.depth-3 { filter: none; opacity: 0.95; }
+      &.depth-1 { opacity: 0.45; transform: scale(0.78); }
+      &.depth-2 { opacity: 0.72; transform: scale(0.92); }
+      &.depth-3 { opacity: 1; transform: scale(1.06); }
     }
 
     .svg-sparkle {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 0 8px rgba(255, 243, 196, 0.8));
+      filter: drop-shadow(0 0 6px rgba(255, 243, 196, 0.7));
       animation: sparkleTwinkle 3.2s ease-in-out infinite;
     }
 
     .svg-petal {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
       animation: petalTumble 6s ease-in-out infinite alternate;
     }
 
     .rose-petal {
-      filter: drop-shadow(0 6px 12px rgba(100, 10, 20, 0.6));
+      opacity: 0.95;
     }
 
     .jasmine-floret {
-      filter: drop-shadow(0 4px 10px rgba(223, 178, 93, 0.45));
+      opacity: 0.95;
     }
 
     .svg-leaf {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 0 6px rgba(223, 178, 93, 0.3));
     }
 
     .svg-ring {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 0 10px rgba(223, 178, 93, 0.5));
       animation: ringSpin 14s linear infinite;
     }
 
@@ -339,7 +334,7 @@ interface FloatingElement {
       height: 100%;
       border-radius: 50%;
       background: radial-gradient(circle, #fff3c4 0%, #dfb25d 50%, transparent 75%);
-      box-shadow: 0 0 14px rgba(255, 243, 196, 0.9), 0 0 24px rgba(223, 178, 93, 0.6);
+      box-shadow: 0 0 12px rgba(255, 243, 196, 0.8);
       animation: fireflyPulse 2.8s ease-in-out infinite alternate;
     }
 
@@ -352,20 +347,25 @@ interface FloatingElement {
     .svg-diya {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.75)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
       animation: diyaFloat 4.5s ease-in-out infinite alternate;
     }
 
     .diya-flame {
       transform-origin: 18px 16px;
-      filter: drop-shadow(0 0 8px #ffb703) drop-shadow(0 0 16px #f77f00);
-      transition: transform 0.08s linear;
+      animation: flameFlicker 1.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes flameFlicker {
+      0% { transform: scale(0.96) skewX(-2deg); }
+      50% { transform: scale(1.04) skewX(2deg); }
+      100% { transform: scale(0.98) skewX(-1deg); }
     }
 
     .svg-kerala-coin {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 4px 12px rgba(184, 107, 88, 0.35)) drop-shadow(0 0 8px rgba(223, 178, 93, 0.5));
+      filter: drop-shadow(0 2px 6px rgba(184, 107, 88, 0.25));
       animation: coinGlint 5s ease-in-out infinite alternate;
     }
 
@@ -374,7 +374,7 @@ interface FloatingElement {
         transform: translate3d(0, 0, 0) rotate(0deg);
       }
       100% {
-        transform: translate3d(24px, -36px, 15px) rotate(16deg);
+        transform: translate3d(18px, -26px, 0) rotate(12deg);
       }
     }
 
@@ -459,16 +459,18 @@ export class FloatingDecorationsComponent implements OnInit, OnDestroy {
       return this.elements.filter(el =>
         el.id === 1 ||  // Sparkle
         el.id === 2 ||  // Rose petal
-        el.id === 3 ||  // Jasmine petal
-        el.id === 6 ||  // Sparkle
-        el.id === 8 ||  // Jasmine petal
-        el.id === 19 || // Kerala Diya
-        el.id === 20 || // Kerala Diya
-        el.id === 21 || // Kerala Gold Coin
-        el.id === 22    // Kerala Gold Coin
+        el.id === 19 || // Kerala Diya left
+        el.id === 20 || // Kerala Diya right
+        el.id === 21 || // Kerala Gold Coin left
+        el.id === 22    // Kerala Gold Coin right
       );
     }
-    return this.elements;
+    // Desktop: 12 curated elements
+    return this.elements.filter(el =>
+      el.id === 1 || el.id === 2 || el.id === 3 || el.id === 4 ||
+      el.id === 6 || el.id === 7 || el.id === 8 || el.id === 10 ||
+      el.id === 19 || el.id === 20 || el.id === 21 || el.id === 22
+    );
   });
 
   private isParallaxRunning = false;
@@ -549,8 +551,7 @@ export class FloatingDecorationsComponent implements OnInit, OnDestroy {
     const sy = this.smoothMouseYSignal();
     const ox = (sx * -40).toFixed(1);
     const oy = (sy * -30).toFixed(1);
-    const syScroll = ((this.scrollY() * 0.12) % 300).toFixed(1);
-    return `translate3d(${ox}px, calc(${oy}px - ${syScroll}px), 0)`;
+    return `translate3d(${ox}px, ${oy}px, 0)`;
   });
 
   readonly orb2Transform = computed(() => {
@@ -558,8 +559,7 @@ export class FloatingDecorationsComponent implements OnInit, OnDestroy {
     const sy = this.smoothMouseYSignal();
     const ox = (sx * 35).toFixed(1);
     const oy = (sy * 25).toFixed(1);
-    const syScroll = ((this.scrollY() * 0.18) % 350).toFixed(1);
-    return `translate3d(${ox}px, calc(${oy}px - ${syScroll}px), 0)`;
+    return `translate3d(${ox}px, ${oy}px, 0)`;
   });
 
   readonly orb3Transform = computed(() => {
@@ -569,34 +569,4 @@ export class FloatingDecorationsComponent implements OnInit, OnDestroy {
     const oy = (sy * -15).toFixed(1);
     return `translate3d(${ox}px, ${oy}px, 0)`;
   });
-
-  getNodeTransform(el: FloatingElement): string {
-    const d = el.depth;
-    // Mouse parallax based on depth (skipped on mobile)
-    const mx = !this.isMobile() ? (this.smoothMouseX * d * 32).toFixed(1) : '0';
-    const my = !this.isMobile() ? (this.smoothMouseY * d * 32).toFixed(1) : '0';
-
-    // Kinetic scroll velocity wind physics
-    const vel = this.scrollVelocity();
-    const velAbs = Math.abs(vel);
-    const velOffset = (vel * d * 0.7).toFixed(1);
-    const velTilt = (-vel * 0.42).toFixed(1);
-    const velSkew = (-vel * 0.22).toFixed(1);
-
-    // Aerodynamic stretch along vertical travel axis (squash and stretch)
-    const stretchY = (1 + Math.min(0.28, velAbs * 0.005)).toFixed(3);
-    const stretchX = (1 - Math.min(0.14, velAbs * 0.0025)).toFixed(3);
-
-    // Dynamic wind sway oscillating with scroll depth + velocity
-    const windSway = (Math.sin((this.scrollY() * 0.006) + el.id) * (14 + velAbs * 0.35)).toFixed(1);
-    const scrollTravel = ((this.scrollY() * d * 0.2) % 180).toFixed(1);
-
-    return `translate3d(calc(${mx}px + ${windSway}px), calc(${my}px - ${scrollTravel}px + ${velOffset}px), ${Math.round(d * 40)}px) rotateX(${velTilt}deg) rotateZ(${el.rotationDeg}deg) skewX(${velSkew}deg) scale3d(${stretchX}, ${stretchY}, 1)`;
-  }
-
-  getDiyaFlameTransform(): string {
-    const vel = this.scrollVelocity();
-    const flameLean = (-vel * 0.55).toFixed(1);
-    return `skewX(${flameLean}deg)`;
-  }
 }

@@ -1,4 +1,13 @@
-import { Component, signal, computed, HostListener } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  inject,
+  signal,
+  computed,
+  ChangeDetectionStrategy,
+  NgZone
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IntroSceneComponent } from './components/intro-scene/intro-scene.component';
 import { DetailsSectionComponent } from './components/details-section/details-section.component';
@@ -7,6 +16,7 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
 @Component({
   selector: 'app-root',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     IntroSceneComponent,
@@ -35,10 +45,7 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
           [style.transform]="risingVeilTransform()"
         >
           <!-- Golden Shimmer Wave Crest Horizon Line -->
-          <div
-            class="golden-wave-crest-horizon"
-            [style.transform]="waveCrestTiltTransform()"
-          >
+          <div class="golden-wave-crest-horizon">
             <svg viewBox="0 0 1440 120" preserveAspectRatio="none" class="liquid-wave-svg" aria-hidden="true">
               <defs>
                 <linearGradient id="crestGoldBeam" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -87,22 +94,8 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
           </div>
 
           <!-- Luminous Peach Body Fill extending beneath the crest -->
-          <div class="peach-veil-body">
-            <div class="peach-silk-wave wave-1"></div>
-            <div class="peach-silk-wave wave-2"></div>
-            <div class="kasavu-watermark-lattice"></div>
-            <div class="peach-gold-dust-sheen"></div>
-          </div>
+          <div class="peach-veil-body"></div>
         </div>
-
-        <!-- ReactBits Pro: Radiant Golden Dawn Bloom (peaking in mid-transition, hidden when settled) -->
-        @if (isTransitionActive()) {
-          <div
-            class="golden-dawn-radiance-bloom"
-            [style.opacity]="dawnBloomOpacity()"
-            [style.transform]="dawnBloomTransform()"
-          ></div>
-        }
       </div>
 
       <!-- Interactive 3D Floating Elements & Ambient Bokeh Engine (reacts to scroll & mouse) -->
@@ -139,14 +132,9 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       <div
         class="luxury-content-wrapper"
         [class.interactive]="detailsInteractive()"
-        [style.opacity]="detailsOpacity()"
-        [style.transform]="detailsTransform()"
         [style.pointer-events]="detailsInteractive() ? 'auto' : 'none'"
       >
-        <app-details-section
-          [scrollY]="scrollY()"
-          [scrollVelocity]="scrollVelocity()"
-        />
+        <app-details-section />
       </div>
 
     </main>
@@ -189,8 +177,6 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       background: radial-gradient(ellipse 75% 70% at 50% 50%, #2e1118 0%, #19080c 45%, #0d0406 80%, #060203 100%);
       z-index: 0;
       pointer-events: none;
-      will-change: opacity;
-      transition: opacity 0.15s ease-out;
     }
 
     /* ReactBits Pro: Liquid Golden Silk Transition Stage */
@@ -202,8 +188,6 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       z-index: 1;
       pointer-events: none;
       overflow: hidden;
-      will-change: opacity;
-      transition: opacity 0.2s linear;
     }
 
     .rising-peach-veil {
@@ -250,14 +234,20 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
         font-family: serif;
         font-size: 16px;
         color: #fff4d1;
-        text-shadow: 0 0 10px #f59e0b, 0 0 20px #dfb25d;
-        animation: crestSparklePulse 2.5s ease-in-out infinite alternate;
+        text-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
+        animation: crestSparklePulse 3s ease-in-out infinite alternate;
 
         &.g-1 { animation-delay: 0s; font-size: 14px; }
         &.g-2 { animation-delay: 0.5s; font-size: 18px; }
         &.g-3 { animation-delay: 1.1s; font-size: 20px; }
         &.g-4 { animation-delay: 0.3s; font-size: 16px; }
         &.g-5 { animation-delay: 0.8s; font-size: 14px; }
+      }
+
+      @media (max-width: 768px) {
+        .crest-sparkles {
+          display: none;
+        }
       }
     }
 
@@ -270,87 +260,8 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       position: relative;
       flex: 1;
       width: 100%;
-      background:
-        radial-gradient(ellipse 80% 60% at 20% 15%, rgba(255, 240, 232, 0.98) 0%, transparent 60%),
-        radial-gradient(ellipse 70% 60% at 85% 45%, rgba(254, 224, 210, 0.95) 0%, transparent 55%),
-        radial-gradient(ellipse 90% 70% at 50% 85%, rgba(248, 204, 188, 0.85) 0%, transparent 65%),
-        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255, 248, 242, 0.7) 0%, transparent 70%),
-        linear-gradient(180deg, #fdf5ef 0%, #fae6dc 25%, #f6d6c7 60%, #f0beab 100%);
+      background: linear-gradient(180deg, #fdf5ef 0%, #fae6dc 25%, #f6d6c7 60%, #f0beab 100%);
       overflow: hidden;
-
-      .peach-silk-wave {
-        position: absolute;
-        pointer-events: none;
-        border-radius: 50%;
-        will-change: transform;
-        
-        &.wave-1 {
-          top: -15%;
-          left: -10%;
-          width: 80vw;
-          height: 60vh;
-          background: radial-gradient(ellipse at center, rgba(255, 235, 224, 0.68) 0%, rgba(254, 215, 198, 0.38) 45%, transparent 68%);
-          animation: silkWaveDrift1 22s ease-in-out infinite alternate;
-        }
-
-        &.wave-2 {
-          bottom: -20%;
-          right: -15%;
-          width: 85vw;
-          height: 70vh;
-          background: radial-gradient(ellipse at center, rgba(252, 218, 201, 0.62) 0%, rgba(246, 195, 175, 0.28) 48%, transparent 68%);
-          animation: silkWaveDrift2 26s ease-in-out infinite alternate;
-        }
-      }
-
-      .kasavu-watermark-lattice {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        opacity: 0.045;
-        background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2396601a' fill-opacity='1'%3E%3Cpath d='M40 0 L45 20 L65 20 L50 32 L56 52 L40 40 L24 52 L30 32 L15 20 L35 20 Z' fill='none' stroke='%2396601a' stroke-width='0.8'/%3E%3Ccircle cx='40' cy='40' r='18' fill='none' stroke='%2396601a' stroke-width='0.7' stroke-dasharray='2,2'/%3E%3Ccircle cx='40' cy='40' r='6' fill='none' stroke='%2396601a' stroke-width='0.9'/%3E%3Cpolygon points='40,15 42,25 52,25 44,31 47,40 40,35 33,40 36,31 28,25 38,25' fill='%2396601a' opacity='0.5'/%3E%3Cpolygon points='0,0 2,10 12,10 4,16 7,25 0,20 -7,25 -4,16 -12,10 -2,10' fill='%2396601a' opacity='0.3'/%3E%3Cpolygon points='80,0 82,10 92,10 84,16 87,25 80,20 73,25 76,16 68,10 78,10' fill='%2396601a' opacity='0.3'/%3E%3Cpolygon points='0,80 2,90 12,90 4,96 7,105 0,100 -7,105 -4,96 -12,90 -2,90' fill='%2396601a' opacity='0.3'/%3E%3Cpolygon points='80,80 82,90 92,90 84,96 87,105 80,100 73,105 76,96 68,90 78,90' fill='%2396601a' opacity='0.3'/%3E%3C/g%3E%3C/svg%3E");
-        background-size: 80px 80px;
-      }
-
-      .peach-gold-dust-sheen {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        background: radial-gradient(circle 800px at 50% 30%, rgba(255, 245, 220, 0.35) 0%, transparent 70%);
-        mix-blend-mode: soft-light;
-      }
-    }
-
-    /* Golden Dawn Radiance Bloom */
-    .golden-dawn-radiance-bloom {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 720px;
-      height: 720px;
-      margin-top: -360px;
-      margin-left: -360px;
-      border-radius: 50%;
-      background: radial-gradient(circle at center, rgba(255, 238, 190, 0.65) 0%, rgba(245, 175, 120, 0.3) 35%, rgba(223, 140, 95, 0.08) 55%, transparent 70%);
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: 2;
-      will-change: opacity, transform;
-      transition: opacity 0.15s ease-out;
-    }
-
-    @keyframes silkWaveDrift1 {
-      0% { transform: translate3d(0, 0, 0) scale(1); }
-      100% { transform: translate3d(5vw, 6vh, 0) scale(1.08); }
-    }
-
-    @keyframes silkWaveDrift2 {
-      0% { transform: translate3d(0, 0, 0) scale(1); }
-      100% { transform: translate3d(-6vw, -5vh, 0) scale(1.06); }
     }
 
     /* Fixed Intro Scene Layer */
@@ -363,7 +274,6 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       height: 100dvh;
       z-index: 25;
       overflow: hidden;
-      transition: opacity 0.4s ease-out;
 
       &.hidden-after-exit {
         visibility: hidden;
@@ -376,7 +286,6 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
     .intro-scroll-track-spacer {
       width: 100%;
       pointer-events: none;
-      will-change: height;
     }
 
     /* Luxury Content Container */
@@ -394,10 +303,13 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
     }
   `]
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   readonly isScrollUnlocked = signal<boolean>(false);
   readonly scrollY = signal<number>(0);
   readonly scrollVelocity = signal<number>(0);
+
+  private ngZone = inject(NgZone);
+  private scrollUnlisten: (() => void) | null = null;
 
   // Scroll phase choreography
   private readonly ROLL_3_4_Y = 380;     // 0 to 380px -> paper rolls up from 0% to 75%
@@ -455,37 +367,6 @@ export class AppComponent {
     return `translate3d(0, ${translateYPercent}%, 0)`;
   });
 
-  // Wave crest dynamic tilt with scroll velocity
-  readonly waveCrestTiltTransform = computed(() => {
-    const vel = this.scrollVelocity();
-    const skew = (-vel * 0.04).toFixed(2);
-    return `skewY(${skew}deg)`;
-  });
-
-  // ReactBits Pro: Radiant Golden Dawn Bloom peaking at mid-transition
-  readonly dawnBloomOpacity = computed(() => {
-    const p = this.peachTransitionProgress();
-    if (p <= 0 || p >= 1) return 0;
-    return (Math.sin(Math.PI * p) * 0.55).toFixed(3);
-  });
-
-  readonly dawnBloomTransform = computed(() => {
-    const p = this.peachTransitionProgress();
-    const scale = (0.8 + (p * 0.45)).toFixed(2);
-    return `scale(${scale})`;
-  });
-
-  readonly isTransitionActive = computed(() => {
-    const p = this.peachTransitionProgress();
-    return p > 0.02 && p < 0.98;
-  });
-
-  readonly detailsOpacity = computed(() => {
-    const p = this.detailsProgress();
-    if (p <= 0) return 0;
-    return Math.min(1, p * 1.4);
-  });
-
   readonly detailsInteractive = computed(() => {
     return this.detailsProgress() >= 0.85;
   });
@@ -503,88 +384,40 @@ export class AppComponent {
     return (y - 180) / (this.ROLL_3_4_Y - 180);
   });
 
-  readonly detailsTransform = computed(() => {
-    const p = this.detailsProgress();
-    if (p <= 0) {
-      return 'translate3d(0, 60px, 0)';
-    }
-    if (p >= 1) {
-      return null;
-    }
-    const offset = ((1 - p) * 60).toFixed(1);
-    return `translate3d(0, ${offset}px, 0)`;
-  });
-
-  private targetY = 0;
-  private currentY = 0;
-  private isTicking = false;
   private lastScrollY = 0;
   private lastScrollTime = 0;
 
-  @HostListener('window:scroll')
-  onWindowScroll(): void {
-    if (typeof window !== 'undefined' && this.isScrollUnlocked()) {
-      const scrollY = window.scrollY;
-      this.targetY = scrollY;
+  ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      this.ngZone.runOutsideAngular(() => {
+        const onScroll = () => {
+          if (!this.isScrollUnlocked()) return;
+          const scrollY = window.scrollY;
+          this.scrollY.set(scrollY);
 
-      // On mobile screens or touch devices, synchronize directly for 0ms lag
-      if (window.innerWidth <= 768) {
-        this.currentY = scrollY;
-        this.scrollY.set(scrollY);
+          // Measure kinetic velocity (capped and damped)
+          const now = performance.now();
+          const dt = Math.max(16, now - this.lastScrollTime);
+          const rawDy = scrollY - this.lastScrollY;
+          const instantVel = Math.max(-50, Math.min(50, (rawDy / dt) * 60));
+          const prevVel = this.scrollVelocity();
+          const smoothedVel = prevVel + (instantVel - prevVel) * 0.45;
+          this.scrollVelocity.set(Math.abs(smoothedVel) < 0.1 ? 0 : smoothedVel);
 
-        const now = performance.now();
-        const dt = Math.max(16, now - this.lastScrollTime);
-        const rawDy = scrollY - this.lastScrollY;
-        const instantVel = Math.max(-100, Math.min(100, (rawDy / dt) * 60));
-        const prevVel = this.scrollVelocity();
-        const smoothedVel = prevVel + (instantVel - prevVel) * 0.45;
-        this.scrollVelocity.set(Math.abs(smoothedVel) < 0.1 ? 0 : smoothedVel);
+          this.lastScrollY = scrollY;
+          this.lastScrollTime = now;
+        };
 
-        this.lastScrollY = scrollY;
-        this.lastScrollTime = now;
-        return;
-      }
-
-      // On desktop mouse wheels, use snappy responsive RAF interpolation
-      if (!this.isTicking) {
-        this.isTicking = true;
-        this.lastScrollTime = performance.now();
-        requestAnimationFrame(() => this.smoothScrollStep());
-      }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        this.scrollUnlisten = () => window.removeEventListener('scroll', onScroll);
+      });
     }
   }
 
-  private smoothScrollStep(): void {
-    const diff = this.targetY - this.currentY;
-    const now = performance.now();
-    const dt = Math.max(16, now - this.lastScrollTime);
-
-    // Responsive snappy lerp (0.52 for immediate responsive feel with smooth physics)
-    this.currentY += diff * 0.52;
-    this.scrollY.set(this.currentY);
-
-    // Instantaneous velocity with direction
-    const rawDy = this.currentY - this.lastScrollY;
-    const instantVel = Math.max(-100, Math.min(100, (rawDy / dt) * 60));
-
-    // Smooth physical momentum filter (liquid inertial damping)
-    const prevVel = this.scrollVelocity();
-    const smoothedVel = prevVel + (instantVel - prevVel) * 0.4;
-    this.scrollVelocity.set(Math.abs(smoothedVel) < 0.05 ? 0 : smoothedVel);
-
-    this.lastScrollY = this.currentY;
-    this.lastScrollTime = now;
-
-    // Check if both position and velocity have smoothly settled to rest
-    if (Math.abs(diff) < 0.5 && Math.abs(this.scrollVelocity()) < 0.1) {
-      this.currentY = this.targetY;
-      this.scrollY.set(this.currentY);
-      this.scrollVelocity.set(0);
-      this.isTicking = false;
-      return;
+  ngOnDestroy(): void {
+    if (this.scrollUnlisten) {
+      this.scrollUnlisten();
     }
-
-    requestAnimationFrame(() => this.smoothScrollStep());
   }
 
   onSceneCompleted(): void {
