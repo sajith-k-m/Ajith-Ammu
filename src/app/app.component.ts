@@ -29,14 +29,13 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       <!-- Base Dark Royal Atmosphere Layer (Letter backdrop) -->
       <div
         class="dark-atmosphere-layer"
-        [style.opacity]="(1 - peachTransitionProgress()).toFixed(3)"
+        [style.visibility]="peachTransitionProgress() >= 1 ? 'hidden' : 'visible'"
         aria-hidden="true"
       ></div>
 
       <!-- ReactBits Pro: Liquid Golden Silk Wave Curtain Metamorphosis -->
       <div
         class="liquid-silk-transition-stage"
-        [style.opacity]="peachTransitionProgress() > 0 ? 1 : 0"
         aria-hidden="true"
       >
         <!-- The Rising Royal Peach Silk Curtain -->
@@ -102,7 +101,6 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       <app-floating-decorations
         [scrollY]="scrollY()"
         [scrollVelocity]="scrollVelocity()"
-        [peachProgress]="peachTransitionProgress()"
       />
 
       <!-- Fixed Intro Scene (Letter unrolls, then rolls up & floats off top screen) -->
@@ -188,6 +186,7 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       z-index: 1;
       pointer-events: none;
       overflow: hidden;
+      contain: layout paint;
     }
 
     .rising-peach-veil {
@@ -200,6 +199,7 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       flex-direction: column;
       will-change: transform;
       pointer-events: none;
+      contain: layout paint;
     }
 
     .golden-wave-crest-horizon {
@@ -264,7 +264,7 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       overflow: hidden;
     }
 
-    /* Fixed Intro Scene Layer */
+    /* Fixed Intro Scene Layer: stays in front of details content while rolling */
     .intro-scene-fixed-layer {
       position: fixed;
       top: 0;
@@ -272,8 +272,9 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       width: 100vw;
       height: 100vh;
       height: 100dvh;
-      z-index: 25;
+      z-index: 40;
       overflow: hidden;
+      contain: layout paint;
 
       &.hidden-after-exit {
         visibility: hidden;
@@ -295,16 +296,15 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       position: relative;
       width: 100%;
       min-height: 100vh;
-      z-index: 30;
+      z-index: 20;
       box-sizing: border-box;
       pointer-events: none;
       opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
+      will-change: opacity;
+      transition: opacity 0.3s ease;
 
       &.visible {
         opacity: 1;
-        visibility: visible;
       }
 
       &.interactive {
@@ -404,22 +404,32 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
       this.ngZone.runOutsideAngular(() => {
+        let isRafScheduled = false;
+        let latestScrollY = 0;
+
         const onScroll = () => {
           if (!this.isScrollUnlocked()) return;
-          const scrollY = window.scrollY;
-          this.scrollY.set(scrollY);
+          latestScrollY = window.scrollY;
 
-          // Measure kinetic velocity (capped and damped)
-          const now = performance.now();
-          const dt = Math.max(16, now - this.lastScrollTime);
-          const rawDy = scrollY - this.lastScrollY;
-          const instantVel = Math.max(-50, Math.min(50, (rawDy / dt) * 60));
-          const prevVel = this.scrollVelocity();
-          const smoothedVel = prevVel + (instantVel - prevVel) * 0.45;
-          this.scrollVelocity.set(Math.abs(smoothedVel) < 0.1 ? 0 : smoothedVel);
+          if (!isRafScheduled) {
+            isRafScheduled = true;
+            requestAnimationFrame(() => {
+              isRafScheduled = false;
+              this.scrollY.set(latestScrollY);
 
-          this.lastScrollY = scrollY;
-          this.lastScrollTime = now;
+              // Measure kinetic velocity (capped and damped)
+              const now = performance.now();
+              const dt = Math.max(16, now - this.lastScrollTime);
+              const rawDy = latestScrollY - this.lastScrollY;
+              const instantVel = Math.max(-50, Math.min(50, (rawDy / dt) * 60));
+              const prevVel = this.scrollVelocity();
+              const smoothedVel = prevVel + (instantVel - prevVel) * 0.45;
+              this.scrollVelocity.set(Math.abs(smoothedVel) < 0.1 ? 0 : smoothedVel);
+
+              this.lastScrollY = latestScrollY;
+              this.lastScrollTime = now;
+            });
+          }
         };
 
         window.addEventListener('scroll', onScroll, { passive: true });

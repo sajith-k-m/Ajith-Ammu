@@ -1079,7 +1079,7 @@ interface Blessing {
       gap: 12px;
       padding: 10px 22px;
       border-radius: 40px;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.95);
       border: 1.5px solid rgba(212, 155, 80, 0.45);
       color: #3b141d;
       font-family: var(--font-sans);
@@ -1087,7 +1087,6 @@ interface Blessing {
       font-weight: 700;
       letter-spacing: 0.04em;
       cursor: pointer;
-      backdrop-filter: blur(16px);
       box-shadow: 0 8px 24px rgba(184, 107, 88, 0.14), inset 0 1px 0 #ffffff;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -1270,40 +1269,15 @@ interface Blessing {
       opacity: 1;
     }
 
-    /* ReactBits Radiant Border Beam */
+    /* ReactBits Radiant Gold Border Trim */
     .border-beam-ring {
       position: absolute;
-      inset: 0;
+      inset: -1px;
       border-radius: inherit;
       pointer-events: none;
-      overflow: hidden;
       z-index: 2;
-
-      &::after {
-        content: '';
-        position: absolute;
-        top: -100%;
-        left: -100%;
-        width: 300%;
-        height: 300%;
-        background: conic-gradient(
-          from 0deg at 50% 50%,
-          transparent 0deg,
-          transparent 40deg,
-          rgba(255, 245, 220, 0.9) 55deg,
-          rgba(212, 155, 80, 0.95) 70deg,
-          transparent 90deg,
-          transparent 360deg
-        );
-        animation: rotateBorderBeam 8s linear infinite;
-        mask: radial-gradient(transparent calc(100% - 3px), black calc(100% - 2px));
-        -webkit-mask: radial-gradient(transparent calc(100% - 3px), black calc(100% - 2px));
-      }
-    }
-
-    @keyframes rotateBorderBeam {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      border: 1.5px solid rgba(212, 155, 80, 0.5);
+      box-shadow: inset 0 0 12px rgba(223, 178, 93, 0.12);
     }
 
     /* ReactBits Shiny Text Animation */
@@ -1321,10 +1295,7 @@ interface Blessing {
       -webkit-text-fill-color: transparent;
       background-position: 50% center;
 
-      &.couple-title {
-        animation: shinyTextSweep 6s ease-in-out infinite;
-      }
-
+      &.couple-title:hover,
       &:not(.couple-title):hover {
         animation: shinyTextSweep 3s ease-in-out infinite;
       }
@@ -1411,19 +1382,17 @@ interface Blessing {
       100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    /* ReactBits Blur Text Reveal */
+    /* ReactBits Elegant Text Reveal */
     .blur-text-reveal {
-      animation: blurTextReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: blurTextReveal 1s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     @keyframes blurTextReveal {
       0% {
-        filter: blur(12px);
         opacity: 0;
-        transform: translateY(12px) scale(0.96);
+        transform: translateY(14px) scale(0.97);
       }
       100% {
-        filter: blur(0px);
         opacity: 1;
         transform: translateY(0) scale(1);
       }
@@ -1460,10 +1429,9 @@ interface Blessing {
       max-width: 760px;
       padding: 48px 36px 40px;
       border-radius: 44px 44px 28px 28px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 246, 240, 0.86) 100%);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 246, 240, 0.92) 100%);
       border: 1.5px solid rgba(212, 155, 80, 0.45);
       box-shadow: 0 24px 60px rgba(184, 107, 88, 0.16), 0 0 35px rgba(223, 178, 93, 0.18), inset 0 1.5px 0 #ffffff;
-      backdrop-filter: blur(24px);
       text-align: center;
       transform-style: preserve-3d;
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease-out;
@@ -1647,15 +1615,11 @@ interface Blessing {
 
       .star-border-beam {
         position: absolute;
-        inset: -150%;
-        background: conic-gradient(from 0deg, transparent 0deg, transparent 315deg, #dfb25d 340deg, #fff8db 360deg);
-        animation: starBorderSpin 4s linear infinite;
+        inset: 0;
+        border-radius: inherit;
+        border: 1.5px solid rgba(223, 178, 93, 0.65);
         pointer-events: none;
       }
-    }
-
-    @keyframes starBorderSpin {
-      100% { transform: rotate(360deg); }
     }
 
     .calendar-btn {
@@ -1795,7 +1759,6 @@ interface Blessing {
       align-items: flex-start;
       gap: 16px;
       text-align: left;
-      backdrop-filter: blur(24px);
       transform-style: preserve-3d;
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease-out;
       position: relative;
@@ -2206,9 +2169,9 @@ interface Blessing {
 
       .star-border-beam {
         position: absolute;
-        inset: -150%;
-        background: conic-gradient(from 0deg, transparent 0deg, transparent 315deg, #dfb25d 340deg, #fff8db 360deg);
-        animation: starBorderSpin 3.5s linear infinite;
+        inset: 0;
+        border-radius: inherit;
+        border: 1.5px solid rgba(46, 196, 134, 0.65);
         pointer-events: none;
       }
     }
@@ -2720,7 +2683,6 @@ interface Blessing {
       cursor: pointer;
       min-height: 350px;
       transform-style: preserve-3d;
-      backdrop-filter: blur(20px);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease, opacity 0.3s ease;
 
       &:hover {
@@ -2873,10 +2835,9 @@ interface Blessing {
       position: relative;
       padding: 44px 36px;
       border-radius: 28px;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.95);
       border: 1.5px solid rgba(212, 155, 80, 0.42);
       box-shadow: 0 24px 60px rgba(184, 107, 88, 0.14), inset 0 1.5px 0 #ffffff;
-      backdrop-filter: blur(20px);
       text-align: center;
       transform-style: preserve-3d;
       transition: transform 0.25s ease-out;
@@ -3088,9 +3049,8 @@ interface Blessing {
     .timeline-content {
       padding: 18px 24px;
       border-radius: 18px;
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.95);
       border: 1.5px solid rgba(212, 155, 80, 0.38);
-      backdrop-filter: blur(14px);
       box-shadow: 0 10px 26px rgba(184, 107, 88, 0.1);
       max-width: 320px;
 
@@ -3153,9 +3113,8 @@ interface Blessing {
     .story-card {
       padding: 30px 24px;
       border-radius: 20px;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.95);
       border: 1.5px solid rgba(212, 155, 80, 0.38);
-      backdrop-filter: blur(16px);
       box-shadow: 0 16px 36px rgba(184, 107, 88, 0.12), inset 0 1px 0 #ffffff;
       display: flex;
       flex-direction: column;
@@ -3346,7 +3305,6 @@ interface Blessing {
       border-radius: 18px;
       background: #ffffff;
       border: 1.5px solid rgba(212, 155, 80, 0.32);
-      backdrop-filter: blur(12px);
       box-shadow: 0 10px 24px rgba(184, 107, 88, 0.1);
       display: flex;
       flex-direction: column;

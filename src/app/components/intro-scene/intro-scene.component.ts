@@ -7,7 +7,9 @@ import {
   computed,
   HostListener,
   output,
-  input
+  input,
+  ChangeDetectionStrategy,
+  NgZone
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InvitationPaperComponent } from '../invitation-paper/invitation-paper.component';
@@ -17,6 +19,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
 @Component({
   selector: 'app-intro-scene',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, InvitationPaperComponent],
   template: `
     <div
@@ -24,9 +27,9 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
       [class.scene-completed]="step() === 'completed'"
       [class.is-animating]="isAnimating()"
     >
-      <!-- Background Faint Static Grain & Golden Halo behind letter (fades out smoothly on scroll exit) -->
-      <div class="bg-grain" [style.opacity]="(1 - exitProgress()) * 0.05" aria-hidden="true"></div>
-      <div class="golden-glow" [style.opacity]="1 - exitProgress()" aria-hidden="true"></div>
+      <!-- Background Faint Static Grain & Golden Halo behind letter (hardware-cached static texture) -->
+      <div class="bg-grain" aria-hidden="true"></div>
+      <div class="golden-glow" aria-hidden="true"></div>
 
       <!-- Skip Button -->
       @if (step() !== 'completed' && step() !== 'loading') {
@@ -363,22 +366,6 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
       display: flex;
       align-items: center;
       justify-content: center;
-      perspective: 1200px;
-      transform-style: preserve-3d;
-      transition: transform 0.15s ease-out;
-
-      @media (max-width: 768px) {
-        animation: mobileIdleSway 7s ease-in-out infinite alternate;
-      }
-    }
-
-    @keyframes mobileIdleSway {
-      0% {
-        transform: rotate(-0.5deg);
-      }
-      100% {
-        transform: rotate(0.5deg);
-      }
     }
 
     /* Scroll Assembly */
@@ -389,7 +376,6 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
       display: flex;
       align-items: center;
       justify-content: center;
-      filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.6));
     }
 
     /* Paper Reveal Window */
@@ -399,7 +385,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
       width: 100%;
       height: 100%;
       z-index: 10;
-      transition: opacity 0.3s ease;
+      contain: paint;
       will-change: clip-path;
     }
 
@@ -457,7 +443,6 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
             rgba(50, 22, 10, 0.12) 70%,
             transparent 100%
           );
-          filter: blur(1px);
         }
 
         &.curl-above {
@@ -470,7 +455,6 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
             rgba(50, 22, 10, 0.12) 70%,
             transparent 100%
           );
-          filter: blur(1px);
         }
       }
     }
@@ -480,14 +464,16 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
       position: absolute;
       top: calc(100% - 10px);
       left: 50%;
+      width: 100px;
+      height: 84px;
       transform-origin: 50px 0px;
       pointer-events: auto;
       cursor: grab;
       user-select: none;
       touch-action: none;
       z-index: 12;
-      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.65));
       will-change: transform;
+      contain: layout paint;
       transition: opacity 0.25s ease-out;
 
       &:active {
@@ -912,18 +898,26 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
     this.timers = [];
   }
 
+  private ngZone = inject(NgZone);
+  private lastRenderedRopeAngle = 0;
+  private lastRenderedSecondaryAngle = 0;
+  private lastRenderedStretch = 1;
+  private lastRenderedUnfurl = 0;
+
   private startPhysicsLoop(): void {
     if (typeof window === 'undefined') return;
-    this.lastPhysicsTime = performance.now();
-    const loop = (now: number) => {
-      const rawDt = (now - this.lastPhysicsTime) * 0.001;
-      this.lastPhysicsTime = now;
-      const dt = Math.max(0.001, Math.min(0.04, rawDt));
+    this.ngZone.runOutsideAngular(() => {
+      this.lastPhysicsTime = performance.now();
+      const loop = (now: number) => {
+        const rawDt = (now - this.lastPhysicsTime) * 0.001;
+        this.lastPhysicsTime = now;
+        const dt = Math.max(0.001, Math.min(0.04, rawDt));
 
-      this.stepPhysics(dt, now);
+        this.stepPhysics(dt, now);
+        this.physicsAnimId = requestAnimationFrame(loop);
+      };
       this.physicsAnimId = requestAnimationFrame(loop);
-    };
-    this.physicsAnimId = requestAnimationFrame(loop);
+    });
   }
 
   private stepPhysics(dt: number, now: number): void {
@@ -1002,10 +996,21 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
       this.ropeStretch = Math.max(0.85, Math.min(1.35, this.ropeStretch));
     }
 
-    // 8. Update Angular signals
-    this.ropeAngleSignal.set(this.ropeAngle);
-    this.ropeSecondaryAngleSignal.set(this.ropeSecondaryAngle);
-    this.ropeStretchSignal.set(this.ropeStretch);
-    this.ropeUnfurlProgress.set(this.ropeUnfurl);
+    // 8. Update Angular signals only on meaningful delta to prevent continuous change detection churn
+    const angleDiff = Math.abs(this.ropeAngle - this.lastRenderedRopeAngle);
+    const secDiff = Math.abs(this.ropeSecondaryAngle - this.lastRenderedSecondaryAngle);
+    const stretchDiff = Math.abs(this.ropeStretch - this.lastRenderedStretch);
+    const unfurlDiff = Math.abs(this.ropeUnfurl - this.lastRenderedUnfurl);
+
+    if (angleDiff > 0.05 || secDiff > 0.05 || stretchDiff > 0.005 || unfurlDiff > 0.01) {
+      this.ropeAngleSignal.set(this.ropeAngle);
+      this.ropeSecondaryAngleSignal.set(this.ropeSecondaryAngle);
+      this.ropeStretchSignal.set(this.ropeStretch);
+      this.ropeUnfurlProgress.set(this.ropeUnfurl);
+      this.lastRenderedRopeAngle = this.ropeAngle;
+      this.lastRenderedSecondaryAngle = this.ropeSecondaryAngle;
+      this.lastRenderedStretch = this.ropeStretch;
+      this.lastRenderedUnfurl = this.ropeUnfurl;
+    }
   }
 }

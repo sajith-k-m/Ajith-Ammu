@@ -1,8 +1,9 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-invitation-paper',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
       class="paper-container"
@@ -79,6 +80,7 @@ import { Component, input } from '@angular/core';
       height: var(--paper-h);
       aspect-ratio: 664 / 914;
       user-select: text;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
     }
 
     .paper-bg {
@@ -88,7 +90,6 @@ import { Component, input } from '@angular/core';
       height: 100%;
       display: block;
       pointer-events: none;
-      filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.45));
     }
 
 

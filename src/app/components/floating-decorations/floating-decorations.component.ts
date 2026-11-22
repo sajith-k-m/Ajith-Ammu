@@ -31,22 +31,9 @@ interface FloatingElement {
   template: `
     <div
       class="floating-3d-stage"
-      [style.--peach-p]="peachProgress()"
       [style.transform]="stageParallaxTransform()"
       aria-hidden="true"
     >
-      <!-- ReactBits Aurora Waves: Dual continuous crossfade without blend-mode snapping -->
-      <div
-        class="reactbits-aurora-layer aurora-dark"
-        [style.opacity]="(1 - peachProgress()) * 0.75"
-        aria-hidden="true"
-      ></div>
-      <div
-        class="reactbits-aurora-layer aurora-peach"
-        [style.opacity]="peachProgress() * 0.55"
-        aria-hidden="true"
-      ></div>
-
       <!-- Deep Atmospheric Ambient Glow Orbs -->
       <div class="ambient-orb orb-1" [style.transform]="orb1Transform()"></div>
       <div class="ambient-orb orb-2" [style.transform]="orb2Transform()"></div>
@@ -193,6 +180,7 @@ interface FloatingElement {
       overflow: hidden;
       z-index: 8;
       perspective: 1200px;
+      contain: strict;
     }
 
     .floating-3d-stage {
@@ -203,52 +191,6 @@ interface FloatingElement {
       transform-style: preserve-3d;
       will-change: transform;
       pointer-events: none;
-    }
-
-    /* ReactBits Aurora Atmospheric Shimmer Wave (Hardware-friendly multi-stop radial gradients) */
-    .reactbits-aurora-layer {
-      position: absolute;
-      inset: -15%;
-      width: 130%;
-      height: 130%;
-      mix-blend-mode: screen;
-      pointer-events: none;
-      will-change: opacity;
-      transition: opacity 0.2s linear;
-
-      &.aurora-dark {
-        background: radial-gradient(ellipse at 25% 35%, rgba(223, 178, 93, 0.16) 0%, transparent 55%),
-                    radial-gradient(ellipse at 75% 25%, rgba(163, 29, 58, 0.18) 0%, transparent 50%),
-                    radial-gradient(ellipse at 35% 75%, rgba(37, 162, 107, 0.12) 0%, transparent 50%),
-                    radial-gradient(ellipse at 70% 65%, rgba(250, 224, 154, 0.14) 0%, transparent 55%);
-        animation: auroraMorph 24s ease-in-out infinite alternate;
-      }
-
-      &.aurora-peach {
-        background: radial-gradient(ellipse at 25% 35%, rgba(223, 178, 93, 0.22) 0%, transparent 55%),
-                    radial-gradient(ellipse at 75% 25%, rgba(245, 170, 145, 0.28) 0%, transparent 50%),
-                    radial-gradient(ellipse at 35% 75%, rgba(255, 205, 175, 0.2) 0%, transparent 50%),
-                    radial-gradient(ellipse at 70% 65%, rgba(254, 230, 185, 0.22) 0%, transparent 55%);
-        animation: auroraMorph 28s ease-in-out infinite alternate-reverse;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .reactbits-aurora-layer {
-        animation: none !important;
-      }
-    }
-
-    @keyframes auroraMorph {
-      0% {
-        transform: rotate(0deg) scale(1);
-      }
-      50% {
-        transform: rotate(3deg) scale(1.04);
-      }
-      100% {
-        transform: rotate(-2deg) scale(0.98);
-      }
     }
 
     /* Ambient Glowing Bokeh Orbs (Naturally soft gradients without GPU blur convolution overhead) */
@@ -413,7 +355,6 @@ interface FloatingElement {
 export class FloatingDecorationsComponent implements OnInit, OnDestroy {
   readonly scrollY = input<number>(0);
   readonly scrollVelocity = input<number>(0);
-  readonly peachProgress = input<number>(0);
 
   protected readonly Math = Math;
 
