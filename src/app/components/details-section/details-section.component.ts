@@ -57,7 +57,12 @@ interface Blessing {
 
       <!-- Section 1: Royal Monogram & Greeting -->
       <header class="royal-header reveal-item">
-        <div class="monogram-crest">
+        <div
+          class="monogram-crest"
+          (mousemove)="onCrestMouseMove($event, crestRef)"
+          (mouseleave)="onCrestMouseLeave(crestRef)"
+          #crestRef
+        >
           <svg viewBox="0 0 120 120" class="crest-svg" aria-hidden="true">
             <circle cx="60" cy="60" r="54" stroke="url(#crestGoldGrad)" stroke-width="1.8" fill="none" opacity="0.6"/>
             <circle cx="60" cy="60" r="48" stroke="url(#crestGoldGrad)" stroke-width="0.8" stroke-dasharray="3 3" fill="none" opacity="0.8"/>
@@ -68,7 +73,7 @@ interface Blessing {
         </div>
 
         <p class="family-invitation">Together with our families, we invite you to celebrate</p>
-        <h1 class="couple-title">Ammu &amp; Ajith</h1>
+        <h1 class="couple-title shiny-text blur-text-reveal">Ammu &amp; Ajith</h1>
         <p class="wedding-tagline">A celebration of eternal love, quiet laughter &amp; two hearts becoming one</p>
 
         <div class="ornate-gold-divider" aria-hidden="true">
@@ -106,7 +111,13 @@ interface Blessing {
         <!-- 4 Grand Architectural Dials -->
         <div class="dials-grid" role="timer" aria-live="polite">
           
-          <div class="dial-box">
+          <div
+            class="dial-box spotlight-card"
+            (mousemove)="onDialTilt($event, d1)"
+            (mouseleave)="onDialLeave(d1)"
+            #d1
+          >
+            <div class="card-spotlight-layer" aria-hidden="true"></div>
             <div class="dial-inner">
               <span class="dial-num">{{ pad(days()) }}</span>
               <span class="dial-unit">DAYS</span>
@@ -115,7 +126,13 @@ interface Blessing {
 
           <div class="dial-separator" aria-hidden="true">:</div>
 
-          <div class="dial-box">
+          <div
+            class="dial-box spotlight-card"
+            (mousemove)="onDialTilt($event, d2)"
+            (mouseleave)="onDialLeave(d2)"
+            #d2
+          >
+            <div class="card-spotlight-layer" aria-hidden="true"></div>
             <div class="dial-inner">
               <span class="dial-num">{{ pad(hours()) }}</span>
               <span class="dial-unit">HOURS</span>
@@ -124,7 +141,13 @@ interface Blessing {
 
           <div class="dial-separator" aria-hidden="true">:</div>
 
-          <div class="dial-box">
+          <div
+            class="dial-box spotlight-card"
+            (mousemove)="onDialTilt($event, d3)"
+            (mouseleave)="onDialLeave(d3)"
+            #d3
+          >
+            <div class="card-spotlight-layer" aria-hidden="true"></div>
             <div class="dial-inner">
               <span class="dial-num">{{ pad(minutes()) }}</span>
               <span class="dial-unit">MINUTES</span>
@@ -133,7 +156,13 @@ interface Blessing {
 
           <div class="dial-separator" aria-hidden="true">:</div>
 
-          <div class="dial-box seconds-box">
+          <div
+            class="dial-box seconds-box spotlight-card"
+            (mousemove)="onDialTilt($event, d4)"
+            (mouseleave)="onDialLeave(d4)"
+            #d4
+          >
+            <div class="card-spotlight-layer" aria-hidden="true"></div>
             <div class="dial-inner">
               <span class="dial-num seconds-pulse">{{ pad(seconds()) }}</span>
               <span class="dial-unit">SECONDS</span>
@@ -146,7 +175,7 @@ interface Blessing {
         <div class="calendar-action-bar">
           <button
             type="button"
-            class="calendar-btn specular-btn"
+            class="calendar-btn specular-btn star-border-btn"
             (click)="addToCalendar()"
             (mousemove)="onBtnMouseMove($event, calBtnRef)"
             (mouseleave)="onBtnMouseLeave(calBtnRef)"
@@ -270,7 +299,7 @@ interface Blessing {
               <div class="rsvp-submit-actions">
                 <button
                   type="submit"
-                  class="primary-submit-rsvp-btn specular-btn"
+                  class="primary-submit-rsvp-btn specular-btn star-border-btn"
                   [disabled]="isSubmittingRsvp()"
                   (mousemove)="onBtnMouseMove($event, submitRsvpRef)"
                   (mouseleave)="onBtnMouseLeave(submitRsvpRef)"
@@ -364,7 +393,7 @@ interface Blessing {
               [href]="mapsUrl()"
               target="_blank"
               rel="noopener noreferrer"
-              class="primary-venue-btn specular-btn"
+              class="primary-venue-btn specular-btn star-border-btn"
               (mousemove)="onBtnMouseMove($event, venueBtnRef)"
               (mouseleave)="onBtnMouseLeave(venueBtnRef)"
               #venueBtnRef
@@ -673,7 +702,7 @@ interface Blessing {
           <div class="form-submit-row">
             <button
               type="button"
-              class="send-blessing-btn specular-btn"
+              class="send-blessing-btn specular-btn star-border-btn"
               [disabled]="!canSubmitBlessing()"
               (click)="submitBlessing()"
               (mousemove)="onBtnMouseMove($event, sendBlessingRef)"
@@ -1092,6 +1121,91 @@ interface Blessing {
       0% { left: -120%; }
       30% { left: 180%; }
       100% { left: 180%; }
+    }
+
+    /* ReactBits Star Border Glowing Orbit */
+    .star-border-btn {
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 250%;
+        height: 250%;
+        background: conic-gradient(
+          from 0deg,
+          transparent 0%,
+          rgba(255, 243, 196, 0.95) 12%,
+          rgba(223, 178, 93, 0.95) 20%,
+          transparent 28%,
+          transparent 100%
+        );
+        animation: starBorderOrbit 4s linear infinite;
+        z-index: -2;
+        pointer-events: none;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 1.5px;
+        background: inherit;
+        border-radius: inherit;
+        z-index: -1;
+        pointer-events: none;
+      }
+    }
+
+    @keyframes starBorderOrbit {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* ReactBits Blur Text Reveal */
+    .blur-text-reveal {
+      animation: blurTextReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes blurTextReveal {
+      0% {
+        filter: blur(12px);
+        opacity: 0;
+        transform: translateY(12px) scale(0.96);
+      }
+      100% {
+        filter: blur(0px);
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* ReactBits True Focus Depth Effect */
+    .ceremony-highlights-grid,
+    .story-cards-grid,
+    .gallery-grid,
+    .timeline-container {
+      transition: filter 0.3s ease;
+    }
+
+    .ceremony-highlights-grid:hover .highlight-item:not(:hover),
+    .story-cards-grid:hover .story-card:not(:hover),
+    .gallery-grid:hover .photo-card:not(:hover),
+    .timeline-container:hover .timeline-item:not(:hover) .timeline-content {
+      filter: blur(1.5px) opacity(0.52);
+      transform: scale(0.98);
+      transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .highlight-item,
+    .story-card,
+    .photo-card,
+    .timeline-content {
+      transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     /* Section 2: Redesigned Royal Chronometer Countdown */
@@ -2863,6 +2977,42 @@ export class DetailsSectionComponent implements OnInit, OnDestroy {
   onCardLeave(cardEl: HTMLElement): void {
     if (!cardEl) return;
     cardEl.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+  }
+
+  // ReactBits Crest Interactive 3D Perspective Tilt
+  onCrestMouseMove(event: MouseEvent, crestEl: HTMLElement): void {
+    if (!crestEl) return;
+    const rect = crestEl.getBoundingClientRect();
+    const x = event.clientX - rect.left - (rect.width / 2);
+    const y = event.clientY - rect.top - (rect.height / 2);
+    const rotateX = (y / (rect.height / 2)) * -10;
+    const rotateY = (x / (rect.width / 2)) * 10;
+    crestEl.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.06)`;
+  }
+
+  onCrestMouseLeave(crestEl: HTMLElement): void {
+    if (!crestEl) return;
+    crestEl.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)';
+  }
+
+  // ReactBits Individual Chronometer Dial Spotlight & Lift
+  onDialTilt(event: MouseEvent, dialEl: HTMLElement): void {
+    if (!dialEl) return;
+    const rect = dialEl.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    dialEl.style.setProperty('--mouse-x', `${x.toFixed(1)}px`);
+    dialEl.style.setProperty('--mouse-y', `${y.toFixed(1)}px`);
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -8;
+    const rotateY = ((x - centerX) / centerX) * 8;
+    dialEl.style.transform = `perspective(600px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
+  }
+
+  onDialLeave(dialEl: HTMLElement): void {
+    if (!dialEl) return;
+    dialEl.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) translateY(0px)';
   }
 
   // ReactBits Magnetic CTA Button Attraction

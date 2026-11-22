@@ -32,6 +32,9 @@ interface FloatingElement {
       [style.transform]="stageParallaxTransform()"
       aria-hidden="true"
     >
+      <!-- ReactBits Aurora Atmospheric Shimmer Wave -->
+      <div class="reactbits-aurora-layer" aria-hidden="true"></div>
+
       <!-- Deep Atmospheric Ambient Glow Orbs -->
       <div class="ambient-orb orb-1" [style.transform]="orb1Transform()"></div>
       <div class="ambient-orb orb-2" [style.transform]="orb2Transform()"></div>
@@ -145,6 +148,35 @@ interface FloatingElement {
       transform-style: preserve-3d;
       will-change: transform;
       pointer-events: none;
+    }
+
+    /* ReactBits Aurora Atmospheric Shimmer Wave */
+    .reactbits-aurora-layer {
+      position: absolute;
+      inset: -20%;
+      width: 140%;
+      height: 140%;
+      background: radial-gradient(ellipse at 25% 35%, rgba(223, 178, 93, 0.16) 0%, transparent 50%),
+                  radial-gradient(ellipse at 75% 25%, rgba(163, 29, 58, 0.18) 0%, transparent 45%),
+                  radial-gradient(ellipse at 35% 75%, rgba(37, 162, 107, 0.12) 0%, transparent 45%),
+                  radial-gradient(ellipse at 70% 65%, rgba(250, 224, 154, 0.14) 0%, transparent 50%);
+      filter: blur(60px);
+      mix-blend-mode: screen;
+      opacity: 0.75;
+      animation: auroraMorph 18s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes auroraMorph {
+      0% {
+        transform: rotate(0deg) scale(1) translate(0, 0);
+      }
+      50% {
+        transform: rotate(4deg) scale(1.08) translate(-2%, 3%);
+      }
+      100% {
+        transform: rotate(-3deg) scale(0.96) translate(3%, -2%);
+      }
     }
 
     /* Ambient Glowing Bokeh Orbs */
