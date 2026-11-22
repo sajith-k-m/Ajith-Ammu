@@ -121,16 +121,16 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
         />
       </div>
 
-      <!-- Scroll Spacer for the 850px Intro Choreography -->
+      <!-- Scroll Spacer for the Intro Choreography -->
       <div
         class="intro-scroll-track-spacer"
-        [style.height.px]="isScrollUnlocked() ? 850 : 0"
         aria-hidden="true"
       ></div>
 
       <!-- Grand Luxury Wedding Content Experience (Flows naturally down the page) -->
       <div
         class="luxury-content-wrapper"
+        [class.visible]="detailsVisible()"
         [class.interactive]="detailsInteractive()"
         [style.pointer-events]="detailsInteractive() ? 'auto' : 'none'"
       >
@@ -282,9 +282,11 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       }
     }
 
-    /* Spacer for the 850px scroll choreography */
+    /* Spacer for the Intro Choreography: always guarantees details are below fold */
     .intro-scroll-track-spacer {
       width: 100%;
+      height: 100vh;
+      min-height: 850px;
       pointer-events: none;
     }
 
@@ -296,6 +298,14 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       z-index: 30;
       box-sizing: border-box;
       pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+
+      &.visible {
+        opacity: 1;
+        visibility: visible;
+      }
 
       &.interactive {
         pointer-events: auto;
@@ -365,6 +375,10 @@ export class AppComponent implements OnInit, OnDestroy {
     if (p >= 1) return 'translate3d(0, 0%, 0)';
     const translateYPercent = ((1 - p) * 105).toFixed(2);
     return `translate3d(0, ${translateYPercent}%, 0)`;
+  });
+
+  readonly detailsVisible = computed(() => {
+    return this.isScrollUnlocked() && this.scrollY() > 220;
   });
 
   readonly detailsInteractive = computed(() => {
