@@ -29,6 +29,7 @@ interface FloatingElement {
   template: `
     <div
       class="floating-3d-stage"
+      [class.peach-mode]="isPeachMode()"
       [style.transform]="stageParallaxTransform()"
       aria-hidden="true"
     >
@@ -312,6 +313,7 @@ interface FloatingElement {
 export class FloatingDecorationsComponent implements OnInit, OnDestroy {
   readonly scrollY = input<number>(0);
   readonly scrollVelocity = input<number>(0);
+  readonly isPeachMode = input<boolean>(false);
 
   protected readonly Math = Math;
 

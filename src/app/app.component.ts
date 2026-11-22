@@ -16,10 +16,21 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
   template: `
     <main class="page-wrapper" [class.scroll-unlocked]="isScrollUnlocked()">
       
+      <!-- Base Dark Royal Atmosphere Layer (Letter backdrop) -->
+      <div class="dark-atmosphere-layer" aria-hidden="true"></div>
+
+      <!-- Luminous Royal Peach & Rose-Champagne Atmosphere Layer (Blends smoothly on scroll) -->
+      <div
+        class="peach-atmosphere-layer"
+        [style.opacity]="peachBlendProgress()"
+        aria-hidden="true"
+      ></div>
+
       <!-- Interactive 3D Floating Elements & Ambient Bokeh Engine (reacts to scroll & mouse) -->
       <app-floating-decorations
         [scrollY]="scrollY()"
         [scrollVelocity]="scrollVelocity()"
+        [isPeachMode]="peachBlendProgress() > 0.35"
       />
 
       <!-- Fixed Intro Scene (Letter unrolls, then rolls up & floats off top screen) -->
@@ -88,6 +99,35 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
         overflow-x: clip;
         overflow-y: visible;
       }
+    }
+
+    /* Base Dark Royal Atmosphere */
+    .dark-atmosphere-layer {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(ellipse 75% 70% at 50% 50%, #2e1118 0%, #19080c 45%, #0d0406 80%, #060203 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Royal Peach & Rose-Champagne Atmosphere Layer */
+    .peach-atmosphere-layer {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: 
+        radial-gradient(ellipse 80% 60% at 20% 15%, rgba(255, 240, 232, 0.98) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 60% at 85% 45%, rgba(254, 224, 210, 0.95) 0%, transparent 55%),
+        radial-gradient(ellipse 90% 70% at 50% 85%, rgba(248, 204, 188, 0.85) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255, 248, 242, 0.7) 0%, transparent 70%),
+        linear-gradient(180deg, #fdf5ef 0%, #fae6dc 25%, #f6d6c7 60%, #f0beab 100%);
+      z-index: 1;
+      pointer-events: none;
+      will-change: opacity;
+      transition: opacity 0.1s linear;
     }
 
     /* Fixed Intro Scene Layer */
@@ -168,6 +208,15 @@ export class AppComponent {
     if (y <= this.ROLL_3_4_Y) return 0;
     if (y >= this.EXIT_END_Y) return 1;
     return (y - this.ROLL_3_4_Y) / (this.EXIT_END_Y - this.ROLL_3_4_Y);
+  });
+
+  // Peach background blend progress: 0.0 at top letter (<= 150px) to 1.0 (>= 800px)
+  readonly peachBlendProgress = computed(() => {
+    const y = this.scrollY();
+    if (y <= 150) return 0;
+    if (y >= 800) return 1;
+    const t = (y - 150) / (800 - 150);
+    return Math.min(1, Math.max(0, t * t * (3 - 2 * t)));
   });
 
   readonly detailsOpacity = computed(() => {

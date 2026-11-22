@@ -804,10 +804,10 @@ interface Blessing {
       <svg width="0" height="0" class="svg-defs">
         <defs>
           <linearGradient id="crestGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#fff8db" />
+            <stop offset="0%" stop-color="#fff5db" />
             <stop offset="35%" stop-color="#fae09a" />
-            <stop offset="70%" stop-color="#dfb25d" />
-            <stop offset="100%" stop-color="#7a4f10" />
+            <stop offset="70%" stop-color="#dfa84a" />
+            <stop offset="100%" stop-color="#8a5214" />
           </linearGradient>
         </defs>
       </svg>
@@ -849,28 +849,29 @@ interface Blessing {
       gap: 12px;
       padding: 10px 22px;
       border-radius: 40px;
-      background: rgba(22, 10, 14, 0.85);
-      border: 1px solid rgba(223, 178, 93, 0.45);
-      color: #fae09a;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid rgba(212, 155, 80, 0.45);
+      color: #3b141d;
       font-family: var(--font-sans);
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.04em;
       cursor: pointer;
       backdrop-filter: blur(16px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 243, 196, 0.2);
+      box-shadow: 0 8px 24px rgba(184, 107, 88, 0.14), inset 0 1px 0 #ffffff;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
       &:hover {
         transform: translateY(-2px);
-        border-color: rgba(255, 243, 196, 0.8);
-        box-shadow: 0 12px 30px rgba(223, 178, 93, 0.35);
+        border-color: rgba(212, 155, 80, 0.85);
+        box-shadow: 0 12px 30px rgba(184, 107, 88, 0.22);
       }
 
       &.playing {
-        border-color: #2ec486;
-        color: #d8f3dc;
-        box-shadow: 0 8px 24px rgba(37, 162, 107, 0.35);
+        border-color: #25a26b;
+        color: #0d4a2f;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 24px rgba(37, 162, 107, 0.25);
 
         .sound-wave .bar {
           animation: wavePulse 1s ease-in-out infinite alternate;
@@ -916,11 +917,14 @@ interface Blessing {
       width: 90px;
       height: 90px;
       margin-bottom: 4px;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
       .crest-svg {
         width: 100%;
         height: 100%;
-        filter: drop-shadow(0 0 16px rgba(223, 178, 93, 0.45));
+        filter: drop-shadow(0 6px 16px rgba(184, 107, 88, 0.25));
       }
 
       .monogram-text {
@@ -937,26 +941,26 @@ interface Blessing {
       font-size: 13px;
       text-transform: uppercase;
       letter-spacing: 0.22em;
-      color: rgba(223, 178, 93, 0.85);
-      font-weight: 600;
+      color: #7d2e3e;
+      font-weight: 700;
     }
 
     .couple-title {
       font-family: var(--font-royal);
       font-size: clamp(38px, 8vw, 68px);
       font-weight: 700;
-      background: linear-gradient(135deg, #fffbf0 0%, #fae09a 30%, #dfb25d 65%, #94641c 100%);
+      background: linear-gradient(110deg, #2b0e16 0%, #6e2433 25%, #b57424 50%, #6e2433 75%, #2b0e16 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: 0.04em;
       line-height: 1.1;
-      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      filter: drop-shadow(0 4px 14px rgba(184, 107, 88, 0.15));
     }
 
     .wedding-tagline {
       font-family: var(--font-caveat);
       font-size: clamp(20px, 4.5vw, 27px);
-      color: rgba(251, 245, 232, 0.88);
+      color: #54212d;
       max-width: 600px;
       line-height: 1.4;
     }
@@ -972,12 +976,15 @@ interface Blessing {
       .divider-line {
         flex: 1;
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(223, 178, 93, 0.6), transparent);
+        background: linear-gradient(90deg, transparent, rgba(181, 116, 36, 0.5), transparent);
       }
 
       .divider-diamond {
         width: 14px;
         height: 14px;
+        background: #b57424;
+        transform: rotate(45deg);
+        box-shadow: 0 0 10px rgba(181, 116, 36, 0.4);
       }
     }
 
@@ -986,7 +993,9 @@ interface Blessing {
        - Spotlight Card (Cursor Tracking Mesh Glow)
        - Glare Overlay (Specular Reflection)
        - Border Beam (Luminous Orbiting Edge Light)
+       - Star Border Button (Orbiting Conic Glow)
        - Shiny Text (Metallic 24k Gold Sweep)
+       - True Focus (Depth of Field Defocus on Sibling Cards)
        - Specular Magnetic Buttons
        ======================================================== */
     .spotlight-card {
@@ -1006,7 +1015,7 @@ interface Blessing {
       transition: opacity 0.35s ease;
       background: radial-gradient(
         420px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-        rgba(223, 178, 93, 0.16),
+        rgba(254, 215, 170, 0.45),
         transparent 75%
       );
     }
@@ -1021,7 +1030,7 @@ interface Blessing {
       transition: opacity 0.35s ease;
       background: radial-gradient(
         320px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-        rgba(255, 255, 255, 0.08),
+        rgba(255, 255, 255, 0.55),
         transparent 65%
       );
     }
@@ -1051,8 +1060,8 @@ interface Blessing {
           from 0deg at 50% 50%,
           transparent 0deg,
           transparent 40deg,
-          rgba(255, 243, 196, 0.85) 55deg,
-          rgba(223, 178, 93, 0.95) 70deg,
+          rgba(255, 245, 220, 0.9) 55deg,
+          rgba(212, 155, 80, 0.95) 70deg,
           transparent 90deg,
           transparent 360deg
         );
@@ -1071,11 +1080,11 @@ interface Blessing {
     .shiny-text {
       background: linear-gradient(
         110deg,
-        #fbf5e8 0%,
-        #fae09a 25%,
-        #ffffff 50%,
-        #dfb25d 75%,
-        #fbf5e8 100%
+        #2b0e16 0%,
+        #6e2433 25%,
+        #b57424 50%,
+        #6e2433 75%,
+        #2b0e16 100%
       );
       background-size: 250% auto;
       -webkit-background-clip: text;
@@ -1108,7 +1117,7 @@ interface Blessing {
         background: linear-gradient(
           90deg,
           transparent,
-          rgba(255, 255, 255, 0.28),
+          rgba(255, 255, 255, 0.45),
           transparent
         );
         transform: skewX(-22deg);
@@ -1140,8 +1149,8 @@ interface Blessing {
         background: conic-gradient(
           from 0deg,
           transparent 0%,
-          rgba(255, 243, 196, 0.95) 12%,
-          rgba(223, 178, 93, 0.95) 20%,
+          rgba(255, 255, 255, 0.95) 12%,
+          rgba(212, 155, 80, 0.95) 20%,
           transparent 28%,
           transparent 100%
         );
@@ -1215,16 +1224,16 @@ interface Blessing {
       max-width: 720px;
       padding: 44px 36px 36px;
       border-radius: 28px;
-      background: radial-gradient(circle at 50% 0%, rgba(48, 18, 25, 0.85) 0%, rgba(18, 7, 10, 0.95) 85%);
-      border: 1.5px solid rgba(223, 178, 93, 0.42);
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(223, 178, 93, 0.15), inset 0 1px 0 rgba(255, 243, 196, 0.35);
+      background: rgba(255, 255, 255, 0.84);
+      border: 1.5px solid rgba(212, 155, 80, 0.45);
+      box-shadow: 0 24px 60px rgba(184, 107, 88, 0.16), 0 0 35px rgba(223, 178, 93, 0.18), inset 0 1.5px 0 #ffffff;
       backdrop-filter: blur(24px);
       text-align: center;
       transform-style: preserve-3d;
       transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
 
       &:hover {
-        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), 0 0 50px rgba(223, 178, 93, 0.28);
+        box-shadow: 0 30px 80px rgba(184, 107, 88, 0.24), 0 0 50px rgba(223, 178, 93, 0.28);
       }
     }
 
@@ -1234,21 +1243,21 @@ interface Blessing {
       gap: 8px;
       padding: 6px 18px;
       border-radius: 30px;
-      background: rgba(223, 178, 93, 0.12);
-      border: 1px solid rgba(223, 178, 93, 0.3);
-      color: #fae09a;
+      background: rgba(240, 180, 160, 0.25);
+      border: 1px solid rgba(190, 110, 75, 0.35);
+      color: #6e2333;
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.16em;
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 12px;
 
       .badge-dot {
         width: 5px;
         height: 5px;
         border-radius: 50%;
-        background: #dfb25d;
-        box-shadow: 0 0 8px #dfb25d;
+        background: #b57424;
+        box-shadow: 0 0 8px #b57424;
       }
     }
 
@@ -1256,7 +1265,7 @@ interface Blessing {
       font-family: var(--font-royal);
       font-size: clamp(22px, 4.8vw, 32px);
       font-weight: 700;
-      color: #fff8eb;
+      color: #2b0e16;
       letter-spacing: 0.06em;
       margin-bottom: 6px;
     }
@@ -1265,7 +1274,8 @@ interface Blessing {
       font-family: var(--font-sans);
       font-size: 13px;
       letter-spacing: 0.1em;
-      color: rgba(223, 178, 93, 0.8);
+      color: #7d3343;
+      font-weight: 600;
       text-transform: uppercase;
       margin-bottom: 30px;
     }
@@ -1284,15 +1294,15 @@ interface Blessing {
       min-width: 72px;
       padding: 16px 8px 12px;
       border-radius: 18px;
-      background: linear-gradient(180deg, rgba(38, 14, 20, 0.9) 0%, rgba(18, 7, 10, 0.95) 100%);
-      border: 1.2px solid rgba(223, 178, 93, 0.32);
-      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6), 0 8px 20px rgba(0, 0, 0, 0.4);
+      background: linear-gradient(180deg, #ffffff 0%, #fff7f2 100%);
+      border: 1.5px solid rgba(212, 155, 80, 0.42);
+      box-shadow: 0 10px 25px rgba(184, 107, 88, 0.12), inset 0 1px 0 #ffffff;
       position: relative;
       overflow: hidden;
 
       &.seconds-box {
-        border-color: rgba(223, 178, 93, 0.55);
-        background: linear-gradient(180deg, rgba(58, 20, 28, 0.9) 0%, rgba(20, 7, 12, 0.95) 100%);
+        border-color: rgba(212, 155, 80, 0.65);
+        background: linear-gradient(180deg, #ffffff 0%, #ffefe6 100%);
       }
     }
 
@@ -1308,26 +1318,40 @@ interface Blessing {
       font-size: clamp(32px, 7vw, 54px);
       font-weight: 800;
       line-height: 1;
-      background: linear-gradient(180deg, #ffffff 0%, #fae09a 45%, #dfb25d 100%);
+      background: linear-gradient(180deg, #2b0e16 0%, #6e2433 45%, #a6651b 80%, #704108 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+      filter: drop-shadow(0 2px 6px rgba(184, 107, 88, 0.18));
     }
 
     .dial-unit {
       font-family: var(--font-sans);
       font-size: clamp(10px, 2.2vw, 12px);
       letter-spacing: 0.16em;
-      color: rgba(223, 178, 93, 0.85);
+      color: #7d3141;
       font-weight: 700;
     }
 
     .dial-separator {
       font-family: var(--font-royal);
       font-size: clamp(24px, 5vw, 36px);
-      color: rgba(223, 178, 93, 0.5);
+      color: rgba(181, 116, 36, 0.7);
       margin-top: -14px;
       font-weight: 300;
+    }
+
+    .seconds-glow-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1.5px solid rgba(212, 155, 80, 0.5);
+      animation: dialHaloPulse 1.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes dialHaloPulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.02); }
     }
 
     .calendar-action-bar {
@@ -1340,29 +1364,30 @@ interface Blessing {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      padding: 12px 26px;
+      padding: 13px 28px;
       border-radius: 30px;
-      background: rgba(223, 178, 93, 0.15);
-      border: 1px solid rgba(223, 178, 93, 0.45);
-      color: #fff3c4;
+      background: linear-gradient(135deg, #ffffff 0%, #fff2eb 100%);
+      border: 1.5px solid rgba(212, 155, 80, 0.5);
+      color: #3b141d;
       font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 13.5px;
+      font-weight: 700;
       letter-spacing: 0.04em;
       cursor: pointer;
+      box-shadow: 0 8px 24px rgba(184, 107, 88, 0.14);
       transition: all 0.25s ease;
 
       &:hover {
-        background: rgba(223, 178, 93, 0.28);
-        border-color: #fff3c4;
+        background: linear-gradient(135deg, #ffffff 0%, #fae2d6 100%);
+        border-color: rgba(212, 155, 80, 0.8);
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(223, 178, 93, 0.25);
+        box-shadow: 0 12px 30px rgba(184, 107, 88, 0.22);
       }
 
       .cal-icon {
-        width: 16px;
-        height: 16px;
-        stroke: #fae09a;
+        width: 17px;
+        height: 17px;
+        stroke: #a6651b;
       }
     }
 
@@ -1388,22 +1413,22 @@ interface Blessing {
       transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
 
       &.rsvp-suite-card {
-        background: radial-gradient(circle at 10% 10%, rgba(18, 56, 38, 0.88) 0%, rgba(10, 24, 18, 0.98) 100%);
-        border: 1.5px solid rgba(46, 196, 134, 0.45);
-        box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(37, 162, 107, 0.18);
+        background: rgba(255, 255, 255, 0.88);
+        border: 1.5px solid rgba(26, 115, 76, 0.38);
+        box-shadow: 0 20px 48px rgba(184, 107, 88, 0.12), 0 8px 24px rgba(26, 115, 76, 0.08), inset 0 1px 0 #ffffff;
 
         &:hover {
-          box-shadow: 0 22px 60px rgba(0, 0, 0, 0.75), 0 0 40px rgba(46, 196, 134, 0.35);
+          box-shadow: 0 26px 64px rgba(184, 107, 88, 0.2), 0 0 35px rgba(46, 196, 134, 0.25);
         }
       }
 
       &.venue-suite-card {
-        background: radial-gradient(circle at 90% 10%, rgba(48, 22, 28, 0.88) 0%, rgba(18, 8, 12, 0.98) 100%);
-        border: 1.5px solid rgba(223, 178, 93, 0.45);
-        box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(223, 178, 93, 0.18);
+        background: rgba(255, 255, 255, 0.88);
+        border: 1.5px solid rgba(212, 155, 80, 0.42);
+        box-shadow: 0 20px 48px rgba(184, 107, 88, 0.14), inset 0 1px 0 #ffffff;
 
         &:hover {
-          box-shadow: 0 22px 60px rgba(0, 0, 0, 0.75), 0 0 40px rgba(223, 178, 93, 0.35);
+          box-shadow: 0 26px 64px rgba(184, 107, 88, 0.22), 0 0 35px rgba(223, 178, 93, 0.25);
         }
       }
     }
@@ -1425,15 +1450,15 @@ interface Blessing {
       }
 
       &.emerald-badge {
-        background: rgba(46, 196, 134, 0.18);
-        border: 1px solid rgba(46, 196, 134, 0.45);
-        color: #74f5bb;
+        background: rgba(26, 115, 76, 0.12);
+        border: 1px solid rgba(26, 115, 76, 0.35);
+        color: #0e4f32;
       }
 
       &.gold-badge {
-        background: rgba(223, 178, 93, 0.18);
-        border: 1px solid rgba(223, 178, 93, 0.45);
-        color: #fae09a;
+        background: rgba(240, 180, 160, 0.25);
+        border: 1px solid rgba(190, 110, 75, 0.35);
+        color: #6e2333;
       }
     }
 
@@ -1441,14 +1466,14 @@ interface Blessing {
       font-family: var(--font-royal);
       font-size: clamp(20px, 4vw, 24px);
       font-weight: 700;
-      color: #fff8ec;
+      color: #2b0e16;
       line-height: 1.25;
     }
 
     .suite-desc {
       font-family: var(--font-sans);
       font-size: 13.5px;
-      color: rgba(251, 245, 232, 0.75);
+      color: #54212d;
       line-height: 1.5;
     }
 
@@ -1474,34 +1499,36 @@ interface Blessing {
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: #fae09a;
+      color: #4a1823;
     }
 
     .field-error {
       font-family: var(--font-sans);
       font-size: 12px;
-      color: #ff8b94;
+      color: #c92a2a;
+      font-weight: 600;
     }
 
     .gold-field-input {
       width: 100%;
       padding: 12px 16px;
       border-radius: 12px;
-      background: rgba(8, 20, 14, 0.9);
-      border: 1.2px solid rgba(46, 196, 134, 0.4);
-      color: #ffffff;
+      background: #ffffff;
+      border: 1.5px solid rgba(212, 155, 80, 0.45);
+      color: #2b0e16;
       font-family: var(--font-sans);
       font-size: 14px;
       outline: none;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
       transition: all 0.2s ease;
 
       &:focus {
-        border-color: #38df96;
-        box-shadow: 0 0 12px rgba(46, 196, 134, 0.4);
+        border-color: #a6651b;
+        box-shadow: 0 0 12px rgba(166, 101, 27, 0.25);
       }
 
       &::placeholder {
-        color: rgba(251, 245, 232, 0.4);
+        color: rgba(84, 33, 45, 0.4);
       }
     }
 
@@ -1514,11 +1541,11 @@ interface Blessing {
     .status-choice-btn {
       flex: 1;
       min-width: 130px;
-      padding: 9px 12px;
+      padding: 10px 14px;
       border-radius: 12px;
-      background: rgba(8, 20, 14, 0.85);
-      border: 1px solid rgba(46, 196, 134, 0.35);
-      color: rgba(251, 245, 232, 0.8);
+      background: #ffffff;
+      border: 1.5px solid rgba(212, 155, 80, 0.35);
+      color: #54212d;
       font-family: var(--font-sans);
       font-size: 12px;
       font-weight: 600;
@@ -1526,9 +1553,10 @@ interface Blessing {
       transition: all 0.2s ease;
 
       &:hover, &.active {
-        background: rgba(46, 196, 134, 0.25);
-        border-color: #38df96;
+        background: linear-gradient(135deg, #18734c 0%, #0d4a2f 100%);
+        border-color: #2ec486;
         color: #ffffff;
+        box-shadow: 0 6px 18px rgba(26, 115, 76, 0.3);
       }
     }
 
@@ -1539,21 +1567,22 @@ interface Blessing {
     }
 
     .guest-pill {
-      padding: 7px 12px;
+      padding: 8px 14px;
       border-radius: 20px;
-      background: rgba(8, 20, 14, 0.85);
-      border: 1px solid rgba(46, 196, 134, 0.3);
-      color: #fae09a;
+      background: #ffffff;
+      border: 1.5px solid rgba(212, 155, 80, 0.35);
+      color: #54212d;
       font-family: var(--font-sans);
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
 
       &:hover, &.active {
-        background: rgba(46, 196, 134, 0.3);
-        border-color: #ffffff;
+        background: linear-gradient(135deg, #18734c 0%, #0d4a2f 100%);
+        border-color: #2ec486;
         color: #ffffff;
+        box-shadow: 0 4px 14px rgba(26, 115, 76, 0.25);
       }
     }
 
@@ -1570,23 +1599,23 @@ interface Blessing {
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 13px 24px;
+      padding: 14px 24px;
       border-radius: 30px;
-      background: linear-gradient(135deg, #1b7a4f 0%, #0d4b2e 100%);
-      border: 1px solid #38df96;
+      background: linear-gradient(135deg, #18734c 0%, #0d4a2f 100%);
+      border: 1px solid #2ec486;
       color: #ffffff;
       font-family: var(--font-sans);
       font-size: 14px;
       font-weight: 700;
       letter-spacing: 0.03em;
-      box-shadow: 0 8px 24px rgba(13, 75, 46, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      box-shadow: 0 10px 28px rgba(26, 115, 76, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.35);
       cursor: pointer;
       transition: all 0.25s ease;
 
       &:hover:not(:disabled) {
         transform: translateY(-2px);
-        box-shadow: 0 12px 30px rgba(46, 196, 134, 0.6);
-        background: linear-gradient(135deg, #249963 0%, #135d39 100%);
+        box-shadow: 0 14px 34px rgba(26, 115, 76, 0.5);
+        background: linear-gradient(135deg, #20875b 0%, #0f5435 100%);
       }
 
       &:disabled {
@@ -1603,12 +1632,13 @@ interface Blessing {
     .quick-tap-rsvp-link {
       font-family: var(--font-sans);
       font-size: 12px;
-      color: #74f5bb;
+      color: #0e4f32;
+      font-weight: 700;
       text-decoration: none;
       transition: color 0.2s ease;
 
       &:hover {
-        color: #ffffff;
+        color: #18734c;
         text-decoration: underline;
       }
     }
@@ -1619,10 +1649,11 @@ interface Blessing {
       flex-direction: column;
       gap: 14px;
       width: 100%;
-      padding: 16px;
+      padding: 18px;
       border-radius: 16px;
-      background: rgba(8, 28, 18, 0.85);
-      border: 1px solid rgba(46, 196, 134, 0.5);
+      background: #ffffff;
+      border: 1.5px solid rgba(26, 115, 76, 0.45);
+      box-shadow: 0 8px 24px rgba(26, 115, 76, 0.1);
     }
 
     .confirmed-header {
@@ -1634,8 +1665,8 @@ interface Blessing {
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background: #2ec486;
-        color: #072218;
+        background: #18734c;
+        color: #ffffff;
         font-size: 18px;
         font-weight: 800;
         display: flex;
@@ -1647,13 +1678,13 @@ interface Blessing {
         font-family: var(--font-royal);
         font-size: 17px;
         font-weight: 700;
-        color: #d8f3dc;
+        color: #2b0e16;
       }
 
       .confirmed-subtitle {
         font-family: var(--font-sans);
         font-size: 12.5px;
-        color: #fae09a;
+        color: #54212d;
       }
     }
 
@@ -1669,11 +1700,12 @@ interface Blessing {
         gap: 8px;
       }
       .sum-label {
-        color: rgba(223, 178, 93, 0.8);
+        color: #7d3343;
         font-weight: 600;
       }
       .sum-val {
-        color: #ffffff;
+        color: #2b0e16;
+        font-weight: 600;
       }
     }
 
@@ -1687,8 +1719,8 @@ interface Blessing {
     .resend-wa-btn {
       padding: 9px 18px;
       border-radius: 20px;
-      background: linear-gradient(135deg, #1b7a4f 0%, #0d4b2e 100%);
-      border: 1px solid #38df96;
+      background: linear-gradient(135deg, #18734c 0%, #0d4a2f 100%);
+      border: 1px solid #2ec486;
       color: #ffffff;
       font-family: var(--font-sans);
       font-size: 12px;
@@ -1697,24 +1729,24 @@ interface Blessing {
       transition: all 0.2s ease;
 
       &:hover {
-        background: #249963;
+        background: #20875b;
       }
     }
 
     .edit-rsvp-btn {
       background: none;
-      border: 1px solid rgba(46, 196, 134, 0.4);
+      border: 1px solid rgba(26, 115, 76, 0.45);
       border-radius: 20px;
       padding: 9px 16px;
-      color: #74f5bb;
+      color: #0e4f32;
       font-family: var(--font-sans);
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
 
       &:hover {
         color: #ffffff;
-        background: rgba(46, 196, 134, 0.15);
+        background: #18734c;
       }
     }
 
@@ -1722,8 +1754,8 @@ interface Blessing {
     .suite-venue-address {
       font-family: var(--font-sans);
       font-size: 13px;
-      font-weight: 600;
-      color: #fae09a;
+      font-weight: 700;
+      color: #7d3343;
       letter-spacing: 0.04em;
     }
 
@@ -1744,46 +1776,47 @@ interface Blessing {
       gap: 10px;
       padding: 13px 24px;
       border-radius: 30px;
-      background: linear-gradient(135deg, rgba(223, 178, 93, 0.32) 0%, rgba(138, 90, 24, 0.3) 100%);
-      border: 1px solid rgba(255, 243, 196, 0.65);
-      color: #fff8eb;
+      background: linear-gradient(135deg, #ffffff 0%, #fae2d6 100%);
+      border: 1.5px solid rgba(212, 155, 80, 0.55);
+      color: #3b141d;
       font-family: var(--font-sans);
       font-size: 14px;
       font-weight: 700;
       letter-spacing: 0.03em;
       text-decoration: none;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 243, 196, 0.3);
+      box-shadow: 0 8px 24px rgba(184, 107, 88, 0.15), inset 0 1px 0 #ffffff;
       cursor: pointer;
       transition: all 0.25s ease;
 
       &:hover {
         transform: translateY(-2px);
-        border-color: #ffffff;
-        box-shadow: 0 12px 30px rgba(223, 178, 93, 0.4);
-        background: linear-gradient(135deg, rgba(223, 178, 93, 0.45) 0%, rgba(138, 90, 24, 0.4) 100%);
+        border-color: rgba(212, 155, 80, 0.85);
+        box-shadow: 0 12px 30px rgba(184, 107, 88, 0.22);
       }
 
       .nav-icon {
         width: 17px;
         height: 17px;
+        stroke: #a6651b;
       }
     }
 
     .copy-address-btn {
-      background: none;
-      border: 1px solid rgba(223, 178, 93, 0.35);
+      background: #ffffff;
+      border: 1.5px solid rgba(212, 155, 80, 0.45);
       border-radius: 30px;
       padding: 11px 18px;
-      color: #fae09a;
+      color: #54212d;
       font-family: var(--font-sans);
       font-size: 12.5px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(184, 107, 88, 0.08);
       transition: all 0.25s ease;
 
       &:hover {
-        background: rgba(223, 178, 93, 0.15);
-        color: #ffffff;
+        background: #fae2d6;
+        color: #2b0e16;
       }
     }
 
@@ -1810,7 +1843,7 @@ interface Blessing {
       font-size: 12px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: rgba(223, 178, 93, 0.9);
+      color: #96601a;
       font-weight: 700;
     }
 
@@ -1818,14 +1851,14 @@ interface Blessing {
       font-family: var(--font-royal);
       font-size: clamp(28px, 6vw, 44px);
       font-weight: 700;
-      color: #fff9ed;
+      color: #2b0e16;
       letter-spacing: 0.04em;
     }
 
     .section-subtext {
       font-family: var(--font-sans);
       font-size: 14px;
-      color: rgba(251, 245, 232, 0.7);
+      color: #54212d;
       line-height: 1.6;
     }
 
@@ -1839,18 +1872,19 @@ interface Blessing {
     .photo-card {
       position: relative;
       border-radius: 22px;
-      background: radial-gradient(circle at 50% 50%, rgba(38, 15, 20, 0.9) 0%, rgba(14, 5, 8, 0.98) 100%);
-      border: 1.5px solid rgba(223, 178, 93, 0.35);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid rgba(212, 155, 80, 0.4);
+      box-shadow: 0 16px 36px rgba(184, 107, 88, 0.12), inset 0 1px 0 #ffffff;
       overflow: hidden;
       cursor: pointer;
       min-height: 340px;
       transform-style: preserve-3d;
+      backdrop-filter: blur(20px);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
 
       &:hover {
-        border-color: rgba(255, 243, 196, 0.7);
-        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(223, 178, 93, 0.3);
+        border-color: rgba(212, 155, 80, 0.85);
+        box-shadow: 0 24px 60px rgba(184, 107, 88, 0.22), 0 0 35px rgba(223, 178, 93, 0.25);
 
         .custom-photo-img {
           transform: scale(1.05);
@@ -1861,7 +1895,7 @@ interface Blessing {
         }
 
         .tap-hint {
-          color: #fff8db;
+          color: #8c4e14;
           transform: translateX(4px);
         }
       }
@@ -1875,7 +1909,7 @@ interface Blessing {
       position: absolute;
       width: 22px;
       height: 22px;
-      border: 2px solid #dfb25d;
+      border: 2px solid #b57424;
       pointer-events: none;
       z-index: 4;
 
@@ -1930,11 +1964,18 @@ interface Blessing {
       align-items: center;
       justify-content: center;
       gap: 16px;
-      background: radial-gradient(circle at center, rgba(58, 22, 28, 0.5) 0%, rgba(14, 5, 8, 0.9) 70%);
+      background: radial-gradient(circle at center, rgba(255, 245, 240, 0.95) 0%, rgba(250, 225, 215, 0.9) 100%);
 
       .watermark-svg {
         width: 68px;
         height: 68px;
+
+        .cam-line, .lens-ring {
+          stroke: #b57424;
+        }
+        .lens-core {
+          fill: #dfa84a;
+        }
       }
 
       .placeholder-badge {
@@ -1944,17 +1985,17 @@ interface Blessing {
         text-transform: uppercase;
         padding: 5px 14px;
         border-radius: 20px;
-        background: rgba(223, 178, 93, 0.12);
-        border: 1px solid rgba(223, 178, 93, 0.3);
-        color: #fae09a;
-        font-weight: 600;
+        background: rgba(240, 180, 160, 0.25);
+        border: 1px solid rgba(190, 110, 75, 0.35);
+        color: #6e2333;
+        font-weight: 700;
       }
     }
 
     .frame-shimmer {
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255, 243, 196, 0.12), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
       transform: translateX(-100%);
       transition: transform 0.8s ease-in-out;
       pointer-events: none;
@@ -1964,7 +2005,8 @@ interface Blessing {
       position: relative;
       z-index: 3;
       padding: 30px 20px 18px;
-      background: linear-gradient(180deg, transparent 0%, rgba(10, 4, 6, 0.95) 60%);
+      background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.96) 65%);
+      border-top: 1px solid rgba(212, 155, 80, 0.25);
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -1975,21 +2017,21 @@ interface Blessing {
       font-family: var(--font-royal);
       font-size: 18px;
       font-weight: 700;
-      color: #fff9ee;
+      color: #2b0e16;
     }
 
     .photo-card-sub {
       font-family: var(--font-caveat);
       font-size: 17px;
-      color: #fae09a;
+      color: #7d3343;
     }
 
     .tap-hint {
       font-family: var(--font-sans);
       font-size: 11.5px;
-      color: rgba(223, 178, 93, 0.7);
+      color: #8c4e14;
       margin-top: 4px;
-      font-weight: 600;
+      font-weight: 700;
       transition: all 0.25s ease;
     }
 
@@ -2003,9 +2045,9 @@ interface Blessing {
       position: relative;
       padding: 44px 36px;
       border-radius: 28px;
-      background: radial-gradient(circle at 50% 0%, rgba(42, 16, 22, 0.9) 0%, rgba(14, 5, 8, 0.98) 100%);
-      border: 1.5px solid rgba(223, 178, 93, 0.38);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid rgba(212, 155, 80, 0.42);
+      box-shadow: 0 24px 60px rgba(184, 107, 88, 0.14), inset 0 1.5px 0 #ffffff;
       backdrop-filter: blur(20px);
       text-align: center;
       transform-style: preserve-3d;
@@ -2023,9 +2065,7 @@ interface Blessing {
         font-family: var(--font-chilanka);
         font-size: clamp(28px, 6vw, 42px);
         font-weight: 700;
-        background: linear-gradient(135deg, #fff3c4 0%, #dfb25d 50%, #fae09a 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #691d2d;
       }
 
       .banner-sub {
@@ -2033,7 +2073,7 @@ interface Blessing {
         font-size: 12px;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: rgba(223, 178, 93, 0.85);
+        color: #96601a;
         font-weight: 700;
       }
     }
@@ -2041,7 +2081,7 @@ interface Blessing {
     .ceremony-lead {
       font-family: var(--font-caveat);
       font-size: clamp(19px, 4vw, 24px);
-      color: rgba(251, 245, 232, 0.9);
+      color: #54212d;
       max-width: 620px;
       margin: 0 auto 36px;
       line-height: 1.4;
@@ -2056,27 +2096,29 @@ interface Blessing {
     .highlight-item {
       padding: 24px 18px;
       border-radius: 18px;
-      background: rgba(24, 9, 13, 0.75);
-      border: 1px solid rgba(223, 178, 93, 0.22);
+      background: #ffffff;
+      border: 1.5px solid rgba(212, 155, 80, 0.35);
+      box-shadow: 0 8px 20px rgba(184, 107, 88, 0.08);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 8px;
 
       .hl-icon {
-        width: 38px;
-        height: 38px;
+        width: 42px;
+        height: 42px;
         border-radius: 50%;
-        background: rgba(223, 178, 93, 0.12);
+        background: rgba(240, 180, 160, 0.25);
+        border: 1px solid rgba(190, 110, 75, 0.35);
         display: flex;
         align-items: center;
         justify-content: center;
         margin-bottom: 4px;
 
         svg {
-          width: 20px;
-          height: 20px;
-          stroke: #dfb25d;
+          width: 22px;
+          height: 22px;
+          stroke: #a6651b;
         }
       }
 
@@ -2084,20 +2126,20 @@ interface Blessing {
         font-family: var(--font-royal);
         font-size: 15px;
         font-weight: 700;
-        color: #fae09a;
+        color: #2b0e16;
       }
 
       .hl-value {
         font-family: var(--font-sans);
         font-size: 15px;
         font-weight: 700;
-        color: #ffffff;
+        color: #7d3343;
       }
 
       .hl-note {
         font-family: var(--font-sans);
         font-size: 12.5px;
-        color: rgba(251, 245, 232, 0.65);
+        color: #54212d;
       }
     }
 
@@ -2123,7 +2165,7 @@ interface Blessing {
       bottom: 0;
       left: 50%;
       width: 2px;
-      background: linear-gradient(180deg, transparent 0%, rgba(223, 178, 93, 0.6) 15%, rgba(223, 178, 93, 0.6) 85%, transparent 100%);
+      background: linear-gradient(180deg, transparent 0%, rgba(181, 116, 36, 0.6) 15%, rgba(181, 116, 36, 0.6) 85%, transparent 100%);
       transform: translateX(-50%);
 
       @media (max-width: 640px) {
@@ -2190,8 +2232,9 @@ interface Blessing {
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background: #14070a;
-      border: 2px solid #dfb25d;
+      background: #ffffff;
+      border: 2.5px solid #a6651b;
+      box-shadow: 0 0 10px rgba(166, 101, 27, 0.35);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2201,15 +2244,15 @@ interface Blessing {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: #fae09a;
+        background: #a6651b;
       }
 
       &.special-gold-dot {
-        border-color: #fff3c4;
-        box-shadow: 0 0 14px #dfb25d;
+        border-color: #7d3343;
+        box-shadow: 0 0 14px rgba(125, 51, 67, 0.4);
 
         .inner-dot {
-          background: #dfb25d;
+          background: #7d3343;
         }
       }
     }
@@ -2217,16 +2260,16 @@ interface Blessing {
     .timeline-content {
       padding: 18px 24px;
       border-radius: 18px;
-      background: rgba(28, 12, 16, 0.85);
-      border: 1px solid rgba(223, 178, 93, 0.28);
+      background: rgba(255, 255, 255, 0.88);
+      border: 1.5px solid rgba(212, 155, 80, 0.38);
       backdrop-filter: blur(14px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 10px 26px rgba(184, 107, 88, 0.1);
       max-width: 320px;
 
       &.highlight-content {
-        border-color: rgba(223, 178, 93, 0.6);
-        background: radial-gradient(circle at 50% 0%, rgba(48, 18, 25, 0.95), rgba(20, 8, 12, 0.98));
-        box-shadow: 0 10px 30px rgba(223, 178, 93, 0.2);
+        border-color: rgba(212, 155, 80, 0.7);
+        background: linear-gradient(135deg, #ffffff 0%, #fff6f0 100%);
+        box-shadow: 0 14px 34px rgba(184, 107, 88, 0.18);
       }
 
       .time-badge {
@@ -2235,12 +2278,12 @@ interface Blessing {
         font-size: 11px;
         font-weight: 700;
         letter-spacing: 0.1em;
-        color: #fae09a;
+        color: #7d3343;
         margin-bottom: 6px;
 
         &.gold-time {
-          color: #fff3c4;
-          background: rgba(223, 178, 93, 0.2);
+          color: #3b141d;
+          background: rgba(240, 180, 160, 0.3);
           padding: 2px 8px;
           border-radius: 12px;
         }
@@ -2250,14 +2293,14 @@ interface Blessing {
         font-family: var(--font-royal);
         font-size: 16px;
         font-weight: 700;
-        color: #ffffff;
+        color: #2b0e16;
         margin-bottom: 4px;
       }
 
       .node-desc {
         font-family: var(--font-sans);
         font-size: 12.5px;
-        color: rgba(251, 245, 232, 0.68);
+        color: #54212d;
         line-height: 1.45;
       }
     }
@@ -2282,10 +2325,10 @@ interface Blessing {
     .story-card {
       padding: 30px 24px;
       border-radius: 20px;
-      background: rgba(26, 11, 15, 0.82);
-      border: 1px solid rgba(223, 178, 93, 0.28);
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid rgba(212, 155, 80, 0.38);
       backdrop-filter: blur(16px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 16px 36px rgba(184, 107, 88, 0.12), inset 0 1px 0 #ffffff;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -2294,8 +2337,8 @@ interface Blessing {
       transition: transform 0.25s ease-out, border-color 0.25s ease;
 
       &:hover {
-        border-color: rgba(255, 243, 196, 0.6);
-        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7), 0 0 25px rgba(223, 178, 93, 0.2);
+        border-color: rgba(212, 155, 80, 0.85);
+        box-shadow: 0 24px 60px rgba(184, 107, 88, 0.22);
       }
 
       .story-chapter-num {
@@ -2303,20 +2346,20 @@ interface Blessing {
         font-size: 11px;
         font-weight: 700;
         letter-spacing: 0.2em;
-        color: #dfb25d;
+        color: #96601a;
       }
 
       .story-heading {
         font-family: var(--font-royal);
         font-size: 19px;
         font-weight: 700;
-        color: #fff9ee;
+        color: #2b0e16;
       }
 
       .story-text {
         font-family: var(--font-caveat);
-        font-size: 18px;
-        color: rgba(251, 245, 232, 0.85);
+        font-size: 19px;
+        color: #3d141e;
         line-height: 1.45;
       }
     }
@@ -2335,9 +2378,9 @@ interface Blessing {
       width: 100%;
       padding: 30px 28px;
       border-radius: 24px;
-      background: radial-gradient(circle at 50% 0%, rgba(42, 16, 22, 0.9) 0%, rgba(18, 7, 10, 0.95) 100%);
-      border: 1.5px solid rgba(223, 178, 93, 0.35);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      background: rgba(255, 255, 255, 0.88);
+      border: 1.5px solid rgba(212, 155, 80, 0.4);
+      box-shadow: 0 20px 48px rgba(184, 107, 88, 0.14), inset 0 1px 0 #ffffff;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -2355,21 +2398,22 @@ interface Blessing {
       min-width: 220px;
       padding: 13px 18px;
       border-radius: 12px;
-      background: rgba(14, 5, 8, 0.8);
-      border: 1px solid rgba(223, 178, 93, 0.35);
-      color: #fff9ee;
+      background: #ffffff;
+      border: 1.5px solid rgba(212, 155, 80, 0.45);
+      color: #2b0e16;
       font-family: var(--font-sans);
       font-size: 14px;
       outline: none;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
       &:focus {
-        border-color: #fae09a;
-        box-shadow: 0 0 14px rgba(223, 178, 93, 0.3);
+        border-color: #a6651b;
+        box-shadow: 0 0 14px rgba(166, 101, 27, 0.25);
       }
 
       &::placeholder {
-        color: rgba(251, 245, 232, 0.4);
+        color: rgba(84, 33, 45, 0.4);
       }
     }
 
@@ -2382,8 +2426,8 @@ interface Blessing {
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      background: rgba(14, 5, 8, 0.8);
-      border: 1px solid rgba(223, 178, 93, 0.25);
+      background: #ffffff;
+      border: 1.5px solid rgba(212, 155, 80, 0.35);
       font-size: 18px;
       cursor: pointer;
       display: flex;
@@ -2393,8 +2437,8 @@ interface Blessing {
 
       &:hover, &.active {
         transform: scale(1.15);
-        border-color: #dfb25d;
-        background: rgba(223, 178, 93, 0.2);
+        border-color: #a6651b;
+        background: rgba(240, 180, 160, 0.3);
       }
     }
 
@@ -2402,23 +2446,24 @@ interface Blessing {
       width: 100%;
       padding: 14px 18px;
       border-radius: 12px;
-      background: rgba(14, 5, 8, 0.8);
-      border: 1px solid rgba(223, 178, 93, 0.35);
-      color: #fff9ee;
+      background: #ffffff;
+      border: 1.5px solid rgba(212, 155, 80, 0.45);
+      color: #2b0e16;
       font-family: var(--font-sans);
       font-size: 14px;
       line-height: 1.5;
       outline: none;
       resize: vertical;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
       &:focus {
-        border-color: #fae09a;
-        box-shadow: 0 0 14px rgba(223, 178, 93, 0.3);
+        border-color: #a6651b;
+        box-shadow: 0 0 14px rgba(166, 101, 27, 0.25);
       }
 
       &::placeholder {
-        color: rgba(251, 245, 232, 0.4);
+        color: rgba(84, 33, 45, 0.4);
       }
     }
 
@@ -2432,20 +2477,20 @@ interface Blessing {
     .send-blessing-btn {
       padding: 13px 28px;
       border-radius: 30px;
-      background: linear-gradient(135deg, #fae09a 0%, #dfb25d 50%, #94641c 100%);
-      border: none;
-      color: #14070a;
+      background: linear-gradient(135deg, #ffffff 0%, #fae2d6 50%, #deb085 100%);
+      border: 1.5px solid rgba(212, 155, 80, 0.55);
+      color: #3b141d;
       font-family: var(--font-sans);
       font-size: 13.5px;
       font-weight: 700;
       letter-spacing: 0.04em;
       cursor: pointer;
-      box-shadow: 0 8px 24px rgba(223, 178, 93, 0.35);
+      box-shadow: 0 8px 24px rgba(184, 107, 88, 0.15);
       transition: all 0.25s ease;
 
       &:hover:not(:disabled) {
         transform: translateY(-2px);
-        box-shadow: 0 12px 30px rgba(223, 178, 93, 0.5);
+        box-shadow: 0 12px 30px rgba(184, 107, 88, 0.22);
       }
 
       &:disabled {
@@ -2457,7 +2502,8 @@ interface Blessing {
     .blessing-toast {
       font-family: var(--font-caveat);
       font-size: 18px;
-      color: #fae09a;
+      color: #691d2d;
+      font-weight: 700;
     }
 
     .blessings-wall-grid {
@@ -2470,9 +2516,10 @@ interface Blessing {
     .blessing-bubble {
       padding: 20px 20px 16px;
       border-radius: 18px;
-      background: rgba(24, 10, 14, 0.85);
-      border: 1px solid rgba(223, 178, 93, 0.22);
+      background: #ffffff;
+      border: 1.5px solid rgba(212, 155, 80, 0.32);
       backdrop-filter: blur(12px);
+      box-shadow: 0 10px 24px rgba(184, 107, 88, 0.1);
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -2492,21 +2539,21 @@ interface Blessing {
         font-family: var(--font-royal);
         font-size: 14px;
         font-weight: 700;
-        color: #fff9ee;
+        color: #2b0e16;
       }
 
       .bubble-date {
         font-family: var(--font-sans);
         font-size: 11px;
-        color: rgba(223, 178, 93, 0.65);
+        color: #7d3343;
         margin-left: auto;
       }
     }
 
     .bubble-msg {
       font-family: var(--font-caveat);
-      font-size: 17.5px;
-      color: rgba(251, 245, 232, 0.88);
+      font-size: 18px;
+      color: #3d141e;
       line-height: 1.4;
       flex: 1;
     }
@@ -2514,10 +2561,10 @@ interface Blessing {
     .forward-wa-btn {
       background: none;
       border: none;
-      color: rgba(223, 178, 93, 0.8);
+      color: #0e4f32;
       font-family: var(--font-sans);
       font-size: 11.5px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       padding: 0;
       text-align: left;
@@ -2525,7 +2572,8 @@ interface Blessing {
       transition: color 0.2s ease;
 
       &:hover {
-        color: #fff3c4;
+        color: #18734c;
+        text-decoration: underline;
       }
     }
 
@@ -2538,7 +2586,7 @@ interface Blessing {
       gap: 10px;
       margin-top: 20px;
       padding-top: 30px;
-      border-top: 1px solid rgba(223, 178, 93, 0.2);
+      border-top: 1px solid rgba(181, 116, 36, 0.3);
       width: 100%;
       max-width: 600px;
     }
@@ -2551,21 +2599,21 @@ interface Blessing {
       .mini-crest {
         width: 100%;
         height: 100%;
-        filter: drop-shadow(0 0 10px rgba(223, 178, 93, 0.4));
+        filter: drop-shadow(0 0 10px rgba(181, 116, 36, 0.3));
       }
     }
 
     .footer-blessing-text {
       font-family: var(--font-caveat);
       font-size: clamp(20px, 4.5vw, 25px);
-      color: rgba(223, 178, 93, 0.85);
+      color: #6e2a39;
     }
 
     .footer-signoff-names {
       font-family: var(--font-caveat);
       font-size: clamp(34px, 7vw, 48px);
       font-weight: 700;
-      color: #fff8ee;
+      color: #2b0e16;
       letter-spacing: 0.02em;
     }
 
@@ -2573,7 +2621,8 @@ interface Blessing {
       font-family: var(--font-sans);
       font-size: 11.5px;
       letter-spacing: 0.16em;
-      color: rgba(223, 178, 93, 0.6);
+      color: #8c4e14;
+      font-weight: 600;
       text-transform: uppercase;
       margin-top: 6px;
     }
@@ -2581,7 +2630,7 @@ interface Blessing {
     .footer-credit {
       font-family: var(--font-sans);
       font-size: 11px;
-      color: rgba(251, 245, 232, 0.35);
+      color: rgba(84, 33, 45, 0.5);
       letter-spacing: 0.08em;
     }
 
@@ -2591,7 +2640,7 @@ interface Blessing {
       inset: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(4, 2, 3, 0.88);
+      background: rgba(30, 10, 16, 0.75);
       backdrop-filter: blur(16px);
       z-index: 99999;
       display: flex;
@@ -2608,14 +2657,14 @@ interface Blessing {
 
     .modal-dialog {
       position: relative;
-      background: radial-gradient(circle at 50% 0%, rgba(48, 18, 25, 0.98) 0%, rgba(14, 5, 8, 0.98) 100%);
-      border: 1.5px solid rgba(223, 178, 93, 0.55);
+      background: radial-gradient(circle at 50% 0%, #ffffff 0%, #fff5f0 100%);
+      border: 1.5px solid rgba(212, 155, 80, 0.55);
       border-radius: 26px;
       padding: 34px 30px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.95), 0 0 50px rgba(223, 178, 93, 0.3);
+      box-shadow: 0 30px 90px rgba(80, 30, 20, 0.35);
       animation: modalPopUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -2635,14 +2684,14 @@ interface Blessing {
       right: 18px;
       background: none;
       border: none;
-      color: rgba(223, 178, 93, 0.8);
+      color: #6e2333;
       font-size: 28px;
       line-height: 1;
       cursor: pointer;
       transition: color 0.2s ease;
 
       &:hover {
-        color: #ffffff;
+        color: #2b0e16;
       }
     }
 
@@ -2650,14 +2699,14 @@ interface Blessing {
       font-family: var(--font-royal);
       font-size: 22px;
       font-weight: 700;
-      color: #fff9ee;
+      color: #2b0e16;
       margin-bottom: 4px;
     }
 
     .modal-sub {
       font-family: var(--font-caveat);
       font-size: 18px;
-      color: #fae09a;
+      color: #6e2333;
       margin-bottom: 20px;
     }
 
@@ -2666,8 +2715,8 @@ interface Blessing {
       height: 280px;
       border-radius: 16px;
       overflow: hidden;
-      background: #0d0407;
-      border: 1px solid rgba(223, 178, 93, 0.25);
+      background: #fff7f2;
+      border: 1.5px solid rgba(212, 155, 80, 0.35);
       margin-bottom: 24px;
       display: flex;
       align-items: center;
@@ -2690,6 +2739,7 @@ interface Blessing {
       .modal-cam-svg {
         width: 60px;
         height: 60px;
+        stroke: #b57424;
       }
 
       .modal-box-tip {
@@ -2698,13 +2748,13 @@ interface Blessing {
         font-weight: 700;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: #fae09a;
+        color: #8c4e14;
       }
 
       .modal-sub-tip {
         font-family: var(--font-sans);
         font-size: 12px;
-        color: rgba(251, 245, 232, 0.6);
+        color: #54212d;
         max-width: 260px;
       }
     }
@@ -2722,18 +2772,18 @@ interface Blessing {
       justify-content: center;
       padding: 12px 24px;
       border-radius: 30px;
-      background: linear-gradient(135deg, #fae09a 0%, #dfb25d 50%, #94641c 100%);
-      color: #14070a;
+      background: linear-gradient(135deg, #18734c 0%, #0d4a2f 100%);
+      color: #ffffff;
       font-family: var(--font-sans);
       font-size: 13.5px;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(223, 178, 93, 0.35);
+      box-shadow: 0 6px 20px rgba(26, 115, 76, 0.3);
       transition: all 0.2s ease;
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 28px rgba(223, 178, 93, 0.5);
+        box-shadow: 0 10px 28px rgba(26, 115, 76, 0.45);
       }
     }
 
@@ -2741,16 +2791,16 @@ interface Blessing {
       padding: 11px 20px;
       border-radius: 30px;
       background: none;
-      border: 1px solid rgba(223, 178, 93, 0.4);
-      color: #fae09a;
+      border: 1.5px solid rgba(212, 155, 80, 0.45);
+      color: #54212d;
       font-family: var(--font-sans);
       font-size: 12.5px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
 
       &:hover {
-        background: rgba(223, 178, 93, 0.15);
-        color: #ffffff;
+        background: #fae2d6;
+        color: #2b0e16;
       }
     }
 
