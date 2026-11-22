@@ -25,8 +25,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
       [class.scene-completed]="step() === 'completed'"
       [class.is-animating]="isAnimating()"
     >
-      <!-- Background Vignette & Faint Static Grain Overlay (fades out smoothly on scroll exit) -->
-      <div class="bg-vignette" [style.opacity]="1 - (exitProgress() * 1.25)" aria-hidden="true"></div>
+      <!-- Background Faint Static Grain & Golden Halo behind letter (fades out smoothly on scroll exit) -->
       <div class="bg-grain" [style.opacity]="(1 - exitProgress()) * 0.05" aria-hidden="true"></div>
       <div class="golden-glow" [style.opacity]="1 - exitProgress()" aria-hidden="true"></div>
 
@@ -227,7 +226,7 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
       min-height: 100vh;
       min-height: 100dvh;
       overflow: hidden;
-      background: #12080a;
+      background: transparent;
     }
 
     .scene-container {

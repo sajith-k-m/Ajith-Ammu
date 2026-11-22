@@ -17,25 +17,105 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
     <main class="page-wrapper" [class.scroll-unlocked]="isScrollUnlocked()">
       
       <!-- Base Dark Royal Atmosphere Layer (Letter backdrop) -->
-      <div class="dark-atmosphere-layer" aria-hidden="true"></div>
-
-      <!-- Luminous Royal Peach & Rose-Champagne Atmosphere Layer (Blends smoothly on scroll) -->
       <div
-        class="peach-atmosphere-layer"
-        [style.opacity]="peachBlendProgress()"
+        class="dark-atmosphere-layer"
+        [style.opacity]="(1 - peachTransitionProgress()).toFixed(3)"
+        aria-hidden="true"
+      ></div>
+
+      <!-- ReactBits Pro: Liquid Golden Silk Wave Curtain Metamorphosis -->
+      <div
+        class="liquid-silk-transition-stage"
+        [style.opacity]="peachTransitionProgress() > 0 ? 1 : 0"
         aria-hidden="true"
       >
-        <div class="peach-silk-wave wave-1"></div>
-        <div class="peach-silk-wave wave-2"></div>
-        <div class="kasavu-watermark-lattice"></div>
-        <div class="peach-gold-dust-sheen"></div>
+        <!-- The Rising Royal Peach Silk Curtain -->
+        <div
+          class="rising-peach-veil"
+          [style.transform]="risingVeilTransform()"
+        >
+          <!-- Golden Shimmer Wave Crest Horizon Line -->
+          <div
+            class="golden-wave-crest-horizon"
+            [style.transform]="waveCrestTiltTransform()"
+          >
+            <svg viewBox="0 0 1440 120" preserveAspectRatio="none" class="liquid-wave-svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="crestGoldBeam" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="rgba(223, 178, 93, 0)" />
+                  <stop offset="12%" stop-color="#dfb25d" stop-opacity="0.6" />
+                  <stop offset="28%" stop-color="#fff8db" stop-opacity="1" />
+                  <stop offset="50%" stop-color="#f59e0b" stop-opacity="1" />
+                  <stop offset="72%" stop-color="#fff8db" stop-opacity="1" />
+                  <stop offset="88%" stop-color="#dfb25d" stop-opacity="0.6" />
+                  <stop offset="100%" stop-color="rgba(223, 178, 93, 0)" />
+                </linearGradient>
+                <linearGradient id="veilPeachSilkFill" x1="50%" y1="0%" x2="50%" y2="100%">
+                  <stop offset="0%" stop-color="#fbeee4" stop-opacity="1" />
+                  <stop offset="40%" stop-color="#fdf5ef" stop-opacity="1" />
+                  <stop offset="100%" stop-color="#fdf5ef" stop-opacity="1" />
+                </linearGradient>
+                <filter id="goldBeamGlow" x="-20%" y="-50%" width="140%" height="200%">
+                  <feGaussianBlur stdDeviation="5" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <!-- Filled Liquid Wave Curve -->
+              <path
+                d="M0,45 C320,85 480,10 720,50 C960,90 1120,15 1440,45 L1440,122 L0,122 Z"
+                fill="url(#veilPeachSilkFill)"
+              />
+              <!-- Wide Warm Golden Bloom -->
+              <path
+                d="M0,45 C320,85 480,10 720,50 C960,90 1120,15 1440,45"
+                fill="none"
+                stroke="rgba(245, 158, 11, 0.45)"
+                stroke-width="8"
+                filter="url(#goldBeamGlow)"
+              />
+              <!-- Crisp 24K Gold Foil Filament Beam -->
+              <path
+                d="M0,45 C320,85 480,10 720,50 C960,90 1120,15 1440,45"
+                fill="none"
+                stroke="url(#crestGoldBeam)"
+                stroke-width="2.8"
+              />
+            </svg>
+            <div class="crest-sparkles">
+              <span class="crest-glyph g-1">✦</span>
+              <span class="crest-glyph g-2">✧</span>
+              <span class="crest-glyph g-3">✦</span>
+              <span class="crest-glyph g-4">✧</span>
+              <span class="crest-glyph g-5">✦</span>
+            </div>
+          </div>
+
+          <!-- Luminous Peach Body Fill extending beneath the crest -->
+          <div class="peach-veil-body">
+            <div class="peach-silk-wave wave-1"></div>
+            <div class="peach-silk-wave wave-2"></div>
+            <div class="kasavu-watermark-lattice"></div>
+            <div class="peach-gold-dust-sheen"></div>
+          </div>
+        </div>
+
+        <!-- ReactBits Pro: Radiant Golden Dawn Bloom (peaking in mid-transition) -->
+        <div
+          class="golden-dawn-radiance-bloom"
+          [style.opacity]="dawnBloomOpacity()"
+          [style.transform]="dawnBloomTransform()"
+        ></div>
       </div>
 
       <!-- Interactive 3D Floating Elements & Ambient Bokeh Engine (reacts to scroll & mouse) -->
       <app-floating-decorations
         [scrollY]="scrollY()"
         [scrollVelocity]="scrollVelocity()"
-        [isPeachMode]="peachBlendProgress() > 0.35"
+        [peachProgress]="peachTransitionProgress()"
       />
 
       <!-- Fixed Intro Scene (Letter unrolls, then rolls up & floats off top screen) -->
@@ -115,24 +195,94 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       background: radial-gradient(ellipse 75% 70% at 50% 50%, #2e1118 0%, #19080c 45%, #0d0406 80%, #060203 100%);
       z-index: 0;
       pointer-events: none;
+      will-change: opacity;
+      transition: opacity 0.15s ease-out;
     }
 
-    /* Royal Peach & Rose-Champagne Atmosphere Layer */
-    .peach-atmosphere-layer {
+    /* ReactBits Pro: Liquid Golden Silk Transition Stage */
+    .liquid-silk-transition-stage {
       position: fixed;
       inset: 0;
       width: 100vw;
       height: 100vh;
-      background: 
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+      will-change: opacity;
+      transition: opacity 0.2s linear;
+    }
+
+    .rising-peach-veil {
+      position: absolute;
+      top: -120px;
+      left: 0;
+      width: 100vw;
+      height: calc(100vh + 140px);
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+      pointer-events: none;
+    }
+
+    .golden-wave-crest-horizon {
+      position: relative;
+      width: 100%;
+      height: 120px;
+      flex-shrink: 0;
+      overflow: visible;
+      will-change: transform;
+      margin-bottom: -2px;
+
+      .liquid-wave-svg {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 120px;
+        display: block;
+      }
+
+      .crest-sparkles {
+        position: absolute;
+        top: 25px;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        pointer-events: none;
+      }
+
+      .crest-glyph {
+        font-family: serif;
+        font-size: 16px;
+        color: #fff4d1;
+        text-shadow: 0 0 10px #f59e0b, 0 0 20px #dfb25d;
+        animation: crestSparklePulse 2.5s ease-in-out infinite alternate;
+
+        &.g-1 { animation-delay: 0s; font-size: 14px; }
+        &.g-2 { animation-delay: 0.5s; font-size: 18px; }
+        &.g-3 { animation-delay: 1.1s; font-size: 20px; }
+        &.g-4 { animation-delay: 0.3s; font-size: 16px; }
+        &.g-5 { animation-delay: 0.8s; font-size: 14px; }
+      }
+    }
+
+    @keyframes crestSparklePulse {
+      0% { opacity: 0.35; transform: scale(0.8) rotate(0deg); }
+      100% { opacity: 1; transform: scale(1.25) rotate(25deg); }
+    }
+
+    .peach-veil-body {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      background:
         radial-gradient(ellipse 80% 60% at 20% 15%, rgba(255, 240, 232, 0.98) 0%, transparent 60%),
         radial-gradient(ellipse 70% 60% at 85% 45%, rgba(254, 224, 210, 0.95) 0%, transparent 55%),
         radial-gradient(ellipse 90% 70% at 50% 85%, rgba(248, 204, 188, 0.85) 0%, transparent 65%),
         radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255, 248, 242, 0.7) 0%, transparent 70%),
         linear-gradient(180deg, #fdf5ef 0%, #fae6dc 25%, #f6d6c7 60%, #f0beab 100%);
-      z-index: 1;
-      pointer-events: none;
-      will-change: opacity;
-      transition: opacity 0.1s linear;
+      overflow: hidden;
 
       .peach-silk-wave {
         position: absolute;
@@ -180,6 +330,25 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
         background: radial-gradient(circle 800px at 50% 30%, rgba(255, 245, 220, 0.35) 0%, transparent 70%);
         mix-blend-mode: soft-light;
       }
+    }
+
+    /* Golden Dawn Radiance Bloom */
+    .golden-dawn-radiance-bloom {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 900px;
+      height: 900px;
+      margin-top: -450px;
+      margin-left: -450px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 238, 190, 0.7) 0%, rgba(245, 175, 120, 0.35) 45%, rgba(223, 140, 95, 0.12) 65%, transparent 80%);
+      filter: blur(80px);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: 2;
+      will-change: opacity, transform;
+      transition: opacity 0.15s ease-out;
     }
 
     @keyframes silkWaveDrift1 {
@@ -272,13 +441,46 @@ export class AppComponent {
     return (y - this.ROLL_3_4_Y) / (this.EXIT_END_Y - this.ROLL_3_4_Y);
   });
 
-  // Peach background blend progress: 0.0 at top letter (<= 120px) to 1.0 (>= 600px)
-  readonly peachBlendProgress = computed(() => {
+  readonly TRANSITION_START_Y = 220;
+  readonly TRANSITION_END_Y = 820;
+
+  // ReactBits Pro: Quintic smootherstep transition progress (0.0 to 1.0)
+  readonly peachTransitionProgress = computed(() => {
     const y = this.scrollY();
-    if (y <= 120) return 0;
-    if (y >= 600) return 1;
-    const t = (y - 120) / (600 - 120);
-    return Math.min(1, Math.max(0, t * t * (3 - 2 * t)));
+    if (y <= this.TRANSITION_START_Y) return 0;
+    if (y >= this.TRANSITION_END_Y) return 1;
+    const t = (y - this.TRANSITION_START_Y) / (this.TRANSITION_END_Y - this.TRANSITION_START_Y);
+    // Perlin's quintic smootherstep polynomial: 6t^5 - 15t^4 + 10t^3
+    return t * t * t * (t * (t * 6 - 15) + 10);
+  });
+
+  // Rising peach silk veil transform
+  readonly risingVeilTransform = computed(() => {
+    const p = this.peachTransitionProgress();
+    if (p <= 0) return 'translate3d(0, 105%, 0)';
+    if (p >= 1) return 'translate3d(0, 0%, 0)';
+    const translateYPercent = ((1 - p) * 105).toFixed(2);
+    return `translate3d(0, ${translateYPercent}%, 0)`;
+  });
+
+  // Wave crest dynamic tilt with scroll velocity
+  readonly waveCrestTiltTransform = computed(() => {
+    const vel = this.scrollVelocity();
+    const skew = (-vel * 0.04).toFixed(2);
+    return `skewY(${skew}deg)`;
+  });
+
+  // ReactBits Pro: Radiant Golden Dawn Bloom peaking at mid-transition
+  readonly dawnBloomOpacity = computed(() => {
+    const p = this.peachTransitionProgress();
+    if (p <= 0 || p >= 1) return 0;
+    return (Math.sin(Math.PI * p) * 0.55).toFixed(3);
+  });
+
+  readonly dawnBloomTransform = computed(() => {
+    const p = this.peachTransitionProgress();
+    const scale = (0.8 + (p * 0.45)).toFixed(2);
+    return `scale(${scale})`;
   });
 
   readonly detailsOpacity = computed(() => {
