@@ -122,34 +122,80 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
                 class="golden-rope-container"
                 [style.transform]="goldenRopeTransform()"
                 [style.opacity]="ropeOpacity()"
-                aria-hidden="true"
+                (pointerdown)="onTasselPointerDown($event)"
+                aria-label="Golden Royal Tassel"
               >
-                <svg viewBox="0 0 100 74" width="100" height="74" class="golden-rope-svg">
+                <svg viewBox="0 0 100 84" width="100" height="84" class="golden-rope-svg">
                   <defs>
-                    <linearGradient id="ropeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <!-- Metallic Royal Gold Gradient for cords and bells -->
+                    <linearGradient id="tasselGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#fff3c4"/>
+                      <stop offset="25%" stop-color="#fae09a"/>
+                      <stop offset="50%" stop-color="#dfb25d"/>
+                      <stop offset="75%" stop-color="#c6953f"/>
+                      <stop offset="100%" stop-color="#7a4f10"/>
+                    </linearGradient>
+
+                    <!-- Silk Cord Shading Gradient -->
+                    <linearGradient id="cordShadeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" stop-color="#fae09a"/>
-                      <stop offset="35%" stop-color="#dfb25d"/>
+                      <stop offset="35%" stop-color="#ffd56b"/>
                       <stop offset="70%" stop-color="#c6953f"/>
-                      <stop offset="100%" stop-color="#8d621b"/>
+                      <stop offset="100%" stop-color="#69420d"/>
                     </linearGradient>
                   </defs>
-                  <!-- Twin looped braided cords around rod shaft -->
-                  <path d="M30 0 C30 16 46 22 50 28" stroke="url(#ropeGrad)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                  <path d="M70 0 C70 16 54 22 50 28" stroke="url(#ropeGrad)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                  <!-- Antique golden knot ring -->
-                  <circle cx="50" cy="30" r="4.5" fill="url(#ropeGrad)"/>
-                  <circle cx="50" cy="30" r="2.2" fill="#1e0c0e"/>
 
-                  <!-- Articulated lower hanging stem & tassel bell with secondary physics swing -->
-                  <g class="tassel-bell-group" [style.transform]="tasselBellTransform()">
-                    <!-- Hanging stem cord -->
-                    <path d="M50 34.5 L50 56" stroke="url(#ropeGrad)" stroke-width="3" stroke-linecap="round"/>
-                    <!-- Golden tassel bell -->
-                    <path d="M46 56 C46 54.5 54 54.5 54 56 L56 68 C56 69.5 44 69.5 44 68 Z" fill="url(#ropeGrad)"/>
-                    <!-- Tassel silk fringe -->
-                    <line x1="47" y1="68" x2="47" y2="72" stroke="url(#ropeGrad)" stroke-width="1.2" stroke-linecap="round"/>
-                    <line x1="50" y1="68" x2="50" y2="73.5" stroke="url(#ropeGrad)" stroke-width="1.4" stroke-linecap="round"/>
-                    <line x1="53" y1="68" x2="53" y2="72" stroke="url(#ropeGrad)" stroke-width="1.2" stroke-linecap="round"/>
+                  <!-- Upper Anchor Loops (wrap firmly around bottom roller cylinder) -->
+                  <path
+                    d="M28 0 C28 14 44 20 50 25"
+                    stroke="url(#tasselGoldGrad)"
+                    stroke-width="3.2"
+                    fill="none"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M72 0 C72 14 56 20 50 25"
+                    stroke="url(#tasselGoldGrad)"
+                    stroke-width="3.2"
+                    fill="none"
+                    stroke-linecap="round"
+                  />
+
+                  <!-- Hanging Tassel Arm (swings smoothly from anchor) -->
+                  <g class="articulated-tassel-arm">
+                    <!-- Top Antique Knot Ring / Rosette -->
+                    <circle cx="50" cy="27" r="5" fill="url(#tasselGoldGrad)"/>
+                    <circle cx="50" cy="27" r="2.4" fill="#180a0c"/>
+                    <!-- Ring highlight collar -->
+                    <ellipse cx="50" cy="32" rx="4.2" ry="2.2" fill="url(#tasselGoldGrad)"/>
+
+                    <!-- Braided Connecting Stem Cord (solidly joins knot collar at y=32 to bell at y=52) -->
+                    <rect x="48" y="31" width="4" height="23" rx="2" fill="url(#cordShadeGrad)"/>
+                    <!-- Textured braid ridges -->
+                    <path d="M48.5 36 L50 37.5 L51.5 36" stroke="#7a4f10" stroke-width="0.8" fill="none" opacity="0.6"/>
+                    <path d="M48.5 41 L50 42.5 L51.5 41" stroke="#7a4f10" stroke-width="0.8" fill="none" opacity="0.6"/>
+                    <path d="M48.5 46 L50 47.5 L51.5 46" stroke="#7a4f10" stroke-width="0.8" fill="none" opacity="0.6"/>
+                    <path d="M48.5 51 L50 52.5 L51.5 51" stroke="#7a4f10" stroke-width="0.8" fill="none" opacity="0.6"/>
+
+                    <!-- Articulated Tassel Bell & Silk Fringe (swings at cord junction) -->
+                    <g class="tassel-bell-group" [style.transform]="tasselBellTransform()">
+                      <!-- Fluted Golden Tassel Bell Cap -->
+                      <path
+                        d="M45.5 52 C45.5 50.5 54.5 50.5 54.5 52 L57 66 C57 67.5 43 67.5 43 66 Z"
+                        fill="url(#tasselGoldGrad)"
+                      />
+                      <ellipse cx="50" cy="53" rx="4.8" ry="1.8" fill="#fff3c4" opacity="0.8"/>
+                      <ellipse cx="50" cy="65.5" rx="6.8" ry="2.2" fill="#7a4f10" opacity="0.7"/>
+
+                      <!-- Cascading Silk Fringe Threads with Dynamic Aerodynamic Flex -->
+                      <g class="fringe-threads-group" [style.transform]="fringeFlexTransform()">
+                        <path d="M44.5 66 C44.5 76 46 79 47 80" stroke="url(#tasselGoldGrad)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                        <path d="M47 66 C47 77 48.5 80 49 81" stroke="url(#tasselGoldGrad)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                        <path d="M50 66 L50 83" stroke="#fff3c4" stroke-width="2.2" stroke-linecap="round"/>
+                        <path d="M53 66 C53 77 51.5 80 51 81" stroke="url(#tasselGoldGrad)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                        <path d="M55.5 66 C55.5 76 54 79 53 80" stroke="url(#tasselGoldGrad)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                      </g>
+                    </g>
                   </g>
                 </svg>
               </div>
@@ -436,12 +482,19 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
       position: absolute;
       top: calc(100% - 10px);
       left: 50%;
-      transform-origin: top center;
-      pointer-events: none;
-      z-index: 10;
-      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+      transform-origin: 50px 0px;
+      pointer-events: auto;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      z-index: 12;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.65));
       will-change: transform;
       transition: opacity 0.25s ease-out;
+
+      &:active {
+        cursor: grabbing;
+      }
 
       .golden-rope-svg {
         display: block;
@@ -450,8 +503,14 @@ type SceneStep = 'loading' | 'rolled' | 'unrolling' | 'text' | 'completed';
       }
 
       .tassel-bell-group {
-        transform-origin: 50px 30px;
-        transform-box: fill-box;
+        transform-origin: 50px 52px;
+        transform-box: view-box;
+        will-change: transform;
+      }
+
+      .fringe-threads-group {
+        transform-origin: 50px 66px;
+        transform-box: view-box;
         will-change: transform;
       }
     }
@@ -500,6 +559,7 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
   readonly scrollRoll = input<number>(0);
   readonly exitProgress = input<number>(0);
   readonly ropeProgress = input<number>(0);
+  readonly scrollVelocity = input<number>(0);
   readonly isScrolled = input<boolean>(false);
 
   readonly step = signal<SceneStep>('loading');
@@ -509,6 +569,16 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
   private mouseY = 0;
   readonly tiltX = signal<number>(0);
   readonly tiltY = signal<number>(0);
+
+  // Pointer tracking & velocity metrics
+  private lastClientX = 0;
+  private lastClientY = 0;
+  private lastPointerTime = 0;
+  private cursorVx = 0;
+  private cursorVy = 0;
+  private isTasselDragging = false;
+  private dragStartX = 0;
+  private dragStartAngle = 0;
 
   private timers: number[] = [];
   private unrollAnimId: number | null = null;
@@ -614,13 +684,19 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
     const unfurl = this.ropeUnfurlProgress();
     const stretch = this.ropeStretchSignal();
     const stretchY = unfurl * stretch;
-    const stretchX = stretchY > 0.05 ? Math.max(0.7, Math.min(1.3, 1 / Math.sqrt(stretchY))) : 1;
+    const stretchX = stretchY > 0.05 ? Math.max(0.65, Math.min(1.35, 1 / Math.sqrt(stretchY))) : 1;
     return `translateX(-50%) rotate(${angle.toFixed(2)}deg) scale(${stretchX.toFixed(3)}, ${stretchY.toFixed(3)})`;
   });
 
   readonly tasselBellTransform = computed(() => {
     const secondaryAngle = this.ropeSecondaryAngleSignal();
     return `rotate(${secondaryAngle.toFixed(2)}deg)`;
+  });
+
+  readonly fringeFlexTransform = computed(() => {
+    const diff = this.ropeSecondaryAngleSignal() - this.ropeAngleSignal();
+    const flexSkew = Math.max(-14, Math.min(14, diff * 0.45));
+    return `skewX(${flexSkew.toFixed(2)}deg)`;
   });
 
   readonly tiltTransform = computed(() => {
@@ -655,16 +731,84 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
     this.clearAllTimers();
   }
 
-  @HostListener('window:mousemove', ['$event'])
-  onMouseMove(event: MouseEvent): void {
-    if (this.step() !== 'completed' || typeof window === 'undefined') return;
-    if (window.innerWidth <= 768) return;
+  @HostListener('window:pointermove', ['$event'])
+  onPointerMove(event: PointerEvent): void {
+    if (typeof window === 'undefined') return;
+    const clientX = event.clientX;
+    const clientY = event.clientY;
+    const now = performance.now();
+    const dt = this.lastPointerTime > 0 ? Math.max(0.005, (now - this.lastPointerTime) * 0.001) : 0.016;
+    this.lastPointerTime = now;
 
-    this.mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
-    this.mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+    const rawVx = this.lastClientX > 0 ? (clientX - this.lastClientX) / dt : 0;
+    const rawVy = this.lastClientY > 0 ? (clientY - this.lastClientY) / dt : 0;
+    this.lastClientX = clientX;
+    this.lastClientY = clientY;
 
-    this.tiltX.set(Math.max(-3, Math.min(3, -this.mouseY * 3)));
-    this.tiltY.set(Math.max(-3, Math.min(3, this.mouseX * 3)));
+    // Filtered cursor velocity (smoothing)
+    this.cursorVx += (rawVx - this.cursorVx) * 0.35;
+    this.cursorVy += (rawVy - this.cursorVy) * 0.35;
+
+    // Stage 3D tilt (only when completed on larger screens for letter perspective)
+    if (this.step() === 'completed') {
+      this.mouseX = (clientX / window.innerWidth - 0.5) * 2;
+      this.mouseY = (clientY / window.innerHeight - 0.5) * 2;
+      if (window.innerWidth > 768) {
+        this.tiltX.set(Math.max(-3, Math.min(3, -this.mouseY * 3)));
+        this.tiltY.set(Math.max(-3, Math.min(3, this.mouseX * 3)));
+      }
+    }
+
+    // Direct Tassel Drag if active
+    if (this.isTasselDragging) {
+      const deltaX = clientX - this.dragStartX;
+      this.ropeAngle = Math.max(-48, Math.min(48, this.dragStartAngle + deltaX * 0.25));
+      this.ropeAngleVel = 0;
+      return;
+    }
+
+    // Interactive Proximity & Aerodynamic Breeze Impulse:
+    // Determine approximate distance from cursor to bottom roller tassel
+    const ropeAnchorX = window.innerWidth / 2;
+    const ropeAnchorY = window.innerHeight * 0.78;
+    const dx = clientX - ropeAnchorX;
+    const dy = clientY - ropeAnchorY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    // If cursor is within 320px radius of tassel, apply strong tactile deflection
+    if (dist < 320) {
+      const proximity = 1 - (dist / 320);
+      const pushForce = (this.cursorVx * 0.055) * (proximity * proximity);
+      this.ropeAngleVel += pushForce;
+
+      const verticalBreeze = Math.abs(this.cursorVy) * 0.001 * proximity;
+      this.ropeStretchVel += verticalBreeze;
+    } else {
+      // Ambient room air current from general cursor movement
+      const ambientBreeze = Math.max(-14, Math.min(14, this.cursorVx * 0.003));
+      this.ropeAngleVel += ambientBreeze * 0.25;
+    }
+  }
+
+  @HostListener('window:pointerup', ['$event'])
+  @HostListener('window:pointercancel', ['$event'])
+  onPointerUp(event: PointerEvent): void {
+    if (this.isTasselDragging) {
+      this.isTasselDragging = false;
+      // Impart release velocity for free pendulum swing
+      this.ropeAngleVel = Math.max(-65, Math.min(65, this.cursorVx * 0.15));
+    }
+  }
+
+  onTasselPointerDown(event: PointerEvent): void {
+    if (this.step() !== 'completed' && this.step() !== 'text') return;
+    this.isTasselDragging = true;
+    this.dragStartX = event.clientX;
+    this.dragStartAngle = this.ropeAngle;
+    try {
+      (event.target as HTMLElement).setPointerCapture(event.pointerId);
+    } catch {}
+    event.stopPropagation();
   }
 
   private preloadInitialAssets(): void {
@@ -801,47 +945,53 @@ export class IntroSceneComponent implements OnInit, OnDestroy {
     const currentRoll = this.scrollRoll();
     const rollDelta = currentRoll - this.lastScrollRoll;
     this.lastScrollRoll = currentRoll;
-    const scrollVel = dt > 0 ? (rollDelta / dt) : 0;
+    const internalScrollVel = dt > 0 ? (rollDelta / dt) : 0;
+    const extScrollVel = this.scrollVelocity() * 0.012;
+    const effectiveScrollVel = Math.abs(extScrollVel) > Math.abs(internalScrollVel) ? extScrollVel : internalScrollVel;
 
-    // 3. Stage tilt reaction (gravity alignment)
-    const stageTilt = this.tiltY(); // from mousemove on desktop or mobile sway (-3 to +3 deg)
-    const gravityTargetAngle = -stageTilt * 1.6;
+    if (!this.isTasselDragging) {
+      // 3. Stage tilt reaction & gravity target angle
+      const stageTilt = this.tiltY(); // from mousemove or device tilt (-3 to +3 deg)
+      const gravityTargetAngle = -stageTilt * 2.2;
 
-    // 4. Ambient natural air current sway
-    const timeSec = now * 0.001;
-    const ambientSway = (Math.sin(timeSec * 1.5) * 1.8) + (Math.sin(timeSec * 2.7) * 0.9);
+      // 4. Ambient natural air current sway
+      const timeSec = now * 0.001;
+      const ambientSway = (Math.sin(timeSec * 1.5) * 2.0) + (Math.sin(timeSec * 2.7) * 1.0);
 
-    // Dynamic scroll torque impulse
-    // When bottom rod rolls up, inertia imparts a rotational kick
-    const scrollImpulse = -scrollVel * 38;
+      // Dynamic scroll torque impulse
+      // When bottom rod rolls up, inertia imparts a rotational kick
+      const scrollImpulse = -effectiveScrollVel * 26;
 
-    const netTargetAngle = gravityTargetAngle + ambientSway;
+      const netTargetAngle = gravityTargetAngle + ambientSway;
 
-    // 5. Primary cord pendulum physics (damped harmonic oscillator)
-    const springTorque = (netTargetAngle - this.ropeAngle) * 18;
-    const dampingTorque = -this.ropeAngleVel * 3.8;
-    const angularAccel = springTorque + dampingTorque + (scrollImpulse * 12);
+      // 5. Primary cord pendulum physics (damped harmonic oscillator)
+      const springTorque = (netTargetAngle - this.ropeAngle) * 24;
+      const dampingTorque = -this.ropeAngleVel * 3.8;
+      const angularAccel = springTorque + dampingTorque + scrollImpulse;
 
-    this.ropeAngleVel += angularAccel * dt;
-    this.ropeAngle += this.ropeAngleVel * dt;
-    this.ropeAngle = Math.max(-28, Math.min(28, this.ropeAngle));
+      this.ropeAngleVel += angularAccel * dt;
+      this.ropeAngle += this.ropeAngleVel * dt;
+      this.ropeAngle = Math.max(-42, Math.min(42, this.ropeAngle));
 
-    // 6. Secondary Tassel Bell Joint physics (articulated sway at knot ring)
-    const bellSpring = (this.ropeAngle * 1.35 - this.ropeSecondaryAngle) * 26;
-    const bellDamping = -this.ropeSecondaryVel * 4.5;
-    const bellAccel = bellSpring + bellDamping;
+      // 6. Secondary Tassel Bell Joint physics (articulated double pendulum lag & whip)
+      const bellTargetAngle = this.ropeAngle * 1.45;
+      const bellSpring = (bellTargetAngle - this.ropeSecondaryAngle) * 32;
+      const bellDamping = -this.ropeSecondaryVel * 4.6;
+      const bellAccel = bellSpring + bellDamping - (this.ropeAngleVel * 1.3);
 
-    this.ropeSecondaryVel += bellAccel * dt;
-    this.ropeSecondaryAngle += this.ropeSecondaryVel * dt;
-    this.ropeSecondaryAngle = Math.max(-22, Math.min(22, this.ropeSecondaryAngle));
+      this.ropeSecondaryVel += bellAccel * dt;
+      this.ropeSecondaryAngle += this.ropeSecondaryVel * dt;
+      this.ropeSecondaryAngle = Math.max(-32, Math.min(32, this.ropeSecondaryAngle));
 
-    // 7. Elastic stretch and bounce on vertical acceleration
-    const targetStretch = 1.0 + Math.min(0.22, Math.abs(scrollVel) * 0.14);
-    const stretchForce = (targetStretch - this.ropeStretch) * 42;
-    const stretchDamp = -this.ropeStretchVel * 7.5;
-    this.ropeStretchVel += (stretchForce + stretchDamp) * dt;
-    this.ropeStretch += this.ropeStretchVel * dt;
-    this.ropeStretch = Math.max(0.85, Math.min(1.35, this.ropeStretch));
+      // 7. Elastic stretch and bounce on vertical acceleration
+      const scrollBounce = Math.min(0.28, Math.abs(effectiveScrollVel) * 0.14);
+      const targetStretch = 1.0 + scrollBounce;
+      const stretchForce = (targetStretch - this.ropeStretch) * 48;
+      const stretchDamp = -this.ropeStretchVel * 7.8;
+      this.ropeStretchVel += (stretchForce + stretchDamp) * dt;
+      this.ropeStretch += this.ropeStretchVel * dt;
+      this.ropeStretch = Math.max(0.85, Math.min(1.35, this.ropeStretch));
+    }
 
     // 8. Update Angular signals
     this.ropeAngleSignal.set(this.ropeAngle);

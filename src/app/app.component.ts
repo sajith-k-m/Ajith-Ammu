@@ -2,38 +2,63 @@ import { Component, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IntroSceneComponent } from './components/intro-scene/intro-scene.component';
 import { DetailsSectionComponent } from './components/details-section/details-section.component';
+import { FloatingDecorationsComponent } from './components/floating-decorations/floating-decorations.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, IntroSceneComponent, DetailsSectionComponent],
+  imports: [
+    CommonModule,
+    IntroSceneComponent,
+    DetailsSectionComponent,
+    FloatingDecorationsComponent
+  ],
   template: `
     <main class="page-wrapper" [class.scroll-unlocked]="isScrollUnlocked()">
-      <div class="scroll-track" [style.height]="trackHeight()">
-        <div class="sticky-viewport">
-          <!-- Intro Scene with Scroll Unrolling, Roll-up & Smooth Top Exit -->
-          <app-intro-scene
-            [scrollRoll]="scrollRoll()"
-            [exitProgress]="exitProgress()"
-            [ropeProgress]="ropeProgress()"
-            [isScrolled]="scrollY() > 10"
-            (sceneCompleted)="onSceneCompleted()"
-          />
+      
+      <!-- Interactive 3D Floating Elements & Ambient Bokeh Engine (reacts to scroll & mouse) -->
+      <app-floating-decorations
+        [scrollY]="scrollY()"
+        [scrollVelocity]="scrollVelocity()"
+      />
 
-          <!-- Full Screen Details Presentation (Rises from below as letter exits top) -->
-          <div
-            class="details-page-wrapper"
-            [class.interactive]="detailsInteractive()"
-            [style.opacity]="detailsOpacity()"
-            [style.transform]="detailsTransform()"
-            [style.pointer-events]="detailsInteractive() ? 'auto' : 'none'"
-            [style.visibility]="detailsProgress() > 0 ? 'visible' : 'hidden'"
-          >
-            <!-- Event Details (Countdown, Location, RSVP, Footer) -->
-            <app-details-section />
-          </div>
-        </div>
+      <!-- Fixed Intro Scene (Letter unrolls, then rolls up & floats off top screen) -->
+      <div
+        class="intro-scene-fixed-layer"
+        [class.hidden-after-exit]="exitProgress() >= 1"
+        [style.pointer-events]="introPointerEvents()"
+      >
+        <app-intro-scene
+          [scrollRoll]="scrollRoll()"
+          [exitProgress]="exitProgress()"
+          [ropeProgress]="ropeProgress()"
+          [scrollVelocity]="scrollVelocity()"
+          [isScrolled]="scrollY() > 10"
+          (sceneCompleted)="onSceneCompleted()"
+        />
       </div>
+
+      <!-- Scroll Spacer for the 850px Intro Choreography -->
+      <div
+        class="intro-scroll-track-spacer"
+        [style.height.px]="isScrollUnlocked() ? 850 : 0"
+        aria-hidden="true"
+      ></div>
+
+      <!-- Grand Luxury Wedding Content Experience (Flows naturally down the page) -->
+      <div
+        class="luxury-content-wrapper"
+        [class.interactive]="detailsInteractive()"
+        [style.opacity]="detailsOpacity()"
+        [style.transform]="detailsTransform()"
+        [style.pointer-events]="detailsInteractive() ? 'auto' : 'none'"
+      >
+        <app-details-section
+          [scrollY]="scrollY()"
+          [scrollVelocity]="scrollVelocity()"
+        />
+      </div>
+
     </main>
   `,
   styles: [`
@@ -42,9 +67,9 @@ import { DetailsSectionComponent } from './components/details-section/details-se
       width: 100%;
       min-height: 100vh;
       min-height: 100dvh;
-      background-color: #12080a;
-      color: #f7e6c4;
-      font-family: var(--font-invitation);
+      background-color: var(--bg-deep, #0a0406);
+      color: var(--text-cream, #fbf5e8);
+      font-family: var(--font-sans);
     }
 
     .page-wrapper {
@@ -60,40 +85,44 @@ import { DetailsSectionComponent } from './components/details-section/details-se
       }
 
       &.scroll-unlocked {
-        overflow: visible;
+        overflow-x: clip;
+        overflow-y: visible;
       }
     }
 
-    .scroll-track {
-      position: relative;
+    /* Fixed Intro Scene Layer */
+    .intro-scene-fixed-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      z-index: 25;
+      overflow: hidden;
+      transition: opacity 0.4s ease-out;
+
+      &.hidden-after-exit {
+        visibility: hidden;
+        pointer-events: none !important;
+        opacity: 0;
+      }
+    }
+
+    /* Spacer for the 850px scroll choreography */
+    .intro-scroll-track-spacer {
       width: 100%;
+      pointer-events: none;
       will-change: height;
     }
 
-    .sticky-viewport {
-      position: sticky;
-      top: 0;
-      left: 0;
+    /* Luxury Content Container */
+    .luxury-content-wrapper {
+      position: relative;
       width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      overflow: hidden;
-    }
-
-    .details-page-wrapper {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 35;
-      padding: 24px 20px;
+      min-height: 100vh;
+      z-index: 30;
       box-sizing: border-box;
-      will-change: transform, opacity;
       pointer-events: none;
 
       &.interactive {
@@ -105,14 +134,11 @@ import { DetailsSectionComponent } from './components/details-section/details-se
 export class AppComponent {
   readonly isScrollUnlocked = signal<boolean>(false);
   readonly scrollY = signal<number>(0);
+  readonly scrollVelocity = signal<number>(0);
 
   // Scroll phase choreography
-  private readonly ROLL_3_4_Y = 380;     // 0 to 380px -> paper rolls up from 0% to 75% (3/4 portion)
-  private readonly EXIT_END_Y = 850;     // 380px to 850px -> balance 1/4 rolls up (0.75 -> 1.0), letter exits off top, details enters
-
-  readonly trackHeight = computed(() => {
-    return this.isScrollUnlocked() ? '240vh' : '100vh';
-  });
+  private readonly ROLL_3_4_Y = 380;     // 0 to 380px -> paper rolls up from 0% to 75%
+  private readonly EXIT_END_Y = 850;     // 380px to 850px -> balance 1/4 rolls up (0.75 -> 1.0), letter exits off top
 
   // Paper roll: 0.0 to 0.75 in Phase 1 (0..380px), then 0.75 to 1.0 in Phase 2 (380..850px)
   readonly scrollRoll = computed(() => {
@@ -147,11 +173,17 @@ export class AppComponent {
   readonly detailsOpacity = computed(() => {
     const p = this.detailsProgress();
     if (p <= 0) return 0;
-    return Math.min(1, p * 1.5);
+    return Math.min(1, p * 1.4);
   });
 
   readonly detailsInteractive = computed(() => {
     return this.detailsProgress() >= 0.85;
+  });
+
+  readonly introPointerEvents = computed(() => {
+    if (this.exitProgress() >= 1) return 'none';
+    if (this.scrollY() > 380) return 'none';
+    return 'auto';
   });
 
   readonly ropeProgress = computed(() => {
@@ -163,26 +195,21 @@ export class AppComponent {
 
   readonly detailsTransform = computed(() => {
     const p = this.detailsProgress();
-    const y = this.scrollY();
     if (p <= 0) {
-      return 'translate3d(0, 70vh, 0)';
+      return 'translate3d(0, 60px, 0)';
     }
-    // Rises smoothly from 70vh below to 0vh (exact full screen center) as p goes 0 to 1
-    const baseTranslateVh = (1 - p) * 70;
-    
-    // Once fully in view (y > EXIT_END_Y), allow gentle upward scrolling for natural browsing
-    let extraOffsetPx = 0;
-    if (y > this.EXIT_END_Y) {
-      const extra = y - this.EXIT_END_Y;
-      extraOffsetPx = Math.min(160, extra * 0.45);
+    if (p >= 1) {
+      return null;
     }
-    
-    return `translate3d(0, calc(${baseTranslateVh.toFixed(2)}vh - ${extraOffsetPx.toFixed(1)}px), 0)`;
+    const offset = ((1 - p) * 60).toFixed(1);
+    return `translate3d(0, ${offset}px, 0)`;
   });
 
   private targetY = 0;
   private currentY = 0;
   private isTicking = false;
+  private lastScrollY = 0;
+  private lastScrollTime = 0;
 
   @HostListener('window:scroll')
   onWindowScroll(): void {
@@ -190,6 +217,7 @@ export class AppComponent {
       this.targetY = window.scrollY;
       if (!this.isTicking) {
         this.isTicking = true;
+        this.lastScrollTime = performance.now();
         requestAnimationFrame(() => this.smoothScrollStep());
       }
     }
@@ -200,6 +228,7 @@ export class AppComponent {
     if (Math.abs(diff) < 0.3) {
       this.currentY = this.targetY;
       this.scrollY.set(this.currentY);
+      this.scrollVelocity.set(0);
       this.isTicking = false;
       return;
     }
@@ -207,6 +236,15 @@ export class AppComponent {
     // Smooth responsive lerp for high-FPS, zero-stutter feel
     this.currentY += diff * 0.28;
     this.scrollY.set(this.currentY);
+
+    const now = performance.now();
+    const dt = Math.max(16, now - this.lastScrollTime);
+    const dy = Math.abs(this.currentY - this.lastScrollY);
+    const vel = Math.min(100, (dy / dt) * 60);
+    this.scrollVelocity.set(vel);
+    this.lastScrollY = this.currentY;
+    this.lastScrollTime = now;
+
     requestAnimationFrame(() => this.smoothScrollStep());
   }
 
