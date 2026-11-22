@@ -86,9 +86,9 @@ interface Blessing {
         </div>
       </header>
 
-      <!-- Section 2: Redesigned Royal Chronometer Countdown -->
+      <!-- Section 2: Redesigned Royal Astrological Chronometer -->
       <div
-        class="chronometer-card reveal-item spotlight-card"
+        class="chronometer-card reveal-item cathedral-arch-card spotlight-card"
         (mousemove)="onCardTilt($event, chronometerRef)"
         (mouseleave)="onCardLeave(chronometerRef)"
         #chronometerRef
@@ -106,99 +106,118 @@ interface Blessing {
         </div>
 
         <h2 class="chronometer-heading shiny-text">Counting Down To Our Forever</h2>
-        <p class="chronometer-date-str">Sunday, April 4, 2027 &bull; Kottarakkara, Kerala</p>
+        <p class="chronometer-date-str">
+          <span class="date-ornament">✦</span>
+          Sunday, April 4, 2027 &bull; Kottarakkara, Kerala
+          <span class="date-ornament">✦</span>
+        </p>
 
-        <!-- 4 Grand Architectural Dials -->
+        <!-- 4 Grand Architectural Cathedral Arch Dials -->
         <div class="dials-grid" role="timer" aria-live="polite">
           
+          <!-- Days Arch Dial -->
           <div
-            class="dial-box spotlight-card"
+            class="dial-box cathedral-arch-dial spotlight-card"
             (mousemove)="onDialTilt($event, d1)"
             (mouseleave)="onDialLeave(d1)"
             #d1
           >
             <div class="card-spotlight-layer" aria-hidden="true"></div>
+            <div class="arch-apex-crest" aria-hidden="true">✦</div>
             <div class="dial-inner">
-              <span class="dial-num">{{ pad(days()) }}</span>
-              <span class="dial-unit">DAYS</span>
+              <span class="dial-num shiny-gold-num">{{ pad(days()) }}</span>
+              <span class="dial-unit-tag">DAYS</span>
             </div>
+            <div class="arch-gold-trim" aria-hidden="true"></div>
           </div>
 
-          <div class="dial-separator" aria-hidden="true">:</div>
+          <div class="dial-separator" aria-hidden="true">✦</div>
 
+          <!-- Hours Arch Dial -->
           <div
-            class="dial-box spotlight-card"
+            class="dial-box cathedral-arch-dial spotlight-card"
             (mousemove)="onDialTilt($event, d2)"
             (mouseleave)="onDialLeave(d2)"
             #d2
           >
             <div class="card-spotlight-layer" aria-hidden="true"></div>
+            <div class="arch-apex-crest" aria-hidden="true">✦</div>
             <div class="dial-inner">
-              <span class="dial-num">{{ pad(hours()) }}</span>
-              <span class="dial-unit">HOURS</span>
+              <span class="dial-num shiny-gold-num">{{ pad(hours()) }}</span>
+              <span class="dial-unit-tag">HOURS</span>
             </div>
+            <div class="arch-gold-trim" aria-hidden="true"></div>
           </div>
 
-          <div class="dial-separator" aria-hidden="true">:</div>
+          <div class="dial-separator" aria-hidden="true">✦</div>
 
+          <!-- Minutes Arch Dial -->
           <div
-            class="dial-box spotlight-card"
+            class="dial-box cathedral-arch-dial spotlight-card"
             (mousemove)="onDialTilt($event, d3)"
             (mouseleave)="onDialLeave(d3)"
             #d3
           >
             <div class="card-spotlight-layer" aria-hidden="true"></div>
+            <div class="arch-apex-crest" aria-hidden="true">✦</div>
             <div class="dial-inner">
-              <span class="dial-num">{{ pad(minutes()) }}</span>
-              <span class="dial-unit">MINUTES</span>
+              <span class="dial-num shiny-gold-num">{{ pad(minutes()) }}</span>
+              <span class="dial-unit-tag">MINUTES</span>
             </div>
+            <div class="arch-gold-trim" aria-hidden="true"></div>
           </div>
 
-          <div class="dial-separator" aria-hidden="true">:</div>
+          <div class="dial-separator" aria-hidden="true">✦</div>
 
+          <!-- Seconds Arch Dial (Living Heartbeat Pulse) -->
           <div
-            class="dial-box seconds-box spotlight-card"
+            class="dial-box cathedral-arch-dial seconds-box spotlight-card"
             (mousemove)="onDialTilt($event, d4)"
             (mouseleave)="onDialLeave(d4)"
             #d4
           >
             <div class="card-spotlight-layer" aria-hidden="true"></div>
+            <div class="arch-apex-crest pulse-crest" aria-hidden="true">✦</div>
             <div class="dial-inner">
-              <span class="dial-num seconds-pulse">{{ pad(seconds()) }}</span>
-              <span class="dial-unit">SECONDS</span>
+              <span class="dial-num shiny-gold-num seconds-pulse">{{ pad(seconds()) }}</span>
+              <span class="dial-unit-tag seconds-tag">SECONDS</span>
             </div>
-            <div class="seconds-glow-ring" aria-hidden="true"></div>
+            <div class="seconds-halo-rings" aria-hidden="true"></div>
+            <div class="arch-gold-trim" aria-hidden="true"></div>
           </div>
 
         </div>
 
         <div class="calendar-action-bar">
-          <button
-            type="button"
-            class="calendar-btn specular-btn star-border-btn"
-            (click)="addToCalendar()"
-            (mousemove)="onBtnMouseMove($event, calBtnRef)"
-            (mouseleave)="onBtnMouseLeave(calBtnRef)"
-            #calBtnRef
-          >
-            <div class="btn-shine-sweep" aria-hidden="true"></div>
-            <svg viewBox="0 0 24 24" class="cal-icon" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            <span>Add to Google / Apple Calendar</span>
-          </button>
+          <div class="star-border-btn-wrap">
+            <div class="star-border-beam" aria-hidden="true"></div>
+            <button
+              type="button"
+              class="calendar-btn star-border-btn specular-btn"
+              (click)="addToCalendar()"
+              (mousemove)="onBtnMouseMove($event, calBtnRef)"
+              (mouseleave)="onBtnMouseLeave(calBtnRef)"
+              #calBtnRef
+            >
+              <div class="btn-shine-sweep" aria-hidden="true"></div>
+              <svg viewBox="0 0 24 24" class="cal-icon" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>Add Auspicious Day to Calendar</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Section 3: Redesigned Action Suite (Interactive RSVP Submit Form & Venue Navigation) -->
+      <!-- Section 3: Redesigned Action Suite (Imperial Wax-Sealed RSVP Missive & Cathedral Sanctuary) -->
       <div class="action-suite-grid reveal-item">
         
-        <!-- Interactive RSVP Card with Complete Submission Form -->
+        <!-- Imperial Wax-Sealed RSVP Missive Card -->
         <div
-          class="suite-card rsvp-suite-card spotlight-card"
+          class="suite-card rsvp-suite-card wax-sealed-card spotlight-card"
           (mousemove)="onCardTilt($event, rsvpRef)"
           (mouseleave)="onCardLeave(rsvpRef)"
           #rsvpRef
@@ -208,109 +227,167 @@ interface Blessing {
           <div class="card-glare-overlay" aria-hidden="true"></div>
           <div class="border-beam-ring" aria-hidden="true"></div>
 
+          <!-- 3D Sculpted Royal Wax Seal & Silk Ribbon Tails -->
+          <div class="wax-seal-ornament" aria-hidden="true">
+            <div class="wax-seal-ribbons">
+              <span class="wax-ribbon ribbon-left"></span>
+              <span class="wax-ribbon ribbon-right"></span>
+            </div>
+            <div class="wax-seal-stamp">
+              <div class="wax-outer-rim"></div>
+              <div class="wax-inner-bed">
+                <svg viewBox="0 0 44 44" class="wax-crest-svg">
+                  <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(255, 235, 180, 0.7)" stroke-width="1" stroke-dasharray="2 1.5"/>
+                  <text x="22" y="27" text-anchor="middle" class="wax-monogram">A&amp;A</text>
+                </svg>
+              </div>
+              <div class="wax-gloss-highlight"></div>
+            </div>
+          </div>
+
           <div class="suite-badge emerald-badge">
             <svg viewBox="0 0 24 24" class="badge-icon" fill="currentColor">
               <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2Z" fill="currentColor"/>
             </svg>
-            <span>{{ isRsvpSubmitted() ? 'RSVP Confirmed' : 'RSVP Submission' }}</span>
+            <span>{{ isRsvpSubmitted() ? 'RSVP Confirmed' : 'Imperial Protocol & RSVP' }}</span>
           </div>
 
           <h3 class="suite-title shiny-text">Will You Grace Us With Your Presence?</h3>
 
           <!-- Form View (when not yet submitted or when editing) -->
           @if (!isRsvpSubmitted()) {
-            <p class="suite-desc">Kindly enter your name and confirm your attendance so we may reserve your royal seat and traditional Kerala Sadhya.</p>
+            <p class="suite-desc">Kindly record your royal response so we may reserve your seats for the auspicious muhurtham and traditional Kerala Sadhya.</p>
 
             <form class="rsvp-inline-form" (ngSubmit)="submitRsvp()">
               
-              <!-- Guest Name -->
-              <div class="form-group">
-                <label class="field-label">Your Full Name / Family Name *</label>
-                <input
-                  type="text"
-                  class="gold-field-input"
-                  [(ngModel)]="rsvpName"
-                  name="rsvpName"
-                  placeholder="e.g. Rahul &amp; Sneha"
-                  maxlength="50"
-                  required
-                />
+              <!-- Royal Hairline Name Input -->
+              <div class="imperial-field-group">
+                <label class="imperial-field-label">Honored Guest / Family Name *</label>
+                <div class="hairline-input-wrap">
+                  <input
+                    type="text"
+                    class="imperial-hairline-input"
+                    [(ngModel)]="rsvpName"
+                    name="rsvpName"
+                    placeholder="e.g. Rahul &amp; Sneha"
+                    maxlength="50"
+                    required
+                  />
+                  <span class="hairline-glow-bar" aria-hidden="true"></span>
+                </div>
                 @if (rsvpError()) {
                   <span class="field-error">{{ rsvpError() }}</span>
                 }
               </div>
 
-              <!-- Attendance Choice -->
-              <div class="form-group">
-                <label class="field-label">Attendance</label>
-                <div class="status-pill-toggle">
+              <!-- Attendance Velvet Badges -->
+              <div class="imperial-field-group">
+                <label class="imperial-field-label">Ceremonial Attendance</label>
+                <div class="velvet-badge-toggle">
                   <button
                     type="button"
-                    class="status-choice-btn"
+                    class="velvet-badge-btn emerald-velvet"
                     [class.active]="rsvpAttendance() === 'attending'"
                     (click)="rsvpAttendance.set('attending')"
                   >
-                    <span>🎉 Joyfully Attending</span>
+                    <span class="velvet-icon">👑</span>
+                    <span class="velvet-text">Graciously Attending</span>
+                    <span class="velvet-glow-border" aria-hidden="true"></span>
                   </button>
                   <button
                     type="button"
-                    class="status-choice-btn"
+                    class="velvet-badge-btn rose-velvet"
                     [class.active]="rsvpAttendance() === 'regret'"
                     (click)="rsvpAttendance.set('regret')"
                   >
-                    <span>💌 Sending Love from Afar</span>
+                    <span class="velvet-icon">🕊️</span>
+                    <span class="velvet-text">Sending Royal Blessings</span>
+                    <span class="velvet-glow-border" aria-hidden="true"></span>
                   </button>
                 </div>
               </div>
 
-              <!-- Guest Count (Shown when attending) -->
+              <!-- Sovereign Minted Gold Coin Guest Counters (Shown when attending) -->
               @if (rsvpAttendance() === 'attending') {
-                <div class="form-group">
-                  <label class="field-label">Number of Guests</label>
-                  <div class="guest-pills-row">
+                <div class="imperial-field-group">
+                  <div class="count-label-row">
+                    <label class="imperial-field-label">Number of Royal Seats Reserved</label>
+                    <span class="seat-count-tag">{{ rsvpGuestCount() }} {{ rsvpGuestCount() === 1 ? 'Guest Seat' : 'Guest Seats' }}</span>
+                  </div>
+                  <div class="sovereign-coins-row">
                     @for (count of [1, 2, 3, 4, 5]; track count) {
                       <button
                         type="button"
-                        class="guest-pill"
+                        class="sovereign-coin-btn"
                         [class.active]="rsvpGuestCount() === count"
                         (click)="rsvpGuestCount.set(count)"
+                        [attr.aria-label]="count === 5 ? '5 or more guests' : count + ' guests'"
                       >
-                        {{ count === 5 ? '5+ Guests' : count + (count === 1 ? ' Guest' : ' Guests') }}
+                        <span class="coin-rim" aria-hidden="true"></span>
+                        <span class="coin-face">
+                          <span class="coin-num">{{ count === 5 ? '5+' : count }}</span>
+                        </span>
+                        <span class="coin-sub">{{ count === 1 ? 'Guest' : (count === 5 ? 'Seats' : 'Guests') }}</span>
                       </button>
                     }
                   </div>
                 </div>
               }
 
-              <!-- Optional Note -->
-              <div class="form-group">
-                <label class="field-label">Message / Dietary Note (Optional)</label>
-                <input
-                  type="text"
-                  class="gold-field-input"
-                  [(ngModel)]="rsvpNote"
-                  name="rsvpNote"
-                  placeholder="e.g. Looking forward to the celebrations!"
-                  maxlength="120"
-                />
+              <!-- Royal Hairline Note Input -->
+              <div class="imperial-field-group">
+                <label class="imperial-field-label">Personal Blessing to Ammu &amp; Ajith (Optional)</label>
+                <div class="hairline-input-wrap">
+                  <input
+                    type="text"
+                    class="imperial-hairline-input"
+                    [(ngModel)]="rsvpNote"
+                    name="rsvpNote"
+                    placeholder="e.g. Can't wait to celebrate your forever!"
+                    maxlength="120"
+                  />
+                  <span class="hairline-glow-bar" aria-hidden="true"></span>
+                </div>
               </div>
 
-              <!-- Submit Buttons with ReactBits Magnetic Hover -->
+              <!-- Grand Emerald Velvet WhatsApp CTA with ReactBits StarBorder -->
               <div class="rsvp-submit-actions">
-                <button
-                  type="submit"
-                  class="primary-submit-rsvp-btn specular-btn star-border-btn"
-                  [disabled]="isSubmittingRsvp()"
-                  (mousemove)="onBtnMouseMove($event, submitRsvpRef)"
-                  (mouseleave)="onBtnMouseLeave(submitRsvpRef)"
-                  #submitRsvpRef
-                >
-                  <div class="btn-shine-sweep" aria-hidden="true"></div>
-                  <svg viewBox="0 0 24 24" class="wa-btn-icon" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                  </svg>
-                  <span>{{ isSubmittingRsvp() ? 'Submitting RSVP...' : 'Submit RSVP via WhatsApp ✨' }}</span>
-                </button>
+                <div class="grand-cta-border-wrap">
+                  <div class="star-border-beam" aria-hidden="true"></div>
+                  <button
+                    type="submit"
+                    class="grand-emerald-cta-btn specular-btn"
+                    [disabled]="isSubmittingRsvp()"
+                    (mousemove)="onBtnMouseMove($event, submitRsvpRef)"
+                    (mouseleave)="onBtnMouseLeave(submitRsvpRef)"
+                    #submitRsvpRef
+                  >
+                    <div class="btn-shine-sweep" aria-hidden="true"></div>
+                    <svg viewBox="0 0 24 24" class="wa-btn-icon" fill="currentColor">
+                      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2Z" fill="currentColor"/>
+                    </svg>
+                    <span class="cta-text">{{ isSubmittingRsvp() ? 'Recording Royal RSVP...' : 'Confirm Attendance via WhatsApp ✨' }}</span>
+                  </button>
+                </div>
+
+                <!-- Live Parchment Message Preview -->
+                <div class="live-scroll-preview">
+                  <div class="preview-badge">
+                    <span class="preview-dot"></span>
+                    <span>Live WhatsApp Dispatch Preview</span>
+                  </div>
+                  <div class="preview-quote-box">
+                    <p class="preview-text">
+                      &ldquo;✨ <strong>WEDDING RSVP — AMMU &amp; AJITH</strong> ✨<br>
+                      👤 Guest: <em>{{ rsvpName ? rsvpName : '[Your Gracious Name]' }}</em><br>
+                      👑 Attendance: <em>{{ rsvpAttendance() === 'attending' ? ('Joyfully Attending (' + rsvpGuestCount() + (rsvpGuestCount() === 1 ? ' Guest)' : ' Guests)')) : 'Sending Warm Love & Blessings from Afar' }}</em>
+                      @if (rsvpNote) {
+                        <br>💬 Note: <em>&ldquo;{{ rsvpNote }}&rdquo;</em>
+                      }
+                      &rdquo;
+                    </p>
+                  </div>
+                </div>
 
                 <a
                   [href]="defaultWhatsappUrl()"
@@ -318,7 +395,7 @@ interface Blessing {
                   rel="noopener noreferrer"
                   class="quick-tap-rsvp-link"
                 >
-                  Or quick 1-tap WhatsApp RSVP &rsaquo;
+                  Or quick 1-tap direct WhatsApp message &rsaquo;
                 </a>
               </div>
 
@@ -329,7 +406,7 @@ interface Blessing {
               <div class="confirmed-header">
                 <div class="confirmed-check-icon">✓</div>
                 <div>
-                  <h4 class="confirmed-title">RSVP Recorded!</h4>
+                  <h4 class="confirmed-title">Royal RSVP Recorded!</h4>
                   <p class="confirmed-subtitle">Thank you, {{ rsvpName }}</p>
                 </div>
               </div>
@@ -337,12 +414,12 @@ interface Blessing {
               <div class="confirmed-summary-box">
                 <div class="summary-line">
                   <span class="sum-label">Status:</span>
-                  <span class="sum-val">{{ rsvpAttendance() === 'attending' ? '🎉 Joyfully Attending' : '💌 Sending Love from Afar' }}</span>
+                  <span class="sum-val">{{ rsvpAttendance() === 'attending' ? '👑 Joyfully Attending' : '🕊️ Sending Love from Afar' }}</span>
                 </div>
                 @if (rsvpAttendance() === 'attending') {
                   <div class="summary-line">
-                    <span class="sum-label">Guests:</span>
-                    <span class="sum-val">{{ rsvpGuestCount() }} {{ rsvpGuestCount() === 1 ? 'Guest' : 'Guests' }}</span>
+                    <span class="sum-label">Seats:</span>
+                    <span class="sum-val">{{ rsvpGuestCount() }} {{ rsvpGuestCount() === 1 ? 'Guest Seat Reserved' : 'Guest Seats Reserved' }}</span>
                   </div>
                 }
                 @if (rsvpNote) {
@@ -365,9 +442,9 @@ interface Blessing {
           }
         </div>
 
-        <!-- Venue & Navigation Card -->
+        <!-- Cathedral Sanctuary Venue & Navigation Card -->
         <div
-          class="suite-card venue-suite-card spotlight-card"
+          class="suite-card venue-suite-card cathedral-venue-card spotlight-card"
           (mousemove)="onCardTilt($event, venueRef)"
           (mouseleave)="onCardLeave(venueRef)"
           #venueRef
@@ -376,55 +453,107 @@ interface Blessing {
           <div class="card-spotlight-layer" aria-hidden="true"></div>
           <div class="card-glare-overlay" aria-hidden="true"></div>
 
+          <!-- Gilded Kerala Cathedral Facade Artwork -->
+          <div class="venue-facade-banner" aria-hidden="true">
+            <svg viewBox="0 0 280 90" class="venue-facade-svg">
+              <path d="M140 10 L160 40 L260 40 L260 85 L20 85 L20 40 L120 40 Z" fill="rgba(223, 178, 93, 0.08)" stroke="url(#crestGoldGrad)" stroke-width="1.2"/>
+              <path d="M140 5 L140 25 M133 12 L147 12" stroke="url(#crestGoldGrad)" stroke-width="1.5"/>
+              <path d="M130 50 C130 40 150 40 150 50 L150 85 L130 85 Z" fill="rgba(150, 96, 26, 0.2)" stroke="url(#crestGoldGrad)" stroke-width="1"/>
+              <circle cx="140" cy="30" r="6" fill="none" stroke="url(#crestGoldGrad)" stroke-width="0.9"/>
+              <path d="M45 55 C45 48 65 48 65 55 L65 85 L45 85 Z" fill="none" stroke="url(#crestGoldGrad)" stroke-width="0.8"/>
+              <path d="M215 55 C215 48 235 48 235 55 L235 85 L215 85 Z" fill="none" stroke="url(#crestGoldGrad)" stroke-width="0.8"/>
+            </svg>
+          </div>
+
           <div class="suite-badge gold-badge">
             <svg viewBox="0 0 24 24" class="badge-icon" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
-            <span>Ceremony Venue</span>
+            <span>Ceremony Venue &bull; 8.9989&deg; N, 76.7725&deg; E</span>
           </div>
 
           <h3 class="suite-title shiny-text">St. Paul's Auditorium</h3>
           <p class="suite-venue-address">Puthoor, Kottarakkara &bull; Kollam District, Kerala</p>
-          <p class="suite-desc">Auspicious ceremony at 10:15 AM followed by grand wedding feast (Sadhya).</p>
+          <p class="suite-desc">Auspicious ceremony at 10:15 AM followed by grand traditional Kerala Sadhya feast.</p>
+
+          <!-- Auspicious Schedule & Highlights -->
+          <div class="venue-highlights-pill-box">
+            <div class="venue-hl-row">
+              <span class="hl-badge">10:15 AM</span>
+              <span class="hl-desc">Sacred Thali Kettu &amp; Wedding Muhurtham</span>
+            </div>
+            <div class="venue-hl-row">
+              <span class="hl-badge">12:30 PM</span>
+              <span class="hl-desc">Grand 24-Dish Kerala Wedding Sadhya Feast</span>
+            </div>
+            <div class="venue-hl-row">
+              <span class="hl-badge">SANCTUARY</span>
+              <span class="hl-desc">Main Central Auditorium &bull; AC Banquet</span>
+            </div>
+          </div>
+
+          <!-- Stylized Mini Venue Map Preview Card -->
+          <div class="venue-mini-map-preview">
+            <div class="map-bg-pattern" aria-hidden="true"></div>
+            <div class="map-compass-badge">
+              <span class="compass-symbol">🧭</span>
+              <span class="compass-coords">Kottarakkara, Kollam</span>
+            </div>
+            <div class="map-live-beacon">
+              <span class="beacon-wave wave-1"></span>
+              <span class="beacon-wave wave-2"></span>
+              <span class="beacon-pin-head">📍</span>
+            </div>
+            <div class="map-caption">
+              <strong>St. Paul's Auditorium</strong> &bull; Ample parking &amp; highway access
+            </div>
+          </div>
 
           <div class="venue-action-row">
-            <a
-              [href]="mapsUrl()"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="primary-venue-btn specular-btn star-border-btn"
-              (mousemove)="onBtnMouseMove($event, venueBtnRef)"
-              (mouseleave)="onBtnMouseLeave(venueBtnRef)"
-              #venueBtnRef
-            >
-              <div class="btn-shine-sweep" aria-hidden="true"></div>
-              <svg viewBox="0 0 24 24" class="nav-icon" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
-              </svg>
-              <span>Open in Google Maps</span>
-            </a>
+            <div class="star-border-btn-wrap">
+              <div class="star-border-beam" aria-hidden="true"></div>
+              <a
+                [href]="mapsUrl()"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="primary-venue-btn specular-btn"
+                (mousemove)="onBtnMouseMove($event, venueBtnRef)"
+                (mouseleave)="onBtnMouseLeave(venueBtnRef)"
+                #venueBtnRef
+              >
+                <div class="btn-shine-sweep" aria-hidden="true"></div>
+                <svg viewBox="0 0 24 24" class="nav-icon" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+                </svg>
+                <span>Navigate in Google Maps</span>
+              </a>
+            </div>
 
             <button type="button" class="copy-address-btn" (click)="copyAddress()">
-              <span>{{ addressCopied() ? '✓ Copied Address!' : 'Copy Address' }}</span>
+              <span>{{ addressCopied() ? '✓ Coordinates Copied!' : 'Copy Venue Address' }}</span>
             </button>
           </div>
         </div>
 
       </div>
 
-      <!-- Section 4: Interactive 3D Photo Placeholders Gallery -->
+      <!-- Section 4: Interactive Artisanal Photo Treasury with ReactBits TrueFocus -->
       <div class="photo-gallery-section reveal-item">
         <div class="section-title-wrap">
-          <span class="section-eyebrow">A TREASURY OF MOMENTS</span>
-          <h2 class="section-heading">Our Story in Frames</h2>
-          <p class="section-subtext">Every glance held a promise, every journey brought us here. Tap any frame to preview or replace with real photos.</p>
+          <span class="section-eyebrow">A TREASURY OF SACRED MEMORIES</span>
+          <h2 class="section-heading shiny-text">Our Story in Frames</h2>
+          <p class="section-subtext">Every glance held a promise, every journey brought us here. Tap any frame to preview or personalize with photos.</p>
         </div>
 
-        <div class="gallery-grid">
+        <div class="gallery-grid" [class.has-hover]="hoveredPhotoId() !== null">
           @for (photo of photos(); track photo.id) {
             <div
               class="photo-card {{ photo.aspect }} spotlight-card"
+              [class.focused]="hoveredPhotoId() === photo.id"
+              [class.blurred]="hoveredPhotoId() !== null && hoveredPhotoId() !== photo.id"
+              (mouseenter)="hoveredPhotoId.set(photo.id)"
+              (mouseleave)="hoveredPhotoId.set(null)"
               (click)="openPhotoModal(photo)"
               (mousemove)="onCardTilt($event, cardEl)"
               (mouseleave)="onCardLeave(cardEl)"
@@ -434,22 +563,100 @@ interface Blessing {
               <div class="card-spotlight-layer" aria-hidden="true"></div>
               <div class="card-glare-overlay" aria-hidden="true"></div>
 
-              <div class="corner-filigree top-left" aria-hidden="true"></div>
-              <div class="corner-filigree top-right" aria-hidden="true"></div>
-              <div class="corner-filigree bottom-left" aria-hidden="true"></div>
-              <div class="corner-filigree bottom-right" aria-hidden="true"></div>
+              <!-- Baroque 24K Gold Corner Rosettes -->
+              <div class="baroque-corner tl" aria-hidden="true">
+                <svg viewBox="0 0 28 28" class="corner-svg"><path d="M2 2 L26 2 C16 4 6 14 2 26 Z" fill="none" stroke="url(#crestGoldGrad)" stroke-width="1.6"/><circle cx="8" cy="8" r="2.5" fill="#dfb25d"/></svg>
+              </div>
+              <div class="baroque-corner tr" aria-hidden="true">
+                <svg viewBox="0 0 28 28" class="corner-svg"><path d="M26 2 L2 2 C12 4 22 14 26 26 Z" fill="none" stroke="url(#crestGoldGrad)" stroke-width="1.6"/><circle cx="20" cy="8" r="2.5" fill="#dfb25d"/></svg>
+              </div>
+              <div class="baroque-corner bl" aria-hidden="true">
+                <svg viewBox="0 0 28 28" class="corner-svg"><path d="M2 26 L26 26 C16 24 6 14 2 2 Z" fill="none" stroke="url(#crestGoldGrad)" stroke-width="1.6"/><circle cx="8" cy="20" r="2.5" fill="#dfb25d"/></svg>
+              </div>
+              <div class="baroque-corner br" aria-hidden="true">
+                <svg viewBox="0 0 28 28" class="corner-svg"><path d="M26 26 L2 26 C12 24 22 14 26 2 Z" fill="none" stroke="url(#crestGoldGrad)" stroke-width="1.6"/><circle cx="20" cy="20" r="2.5" fill="#dfb25d"/></svg>
+              </div>
 
               <div class="photo-frame-content">
                 @if (photo.customImgUrl) {
                   <img [src]="photo.customImgUrl" [alt]="photo.title" class="custom-photo-img" />
                 } @else {
-                  <div class="luxury-placeholder-art">
-                    <div class="placeholder-watermark">
-                      <svg viewBox="0 0 64 64" class="watermark-svg">
-                        <circle cx="32" cy="32" r="28" stroke="url(#crestGoldGrad)" stroke-width="1.2" stroke-dasharray="4 2" fill="none" opacity="0.4"/>
-                        <path d="M22 26 L26 20 L38 20 L42 26 L50 26 C52.2 26 54 27.8 54 30 L54 48 C54 50.2 52.2 52 50 52 L14 52 C11.8 52 10 50.2 10 48 L10 30 C10 27.8 11.8 26 14 26 Z" stroke="url(#crestGoldGrad)" stroke-width="1.8" fill="rgba(223, 178, 93, 0.08)"/>
-                        <circle cx="32" cy="39" r="8" stroke="url(#crestGoldGrad)" stroke-width="1.8" fill="none"/>
-                      </svg>
+                  <!-- Handcrafted Royal Art Silhouette Placeholders -->
+                  <div class="luxury-placeholder-art artwork-frame-{{ photo.id }}">
+                    <div class="art-silhouette-canvas">
+                      @switch (photo.id) {
+                        @case (1) {
+                          <!-- Frame 1: Mandapam & Sacred Vows -->
+                          <svg viewBox="0 0 160 160" class="art-svg">
+                            <circle cx="80" cy="80" r="70" fill="none" stroke="url(#crestGoldGrad)" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+                            <path d="M30 40 Q80 15 130 40 L130 46 Q80 25 30 46 Z" fill="url(#crestGoldGrad)" opacity="0.6"/>
+                            <!-- Couple Silhouette -->
+                            <ellipse cx="68" cy="72" rx="12" ry="14" fill="#6e2333" opacity="0.8"/>
+                            <path d="M52 135 C52 95 84 95 84 135 Z" fill="#6e2333" opacity="0.8"/>
+                            <ellipse cx="94" cy="74" rx="10" ry="12" fill="#8c3346" opacity="0.8"/>
+                            <path d="M82 135 C82 100 108 100 108 135 Z" fill="#8c3346" opacity="0.8"/>
+                            <circle cx="80" cy="62" r="3" fill="#dfb25d"/>
+                          </svg>
+                        }
+                        @case (2) {
+                          <!-- Frame 2: Whispers Under Starlight & Palms -->
+                          <svg viewBox="0 0 160 160" class="art-svg">
+                            <path d="M125 35 A22 22 0 1 0 145 60 A18 18 0 1 1 125 35 Z" fill="url(#crestGoldGrad)" opacity="0.75"/>
+                            <path d="M25 140 Q40 80 70 50 Q60 55 45 62 M70 50 Q85 60 90 70 M70 50 Q65 40 50 35 M70 50 Q75 35 90 35" stroke="url(#crestGoldGrad)" stroke-width="1.8" fill="none" opacity="0.6"/>
+                            <ellipse cx="95" cy="100" rx="10" ry="12" fill="#6e2333" opacity="0.8"/>
+                            <ellipse cx="115" cy="102" rx="9" ry="11" fill="#8c3346" opacity="0.8"/>
+                            <path d="M82 145 C82 118 128 118 128 145 Z" fill="#6e2333" opacity="0.75"/>
+                          </svg>
+                        }
+                        @case (3) {
+                          <!-- Frame 3: Traditional Kerala Nilavilakku (Sacred Lamp) -->
+                          <svg viewBox="0 0 160 160" class="art-svg">
+                            <ellipse cx="80" cy="142" rx="35" ry="8" fill="url(#crestGoldGrad)" opacity="0.6"/>
+                            <path d="M76 140 L76 75 L84 75 L84 140 Z" fill="url(#crestGoldGrad)" opacity="0.7"/>
+                            <ellipse cx="80" cy="75" rx="30" ry="8" fill="url(#crestGoldGrad)" opacity="0.8"/>
+                            <path d="M78 72 Q80 50 80 48 Q82 50 82 72 Z" fill="#dfb25d"/>
+                            <circle cx="80" cy="46" r="6" fill="#fae09a" filter="drop-shadow(0 0 8px #dfb25d)"/>
+                            <!-- Jasmine Garland -->
+                            <path d="M50 78 Q80 98 110 78" fill="none" stroke="#fff8db" stroke-width="3" stroke-dasharray="2 3"/>
+                          </svg>
+                        }
+                        @case (4) {
+                          <!-- Frame 4: Sunset Backwaters & Lotus -->
+                          <svg viewBox="0 0 160 160" class="art-svg">
+                            <circle cx="80" cy="65" r="28" fill="url(#crestGoldGrad)" opacity="0.4"/>
+                            <line x1="20" y1="105" x2="140" y2="105" stroke="url(#crestGoldGrad)" stroke-width="1.5" opacity="0.6"/>
+                            <line x1="35" y1="118" x2="125" y2="118" stroke="url(#crestGoldGrad)" stroke-width="1" opacity="0.4"/>
+                            <line x1="50" y1="130" x2="110" y2="130" stroke="url(#crestGoldGrad)" stroke-width="0.8" opacity="0.3"/>
+                            <!-- Couple in Kettuvallam -->
+                            <path d="M45 105 Q80 120 115 105 Z" fill="#6e2333" opacity="0.7"/>
+                            <circle cx="75" cy="95" r="5" fill="#8c3346"/>
+                            <circle cx="85" cy="96" r="4.5" fill="#6e2333"/>
+                          </svg>
+                        }
+                        @case (5) {
+                          <!-- Frame 5: Sacred Rings & Garland -->
+                          <svg viewBox="0 0 160 160" class="art-svg">
+                            <circle cx="68" cy="80" r="22" fill="none" stroke="url(#crestGoldGrad)" stroke-width="3" filter="drop-shadow(0 0 6px rgba(223, 178, 93, 0.6))"/>
+                            <circle cx="92" cy="80" r="22" fill="none" stroke="url(#crestGoldGrad)" stroke-width="3" filter="drop-shadow(0 0 6px rgba(223, 178, 93, 0.6))"/>
+                            <!-- Diamond Glint -->
+                            <polygon points="68,54 71,58 75,58 72,61 73,65 68,62 63,65 64,61 61,58 65,58" fill="#fff8db"/>
+                          </svg>
+                        }
+                        @default {
+                          <!-- Frame 6: Grand Procession & Muthukkuda -->
+                          <svg viewBox="0 0 160 160" class="art-svg">
+                            <path d="M40 70 Q80 25 120 70 Z" fill="url(#crestGoldGrad)" opacity="0.65"/>
+                            <line x1="80" y1="70" x2="80" y2="135" stroke="url(#crestGoldGrad)" stroke-width="2.5"/>
+                            <!-- Decorative umbrella tassels -->
+                            <circle cx="45" cy="74" r="3" fill="#dfb25d"/>
+                            <circle cx="62" cy="74" r="3" fill="#dfb25d"/>
+                            <circle cx="80" cy="74" r="3" fill="#dfb25d"/>
+                            <circle cx="98" cy="74" r="3" fill="#dfb25d"/>
+                            <circle cx="115" cy="74" r="3" fill="#dfb25d"/>
+                            <ellipse cx="80" cy="25" rx="5" ry="3" fill="#dfb25d"/>
+                          </svg>
+                        }
+                      }
                     </div>
                     <span class="placeholder-badge">{{ photo.placeholderTag }}</span>
                   </div>
@@ -460,7 +667,7 @@ interface Blessing {
                 <div class="photo-caption-bar">
                   <h4 class="photo-card-title">{{ photo.title }}</h4>
                   <p class="photo-card-sub">{{ photo.subtitle }}</p>
-                  <span class="tap-hint">Tap to view / swap photo &rsaquo;</span>
+                  <span class="tap-hint">Tap to inspect or personalize &rsaquo;</span>
                 </div>
               </div>
             </div>
@@ -1217,14 +1424,14 @@ interface Blessing {
       transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    /* Section 2: Redesigned Royal Chronometer Countdown */
+    /* Section 2: Redesigned Royal Astrological Chronometer */
     .chronometer-card {
       position: relative;
       width: 100%;
-      max-width: 720px;
-      padding: 44px 36px 36px;
-      border-radius: 28px;
-      background: rgba(255, 255, 255, 0.84);
+      max-width: 760px;
+      padding: 48px 36px 40px;
+      border-radius: 44px 44px 28px 28px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 246, 240, 0.86) 100%);
       border: 1.5px solid rgba(212, 155, 80, 0.45);
       box-shadow: 0 24px 60px rgba(184, 107, 88, 0.16), 0 0 35px rgba(223, 178, 93, 0.18), inset 0 1.5px 0 #ffffff;
       backdrop-filter: blur(24px);
@@ -1233,7 +1440,7 @@ interface Blessing {
       transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
 
       &:hover {
-        box-shadow: 0 30px 80px rgba(184, 107, 88, 0.24), 0 0 50px rgba(223, 178, 93, 0.28);
+        box-shadow: 0 32px 80px rgba(184, 107, 88, 0.24), 0 0 50px rgba(223, 178, 93, 0.28);
       }
     }
 
@@ -1241,16 +1448,16 @@ interface Blessing {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 18px;
+      padding: 6px 20px;
       border-radius: 30px;
       background: rgba(240, 180, 160, 0.25);
       border: 1px solid rgba(190, 110, 75, 0.35);
       color: #6e2333;
       font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
 
       .badge-dot {
         width: 5px;
@@ -1263,46 +1470,70 @@ interface Blessing {
 
     .chronometer-heading {
       font-family: var(--font-royal);
-      font-size: clamp(22px, 4.8vw, 32px);
+      font-size: clamp(24px, 5vw, 34px);
       font-weight: 700;
       color: #2b0e16;
       letter-spacing: 0.06em;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .chronometer-date-str {
       font-family: var(--font-sans);
       font-size: 13px;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       color: #7d3343;
       font-weight: 600;
       text-transform: uppercase;
-      margin-bottom: 30px;
+      margin-bottom: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      .date-ornament {
+        color: #b57424;
+        font-size: 11px;
+      }
     }
 
     .dials-grid {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: clamp(8px, 2.5vw, 20px);
-      margin-bottom: 32px;
+      gap: clamp(8px, 2.5vw, 18px);
+      margin-bottom: 34px;
     }
 
-    .dial-box {
+    .cathedral-arch-dial {
       flex: 1;
-      max-width: 120px;
-      min-width: 72px;
-      padding: 16px 8px 12px;
-      border-radius: 18px;
+      max-width: 125px;
+      min-width: 74px;
+      padding: 16px 8px 14px;
+      border-radius: 44px 44px 18px 18px;
       background: linear-gradient(180deg, #ffffff 0%, #fff7f2 100%);
-      border: 1.5px solid rgba(212, 155, 80, 0.42);
-      box-shadow: 0 10px 25px rgba(184, 107, 88, 0.12), inset 0 1px 0 #ffffff;
+      border: 1.5px solid rgba(212, 155, 80, 0.48);
+      box-shadow: 0 12px 28px rgba(184, 107, 88, 0.14), inset 0 1.5px 0 #ffffff;
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
       &.seconds-box {
-        border-color: rgba(212, 155, 80, 0.65);
+        border-color: rgba(212, 155, 80, 0.7);
         background: linear-gradient(180deg, #ffffff 0%, #ffefe6 100%);
+      }
+    }
+
+    .arch-apex-crest {
+      font-size: 13px;
+      color: #b57424;
+      line-height: 1;
+      margin-bottom: 2px;
+      text-shadow: 0 0 6px rgba(212, 155, 80, 0.5);
+
+      &.pulse-crest {
+        animation: dialHaloPulse 1.8s ease-in-out infinite;
       }
     }
 
@@ -1310,48 +1541,64 @@ interface Blessing {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
+      width: 100%;
     }
 
     .dial-num {
       font-family: var(--font-royal);
-      font-size: clamp(32px, 7vw, 54px);
+      font-size: clamp(34px, 7.5vw, 56px);
       font-weight: 800;
       line-height: 1;
-      background: linear-gradient(180deg, #2b0e16 0%, #6e2433 45%, #a6651b 80%, #704108 100%);
+      background: linear-gradient(180deg, #2b0e16 0%, #6e2433 35%, #a6651b 75%, #704108 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 2px 6px rgba(184, 107, 88, 0.18));
+      filter: drop-shadow(0 2px 6px rgba(184, 107, 88, 0.2));
     }
 
-    .dial-unit {
+    .dial-unit-tag {
       font-family: var(--font-sans);
-      font-size: clamp(10px, 2.2vw, 12px);
-      letter-spacing: 0.16em;
+      font-size: clamp(9.5px, 2vw, 11px);
+      letter-spacing: 0.18em;
       color: #7d3141;
       font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(212, 155, 80, 0.12);
+      border: 1px solid rgba(212, 155, 80, 0.3);
+
+      &.seconds-tag {
+        background: rgba(212, 155, 80, 0.2);
+        border-color: rgba(212, 155, 80, 0.5);
+      }
+    }
+
+    .arch-gold-trim {
+      position: absolute;
+      inset: 3px;
+      border-radius: 40px 40px 14px 14px;
+      border: 1px solid rgba(212, 155, 80, 0.2);
+      pointer-events: none;
     }
 
     .dial-separator {
-      font-family: var(--font-royal);
-      font-size: clamp(24px, 5vw, 36px);
-      color: rgba(181, 116, 36, 0.7);
-      margin-top: -14px;
-      font-weight: 300;
+      font-size: clamp(14px, 3.5vw, 20px);
+      color: rgba(181, 116, 36, 0.65);
+      margin-top: -6px;
     }
 
-    .seconds-glow-ring {
+    .seconds-halo-rings {
       position: absolute;
-      inset: 0;
+      inset: -2px;
       border-radius: inherit;
-      border: 1.5px solid rgba(212, 155, 80, 0.5);
+      border: 1.5px solid rgba(212, 155, 80, 0.6);
       animation: dialHaloPulse 1.8s ease-in-out infinite;
       pointer-events: none;
     }
 
     @keyframes dialHaloPulse {
-      0%, 100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 0.8; transform: scale(1.02); }
+      0%, 100% { opacity: 0.25; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.03); }
     }
 
     .calendar-action-bar {
@@ -1360,14 +1607,35 @@ interface Blessing {
       width: 100%;
     }
 
+    /* ReactBits StarBorder Animation */
+    .star-border-btn-wrap {
+      position: relative;
+      display: inline-flex;
+      border-radius: 34px;
+      padding: 1.5px;
+      overflow: hidden;
+
+      .star-border-beam {
+        position: absolute;
+        inset: -150%;
+        background: conic-gradient(from 0deg, transparent 0deg, transparent 315deg, #dfb25d 340deg, #fff8db 360deg);
+        animation: starBorderSpin 4s linear infinite;
+        pointer-events: none;
+      }
+    }
+
+    @keyframes starBorderSpin {
+      100% { transform: rotate(360deg); }
+    }
+
     .calendar-btn {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      padding: 13px 28px;
-      border-radius: 30px;
+      padding: 14px 28px;
+      border-radius: 32px;
       background: linear-gradient(135deg, #ffffff 0%, #fff2eb 100%);
-      border: 1.5px solid rgba(212, 155, 80, 0.5);
+      border: 1px solid rgba(212, 155, 80, 0.5);
       color: #3b141d;
       font-family: var(--font-sans);
       font-size: 13.5px;
@@ -1376,6 +1644,8 @@ interface Blessing {
       cursor: pointer;
       box-shadow: 0 8px 24px rgba(184, 107, 88, 0.14);
       transition: all 0.25s ease;
+      position: relative;
+      z-index: 1;
 
       &:hover {
         background: linear-gradient(135deg, #ffffff 0%, #fae2d6 100%);
@@ -1395,40 +1665,131 @@ interface Blessing {
     .action-suite-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
+      gap: 28px;
       width: 100%;
-      max-width: 920px;
+      max-width: 960px;
     }
 
     .suite-card {
-      padding: 34px 28px;
-      border-radius: 24px;
+      padding: 38px 30px 32px;
+      border-radius: 28px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 14px;
+      gap: 16px;
       text-align: left;
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(24px);
       transform-style: preserve-3d;
       transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+      position: relative;
 
       &.rsvp-suite-card {
-        background: rgba(255, 255, 255, 0.88);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 248, 242, 0.88) 100%);
         border: 1.5px solid rgba(26, 115, 76, 0.38);
-        box-shadow: 0 20px 48px rgba(184, 107, 88, 0.12), 0 8px 24px rgba(26, 115, 76, 0.08), inset 0 1px 0 #ffffff;
+        box-shadow: 0 24px 54px rgba(184, 107, 88, 0.15), 0 8px 24px rgba(26, 115, 76, 0.08), inset 0 1.5px 0 #ffffff;
 
         &:hover {
-          box-shadow: 0 26px 64px rgba(184, 107, 88, 0.2), 0 0 35px rgba(46, 196, 134, 0.25);
+          box-shadow: 0 30px 72px rgba(184, 107, 88, 0.22), 0 0 40px rgba(46, 196, 134, 0.25);
         }
       }
 
       &.venue-suite-card {
-        background: rgba(255, 255, 255, 0.88);
-        border: 1.5px solid rgba(212, 155, 80, 0.42);
-        box-shadow: 0 20px 48px rgba(184, 107, 88, 0.14), inset 0 1px 0 #ffffff;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 246, 240, 0.88) 100%);
+        border: 1.5px solid rgba(212, 155, 80, 0.45);
+        border-radius: 44px 44px 28px 28px;
+        box-shadow: 0 24px 54px rgba(184, 107, 88, 0.16), inset 0 1.5px 0 #ffffff;
 
         &:hover {
-          box-shadow: 0 26px 64px rgba(184, 107, 88, 0.22), 0 0 35px rgba(223, 178, 93, 0.25);
+          box-shadow: 0 30px 72px rgba(184, 107, 88, 0.24), 0 0 40px rgba(223, 178, 93, 0.25);
+        }
+      }
+    }
+
+    /* 3D Sculpted Royal Wax Seal */
+    .wax-seal-ornament {
+      position: absolute;
+      top: -18px;
+      right: 28px;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .wax-seal-stamp {
+        width: 58px;
+        height: 58px;
+        border-radius: 50% / 48% 52% 49% 51%;
+        background: radial-gradient(circle at 35% 35%, #a61c36 0%, #750f24 55%, #420410 100%);
+        box-shadow: 0 8px 22px rgba(100, 10, 25, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.45), inset 0 -3px 6px rgba(0, 0, 0, 0.6);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .wax-outer-rim {
+        position: absolute;
+        inset: 2px;
+        border-radius: 50%;
+        border: 1.2px solid rgba(255, 216, 133, 0.35);
+      }
+
+      .wax-inner-bed {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .wax-crest-svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .wax-monogram {
+        font-family: var(--font-royal);
+        font-size: 14px;
+        font-weight: 800;
+        fill: #ffd885;
+        letter-spacing: 0.05em;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.7));
+      }
+
+      .wax-gloss-highlight {
+        position: absolute;
+        top: 6px;
+        left: 10px;
+        width: 18px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: rotate(-30deg);
+        filter: blur(1.5px);
+      }
+
+      .wax-seal-ribbons {
+        position: absolute;
+        top: 36px;
+        display: flex;
+        gap: 6px;
+        z-index: -1;
+      }
+
+      .wax-ribbon {
+        width: 14px;
+        height: 38px;
+        background: linear-gradient(180deg, #750f24 0%, #4a0614 100%);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 80%, 0% 100%);
+
+        &.ribbon-left {
+          transform: rotate(-14deg);
+        }
+        &.ribbon-right {
+          transform: rotate(14deg);
+          background: linear-gradient(180deg, #8a152d 0%, #540817 100%);
         }
       }
     }
@@ -1437,11 +1798,11 @@ interface Blessing {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 5px 14px;
+      padding: 6px 16px;
       border-radius: 20px;
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
 
       .badge-icon {
@@ -1451,7 +1812,7 @@ interface Blessing {
 
       &.emerald-badge {
         background: rgba(26, 115, 76, 0.12);
-        border: 1px solid rgba(26, 115, 76, 0.35);
+        border: 1px solid rgba(26, 115, 76, 0.38);
         color: #0e4f32;
       }
 
@@ -1464,7 +1825,7 @@ interface Blessing {
 
     .suite-title {
       font-family: var(--font-royal);
-      font-size: clamp(20px, 4vw, 24px);
+      font-size: clamp(21px, 4.2vw, 25px);
       font-weight: 700;
       color: #2b0e16;
       line-height: 1.25;
@@ -1474,32 +1835,78 @@ interface Blessing {
       font-family: var(--font-sans);
       font-size: 13.5px;
       color: #54212d;
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
-    /* RSVP Inline Form Styles */
+    /* Imperial Hairline Underline Form */
     .rsvp-inline-form {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 18px;
       width: 100%;
-      margin-top: 4px;
+      margin-top: 6px;
     }
 
-    .form-group {
+    .imperial-field-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
       width: 100%;
     }
 
-    .field-label {
-      font-family: var(--font-sans);
+    .imperial-field-label {
+      font-family: var(--font-royal);
       font-size: 11.5px;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: #4a1823;
+      color: #5c1e28;
+    }
+
+    .hairline-input-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .imperial-hairline-input {
+      width: 100%;
+      padding: 10px 4px;
+      background: transparent;
+      border: none;
+      border-bottom: 1.5px solid rgba(212, 155, 80, 0.45);
+      color: #2b0e16;
+      font-family: var(--font-serif);
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.25s ease;
+
+      &:focus {
+        border-color: #a6651b;
+      }
+
+      &::placeholder {
+        color: rgba(84, 33, 45, 0.4);
+        font-family: var(--font-sans);
+        font-size: 14px;
+      }
+    }
+
+    .hairline-glow-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #dfb25d 50%, transparent);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 10px rgba(223, 178, 93, 0.8);
+      pointer-events: none;
+    }
+
+    .imperial-hairline-input:focus + .hairline-glow-bar {
+      transform: scaleX(1);
     }
 
     .field-error {
@@ -1509,113 +1916,197 @@ interface Blessing {
       font-weight: 600;
     }
 
-    .gold-field-input {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 12px;
-      background: #ffffff;
-      border: 1.5px solid rgba(212, 155, 80, 0.45);
-      color: #2b0e16;
-      font-family: var(--font-sans);
-      font-size: 14px;
-      outline: none;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
-      transition: all 0.2s ease;
-
-      &:focus {
-        border-color: #a6651b;
-        box-shadow: 0 0 12px rgba(166, 101, 27, 0.25);
-      }
-
-      &::placeholder {
-        color: rgba(84, 33, 45, 0.4);
-      }
-    }
-
-    .status-pill-toggle {
+    /* Velvet Attendance Badges */
+    .velvet-badge-toggle {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
-    .status-choice-btn {
+    .velvet-badge-btn {
       flex: 1;
-      min-width: 130px;
-      padding: 10px 14px;
-      border-radius: 12px;
+      min-width: 140px;
+      padding: 12px 16px;
+      border-radius: 14px;
       background: #ffffff;
-      border: 1.5px solid rgba(212, 155, 80, 0.35);
+      border: 1.5px solid rgba(212, 155, 80, 0.38);
       color: #54212d;
-      font-family: var(--font-sans);
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:hover, &.active {
-        background: linear-gradient(135deg, #18734c 0%, #0d4a2f 100%);
-        border-color: #2ec486;
-        color: #ffffff;
-        box-shadow: 0 6px 18px rgba(26, 115, 76, 0.3);
-      }
-    }
-
-    .guest-pills-row {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .guest-pill {
-      padding: 8px 14px;
-      border-radius: 20px;
-      background: #ffffff;
-      border: 1.5px solid rgba(212, 155, 80, 0.35);
-      color: #54212d;
-      font-family: var(--font-sans);
+      font-family: var(--font-royal);
       font-size: 12px;
       font-weight: 700;
+      letter-spacing: 0.04em;
       cursor: pointer;
-      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(184, 107, 88, 0.08);
+      transition: all 0.25s ease;
 
-      &:hover, &.active {
-        background: linear-gradient(135deg, #18734c 0%, #0d4a2f 100%);
+      .velvet-icon {
+        font-size: 14px;
+      }
+
+      &.emerald-velvet:hover,
+      &.emerald-velvet.active {
+        background: linear-gradient(135deg, #093c24 0%, #13663e 50%, #0a331f 100%);
         border-color: #2ec486;
         color: #ffffff;
-        box-shadow: 0 4px 14px rgba(26, 115, 76, 0.25);
+        box-shadow: 0 8px 24px rgba(19, 102, 62, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      }
+
+      &.rose-velvet:hover,
+      &.rose-velvet.active {
+        background: linear-gradient(135deg, #6b1d2e 0%, #8c2e42 50%, #521220 100%);
+        border-color: #dfb25d;
+        color: #ffffff;
+        box-shadow: 0 8px 24px rgba(140, 46, 66, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
       }
     }
 
+    /* Kerala Sovereign Minted Coins */
+    .count-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .seat-count-tag {
+      font-family: var(--font-sans);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #0e4f32;
+      background: rgba(26, 115, 76, 0.12);
+      border: 1px solid rgba(26, 115, 76, 0.3);
+      padding: 2px 10px;
+      border-radius: 12px;
+    }
+
+    .sovereign-coins-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .sovereign-coin-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffffff 0%, #fff4db 50%, #fae2b8 100%);
+      border: 1.5px solid rgba(212, 155, 80, 0.55);
+      box-shadow: 0 6px 16px rgba(184, 107, 88, 0.12), inset 0 1px 0 #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+      .coin-face {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .coin-num {
+        font-family: var(--font-royal);
+        font-size: 16px;
+        font-weight: 800;
+        color: #54212d;
+        line-height: 1;
+      }
+
+      .coin-sub {
+        font-family: var(--font-sans);
+        font-size: 8px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #7d3343;
+        margin-top: 1px;
+      }
+
+      &:hover {
+        transform: translateY(-2px) scale(1.05);
+        border-color: rgba(212, 155, 80, 0.85);
+        box-shadow: 0 8px 20px rgba(184, 107, 88, 0.2);
+      }
+
+      &.active {
+        background: linear-gradient(135deg, #093c24 0%, #13663e 50%, #0a331f 100%);
+        border-color: #2ec486;
+        box-shadow: 0 8px 24px rgba(19, 102, 62, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        transform: scale(1.1) translateY(-2px);
+
+        .coin-num {
+          color: #ffd885;
+          text-shadow: 0 0 8px rgba(255, 216, 133, 0.6);
+        }
+
+        .coin-sub {
+          color: #ffffff;
+        }
+      }
+    }
+
+    /* Grand Emerald Velvet WhatsApp CTA */
     .rsvp-submit-actions {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 6px;
+      gap: 12px;
+      margin-top: 8px;
       width: 100%;
     }
 
-    .primary-submit-rsvp-btn {
-      display: inline-flex;
+    .grand-cta-border-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: 36px;
+      padding: 2px;
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(19, 102, 62, 0.35);
+
+      .star-border-beam {
+        position: absolute;
+        inset: -150%;
+        background: conic-gradient(from 0deg, transparent 0deg, transparent 315deg, #dfb25d 340deg, #fff8db 360deg);
+        animation: starBorderSpin 3.5s linear infinite;
+        pointer-events: none;
+      }
+    }
+
+    .grand-emerald-cta-btn {
+      width: 100%;
+      padding: 16px 22px;
+      border-radius: 34px;
+      background: linear-gradient(135deg, #08331f 0%, #105934 50%, #082d1c 100%);
+      border: 1px solid rgba(46, 196, 134, 0.6);
+      color: #ffffff;
+      font-family: var(--font-royal);
+      font-size: clamp(12px, 2.2vw, 13.5px);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: row;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 14px 24px;
-      border-radius: 30px;
-      background: linear-gradient(135deg, #18734c 0%, #0d4a2f 100%);
-      border: 1px solid #2ec486;
-      color: #ffffff;
-      font-family: var(--font-sans);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      box-shadow: 0 10px 28px rgba(26, 115, 76, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.35);
       cursor: pointer;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
       transition: all 0.25s ease;
 
       &:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 14px 34px rgba(26, 115, 76, 0.5);
-        background: linear-gradient(135deg, #20875b 0%, #0f5435 100%);
+        transform: translateY(-1px);
+        background: linear-gradient(135deg, #0d462b 0%, #157343 50%, #0a3a24 100%);
       }
 
       &:disabled {
@@ -1624,8 +2115,61 @@ interface Blessing {
       }
 
       .wa-btn-icon {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        fill: #ffd885;
+        filter: drop-shadow(0 0 6px rgba(255, 216, 133, 0.6));
+      }
+
+      .cta-text {
+        white-space: nowrap;
+      }
+    }
+
+    /* Live WhatsApp Message Preview */
+    .live-scroll-preview {
+      width: 100%;
+      border-radius: 14px;
+      background: rgba(255, 252, 245, 0.95);
+      border: 1.2px dashed rgba(212, 155, 80, 0.55);
+      padding: 14px 16px;
+      font-family: var(--font-sans);
+      box-shadow: 0 4px 14px rgba(184, 107, 88, 0.08);
+
+      .preview-badge {
+        font-size: 10.5px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #8c4e14;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 6px;
+
+        .preview-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #2ec486;
+          box-shadow: 0 0 6px #2ec486;
+        }
+      }
+
+      .preview-quote-box {
+        font-size: 12.5px;
+        color: #3d141e;
+        line-height: 1.55;
+
+        strong {
+          color: #2b0e16;
+        }
+        em {
+          color: #0e4f32;
+          font-style: normal;
+          font-weight: 600;
+        }
       }
     }
 
@@ -1647,27 +2191,27 @@ interface Blessing {
     .rsvp-confirmed-panel {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
       width: 100%;
-      padding: 18px;
-      border-radius: 16px;
+      padding: 24px;
+      border-radius: 20px;
       background: #ffffff;
       border: 1.5px solid rgba(26, 115, 76, 0.45);
-      box-shadow: 0 8px 24px rgba(26, 115, 76, 0.1);
+      box-shadow: 0 10px 30px rgba(26, 115, 76, 0.12);
     }
 
     .confirmed-header {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
 
       .confirmed-check-icon {
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         background: #18734c;
         color: #ffffff;
-        font-size: 18px;
+        font-size: 20px;
         font-weight: 800;
         display: flex;
         align-items: center;
@@ -1676,14 +2220,14 @@ interface Blessing {
 
       .confirmed-title {
         font-family: var(--font-royal);
-        font-size: 17px;
+        font-size: 19px;
         font-weight: 700;
         color: #2b0e16;
       }
 
       .confirmed-subtitle {
         font-family: var(--font-sans);
-        font-size: 12.5px;
+        font-size: 13px;
         color: #54212d;
       }
     }
@@ -1691,9 +2235,9 @@ interface Blessing {
     .confirmed-summary-box {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
       font-family: var(--font-sans);
-      font-size: 12.5px;
+      font-size: 13px;
 
       .summary-line {
         display: flex;
@@ -1713,17 +2257,17 @@ interface Blessing {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin-top: 4px;
+      margin-top: 6px;
     }
 
     .resend-wa-btn {
-      padding: 9px 18px;
-      border-radius: 20px;
+      padding: 10px 20px;
+      border-radius: 24px;
       background: linear-gradient(135deg, #18734c 0%, #0d4a2f 100%);
       border: 1px solid #2ec486;
       color: #ffffff;
       font-family: var(--font-sans);
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -1735,12 +2279,12 @@ interface Blessing {
 
     .edit-rsvp-btn {
       background: none;
-      border: 1px solid rgba(26, 115, 76, 0.45);
-      border-radius: 20px;
-      padding: 9px 16px;
+      border: 1.5px solid rgba(26, 115, 76, 0.45);
+      border-radius: 24px;
+      padding: 10px 18px;
       color: #0e4f32;
       font-family: var(--font-sans);
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
 
@@ -1750,22 +2294,165 @@ interface Blessing {
       }
     }
 
-    /* Venue Navigation */
+    /* Cathedral Venue Card */
+    .venue-facade-banner {
+      width: 100%;
+      height: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -10px;
+      margin-bottom: 2px;
+
+      .venue-facade-svg {
+        width: 100%;
+        max-width: 260px;
+        height: 100%;
+      }
+    }
+
     .suite-venue-address {
       font-family: var(--font-sans);
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 700;
       color: #7d3343;
       letter-spacing: 0.04em;
+    }
+
+    /* Venue Highlights & Schedule Pills */
+    .venue-highlights-pill-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      margin: 4px 0;
+    }
+
+    .venue-hl-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(212, 155, 80, 0.28);
+      box-shadow: 0 2px 6px rgba(184, 107, 88, 0.05);
+
+      .hl-badge {
+        font-family: var(--font-royal);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        padding: 3px 8px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #093c24 0%, #13663e 100%);
+        color: #ffffff;
+        box-shadow: 0 2px 8px rgba(19, 102, 62, 0.25);
+        flex-shrink: 0;
+      }
+
+      .hl-desc {
+        font-family: var(--font-sans);
+        font-size: 12px;
+        font-weight: 600;
+        color: #3d141e;
+      }
+    }
+
+    /* Stylized Mini Map Card */
+    .venue-mini-map-preview {
+      width: 100%;
+      height: 110px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #fbf4ea 0%, #fae6d8 50%, #f5d4c2 100%);
+      border: 1.2px solid rgba(212, 155, 80, 0.45);
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.04), 0 6px 18px rgba(184, 107, 88, 0.1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 10px 14px;
+
+      .map-bg-pattern {
+        position: absolute;
+        inset: 0;
+        opacity: 0.08;
+        background-image: radial-gradient(#96601a 1px, transparent 1px);
+        background-size: 12px 12px;
+        pointer-events: none;
+      }
+
+      .map-compass-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(212, 155, 80, 0.35);
+        font-size: 10.5px;
+        font-weight: 700;
+        color: #6e2333;
+        width: fit-content;
+        z-index: 2;
+      }
+
+      .map-live-beacon {
+        position: absolute;
+        top: 38%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+
+        .beacon-pin-head {
+          font-size: 22px;
+          filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
+          position: relative;
+          z-index: 2;
+        }
+
+        .beacon-wave {
+          position: absolute;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          border: 1.5px solid rgba(212, 155, 80, 0.8);
+          animation: beaconPulse 2s ease-out infinite;
+
+          &.wave-2 {
+            animation-delay: 0.7s;
+          }
+        }
+      }
+
+      .map-caption {
+        font-family: var(--font-sans);
+        font-size: 11px;
+        color: #54212d;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.75);
+        padding: 2px 8px;
+        border-radius: 8px;
+        width: fit-content;
+      }
+    }
+
+    @keyframes beaconPulse {
+      0% { transform: scale(0.5); opacity: 1; }
+      100% { transform: scale(2.2); opacity: 0; }
     }
 
     .venue-action-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       margin-top: auto;
-      padding-top: 10px;
+      padding-top: 14px;
       width: 100%;
     }
 
@@ -1774,10 +2461,10 @@ interface Blessing {
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 13px 24px;
-      border-radius: 30px;
+      padding: 14px 26px;
+      border-radius: 32px;
       background: linear-gradient(135deg, #ffffff 0%, #fae2d6 100%);
-      border: 1.5px solid rgba(212, 155, 80, 0.55);
+      border: 1px solid rgba(212, 155, 80, 0.55);
       color: #3b141d;
       font-family: var(--font-sans);
       font-size: 14px;
@@ -1786,6 +2473,8 @@ interface Blessing {
       text-decoration: none;
       box-shadow: 0 8px 24px rgba(184, 107, 88, 0.15), inset 0 1px 0 #ffffff;
       cursor: pointer;
+      position: relative;
+      z-index: 1;
       transition: all 0.25s ease;
 
       &:hover {
@@ -1804,11 +2493,11 @@ interface Blessing {
     .copy-address-btn {
       background: #ffffff;
       border: 1.5px solid rgba(212, 155, 80, 0.45);
-      border-radius: 30px;
-      padding: 11px 18px;
+      border-radius: 32px;
+      padding: 12px 20px;
       color: #54212d;
       font-family: var(--font-sans);
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(184, 107, 88, 0.08);
@@ -1835,7 +2524,7 @@ interface Blessing {
       align-items: center;
       text-align: center;
       gap: 8px;
-      max-width: 680px;
+      max-width: 700px;
     }
 
     .section-eyebrow {
@@ -1864,27 +2553,41 @@ interface Blessing {
 
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 26px;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 28px;
       width: 100%;
+      position: relative;
+
+      &.has-hover .photo-card.blurred {
+        filter: blur(2.5px) grayscale(15%);
+        opacity: 0.55;
+        transform: scale(0.97) !important;
+      }
+
+      .photo-card.focused {
+        filter: none;
+        opacity: 1;
+        z-index: 6;
+        border-color: rgba(212, 155, 80, 0.9);
+        box-shadow: 0 30px 75px rgba(184, 107, 88, 0.28), 0 0 45px rgba(223, 178, 93, 0.35);
+      }
     }
 
     .photo-card {
       position: relative;
-      border-radius: 22px;
-      background: rgba(255, 255, 255, 0.85);
-      border: 1.5px solid rgba(212, 155, 80, 0.4);
-      box-shadow: 0 16px 36px rgba(184, 107, 88, 0.12), inset 0 1px 0 #ffffff;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 245, 240, 0.88) 100%);
+      border: 1.5px solid rgba(212, 155, 80, 0.45);
+      box-shadow: 0 18px 42px rgba(184, 107, 88, 0.14), inset 0 1.5px 0 #ffffff;
       overflow: hidden;
       cursor: pointer;
-      min-height: 340px;
+      min-height: 350px;
       transform-style: preserve-3d;
       backdrop-filter: blur(20px);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease, opacity 0.3s ease;
 
       &:hover {
         border-color: rgba(212, 155, 80, 0.85);
-        box-shadow: 0 24px 60px rgba(184, 107, 88, 0.22), 0 0 35px rgba(223, 178, 93, 0.25);
 
         .custom-photo-img {
           transform: scale(1.05);
@@ -1901,42 +2604,27 @@ interface Blessing {
       }
 
       &.portrait {
-        min-height: 380px;
+        min-height: 390px;
       }
     }
 
-    .corner-filigree {
+    /* Baroque 24K Gold Corner Rosettes */
+    .baroque-corner {
       position: absolute;
-      width: 22px;
-      height: 22px;
-      border: 2px solid #b57424;
+      width: 28px;
+      height: 28px;
       pointer-events: none;
       z-index: 4;
 
-      &.top-left {
-        top: 10px;
-        left: 10px;
-        border-right: none;
-        border-bottom: none;
+      .corner-svg {
+        width: 100%;
+        height: 100%;
       }
-      &.top-right {
-        top: 10px;
-        right: 10px;
-        border-left: none;
-        border-bottom: none;
-      }
-      &.bottom-left {
-        bottom: 10px;
-        left: 10px;
-        border-right: none;
-        border-top: none;
-      }
-      &.bottom-right {
-        bottom: 10px;
-        right: 10px;
-        border-left: none;
-        border-top: none;
-      }
+
+      &.tl { top: 8px; left: 8px; }
+      &.tr { top: 8px; right: 8px; }
+      &.bl { bottom: 8px; left: 8px; }
+      &.br { bottom: 8px; right: 8px; }
     }
 
     .photo-frame-content {
@@ -1964,38 +2652,41 @@ interface Blessing {
       align-items: center;
       justify-content: center;
       gap: 16px;
-      background: radial-gradient(circle at center, rgba(255, 245, 240, 0.95) 0%, rgba(250, 225, 215, 0.9) 100%);
+      background: radial-gradient(circle at center, rgba(255, 248, 242, 0.98) 0%, rgba(250, 226, 215, 0.92) 100%);
 
-      .watermark-svg {
-        width: 68px;
-        height: 68px;
+      .art-silhouette-canvas {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 140px;
+        height: 140px;
+      }
 
-        .cam-line, .lens-ring {
-          stroke: #b57424;
-        }
-        .lens-core {
-          fill: #dfa84a;
-        }
+      .art-svg {
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 4px 12px rgba(184, 107, 88, 0.25));
       }
 
       .placeholder-badge {
-        font-family: var(--font-sans);
-        font-size: 11px;
+        font-family: var(--font-royal);
+        font-size: 10.5px;
         letter-spacing: 0.16em;
         text-transform: uppercase;
-        padding: 5px 14px;
+        padding: 5px 16px;
         border-radius: 20px;
-        background: rgba(240, 180, 160, 0.25);
-        border: 1px solid rgba(190, 110, 75, 0.35);
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(190, 110, 75, 0.4);
         color: #6e2333;
         font-weight: 700;
+        box-shadow: 0 4px 12px rgba(184, 107, 88, 0.1);
       }
     }
 
     .frame-shimmer {
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
       transform: translateX(-100%);
       transition: transform 0.8s ease-in-out;
       pointer-events: none;
@@ -2004,7 +2695,7 @@ interface Blessing {
     .photo-caption-bar {
       position: relative;
       z-index: 3;
-      padding: 30px 20px 18px;
+      padding: 28px 20px 18px;
       background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.96) 65%);
       border-top: 1px solid rgba(212, 155, 80, 0.25);
       display: flex;
@@ -2809,6 +3500,105 @@ interface Blessing {
       width: 0;
       height: 0;
     }
+
+    /* Comprehensive Mobile Responsive Polish */
+    @media (max-width: 640px) {
+      .chronometer-card {
+        padding: 32px 14px 28px;
+        border-radius: 32px 32px 22px 22px;
+      }
+
+      .dials-grid {
+        gap: 4px;
+        margin-bottom: 24px;
+      }
+
+      .cathedral-arch-dial {
+        min-width: 62px;
+        max-width: 80px;
+        padding: 10px 4px 8px;
+        border-radius: 28px 28px 12px 12px;
+      }
+
+      .arch-apex-crest {
+        font-size: 10px;
+      }
+
+      .dial-num {
+        font-size: clamp(22px, 6.2vw, 32px);
+      }
+
+      .dial-unit-tag {
+        font-size: 8px;
+        padding: 1px 5px;
+        letter-spacing: 0.1em;
+      }
+
+      .dial-separator {
+        font-size: 10px;
+        margin-top: -2px;
+      }
+
+      .action-suite-grid {
+        gap: 20px;
+      }
+
+      .suite-card {
+        padding: 28px 18px 24px;
+        border-radius: 24px;
+      }
+
+      .wax-seal-ornament {
+        top: -12px;
+        right: 14px;
+        transform: scale(0.8);
+      }
+
+      .suite-badge {
+        font-size: 9.5px;
+        padding: 4px 10px;
+        letter-spacing: 0.1em;
+      }
+
+      .velvet-badge-toggle {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .velvet-badge-btn {
+        min-width: 100%;
+        padding: 10px 14px;
+      }
+
+      .sovereign-coins-row {
+        gap: 8px;
+      }
+
+      .sovereign-coin-btn {
+        width: 48px;
+        height: 48px;
+
+        .coin-num {
+          font-size: 14px;
+        }
+        .coin-sub {
+          font-size: 7.5px;
+        }
+      }
+
+      .grand-emerald-cta-btn {
+        padding: 14px 16px;
+
+        .cta-text {
+          font-size: 11.5px;
+          letter-spacing: 0.03em;
+        }
+      }
+
+      .venue-mini-map-preview {
+        height: 95px;
+      }
+    }
   `]
 })
 export class DetailsSectionComponent implements OnInit, OnDestroy {
@@ -2854,6 +3644,7 @@ export class DetailsSectionComponent implements OnInit, OnDestroy {
     { id: 6, title: 'Walking Into Forever', subtitle: 'The beginning of our greatest adventure', placeholderTag: 'Celebration Frame 06', aspect: 'portrait' }
   ]);
   readonly selectedPhoto = signal<PhotoItem | null>(null);
+  readonly hoveredPhotoId = signal<number | null>(null);
 
   // Guestbook & Blessings state
   readonly reactions = ['💖', '🌸', '🥂', '✨', '💍'];

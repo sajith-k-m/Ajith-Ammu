@@ -24,7 +24,12 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
         class="peach-atmosphere-layer"
         [style.opacity]="peachBlendProgress()"
         aria-hidden="true"
-      ></div>
+      >
+        <div class="peach-silk-wave wave-1"></div>
+        <div class="peach-silk-wave wave-2"></div>
+        <div class="kasavu-watermark-lattice"></div>
+        <div class="peach-gold-dust-sheen"></div>
+      </div>
 
       <!-- Interactive 3D Floating Elements & Ambient Bokeh Engine (reacts to scroll & mouse) -->
       <app-floating-decorations
@@ -128,6 +133,63 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       pointer-events: none;
       will-change: opacity;
       transition: opacity 0.1s linear;
+
+      .peach-silk-wave {
+        position: absolute;
+        pointer-events: none;
+        filter: blur(60px);
+        border-radius: 50%;
+        will-change: transform, opacity;
+        
+        &.wave-1 {
+          top: -15%;
+          left: -10%;
+          width: 80vw;
+          height: 60vh;
+          background: radial-gradient(ellipse at center, rgba(255, 235, 224, 0.75) 0%, rgba(254, 215, 198, 0.45) 50%, transparent 75%);
+          animation: silkWaveDrift1 22s ease-in-out infinite alternate;
+        }
+
+        &.wave-2 {
+          bottom: -20%;
+          right: -15%;
+          width: 85vw;
+          height: 70vh;
+          background: radial-gradient(ellipse at center, rgba(252, 218, 201, 0.7) 0%, rgba(246, 195, 175, 0.35) 55%, transparent 75%);
+          animation: silkWaveDrift2 26s ease-in-out infinite alternate;
+        }
+      }
+
+      .kasavu-watermark-lattice {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        opacity: 0.045;
+        background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2396601a' fill-opacity='1'%3E%3Cpath d='M40 0 L45 20 L65 20 L50 32 L56 52 L40 40 L24 52 L30 32 L15 20 L35 20 Z' fill='none' stroke='%2396601a' stroke-width='0.8'/%3E%3Ccircle cx='40' cy='40' r='18' fill='none' stroke='%2396601a' stroke-width='0.7' stroke-dasharray='2,2'/%3E%3Ccircle cx='40' cy='40' r='6' fill='none' stroke='%2396601a' stroke-width='0.9'/%3E%3Cpolygon points='40,15 42,25 52,25 44,31 47,40 40,35 33,40 36,31 28,25 38,25' fill='%2396601a' opacity='0.5'/%3E%3Cpolygon points='0,0 2,10 12,10 4,16 7,25 0,20 -7,25 -4,16 -12,10 -2,10' fill='%2396601a' opacity='0.3'/%3E%3Cpolygon points='80,0 82,10 92,10 84,16 87,25 80,20 73,25 76,16 68,10 78,10' fill='%2396601a' opacity='0.3'/%3E%3Cpolygon points='0,80 2,90 12,90 4,96 7,105 0,100 -7,105 -4,96 -12,90 -2,90' fill='%2396601a' opacity='0.3'/%3E%3Cpolygon points='80,80 82,90 92,90 84,96 87,105 80,100 73,105 76,96 68,90 78,90' fill='%2396601a' opacity='0.3'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 80px 80px;
+      }
+
+      .peach-gold-dust-sheen {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background: radial-gradient(circle 800px at 50% 30%, rgba(255, 245, 220, 0.35) 0%, transparent 70%);
+        mix-blend-mode: soft-light;
+      }
+    }
+
+    @keyframes silkWaveDrift1 {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(5vw, 6vh, 0) scale(1.08); }
+    }
+
+    @keyframes silkWaveDrift2 {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-6vw, -5vh, 0) scale(1.06); }
     }
 
     /* Fixed Intro Scene Layer */
@@ -210,12 +272,12 @@ export class AppComponent {
     return (y - this.ROLL_3_4_Y) / (this.EXIT_END_Y - this.ROLL_3_4_Y);
   });
 
-  // Peach background blend progress: 0.0 at top letter (<= 150px) to 1.0 (>= 800px)
+  // Peach background blend progress: 0.0 at top letter (<= 120px) to 1.0 (>= 600px)
   readonly peachBlendProgress = computed(() => {
     const y = this.scrollY();
-    if (y <= 150) return 0;
-    if (y >= 800) return 1;
-    const t = (y - 150) / (800 - 150);
+    if (y <= 120) return 0;
+    if (y >= 600) return 1;
+    const t = (y - 120) / (600 - 120);
     return Math.min(1, Math.max(0, t * t * (3 - 2 * t)));
   });
 
