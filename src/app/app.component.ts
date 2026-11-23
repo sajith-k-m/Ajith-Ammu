@@ -57,9 +57,9 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
                   <stop offset="100%" stop-color="rgba(223, 178, 93, 0)" />
                 </linearGradient>
                 <linearGradient id="veilPeachSilkFill" x1="50%" y1="0%" x2="50%" y2="100%">
-                  <stop offset="0%" stop-color="#fbeee4" stop-opacity="1" />
-                  <stop offset="40%" stop-color="#fdf5ef" stop-opacity="1" />
-                  <stop offset="100%" stop-color="#fdf5ef" stop-opacity="1" />
+                  <stop offset="0%" stop-color="#fff9f5" stop-opacity="0.9" />
+                  <stop offset="40%" stop-color="#f8f4ee" stop-opacity="0.98" />
+                  <stop offset="100%" stop-color="#f8f4ee" stop-opacity="1" />
                 </linearGradient>
               </defs>
               <!-- Filled Liquid Wave Curve -->
@@ -260,7 +260,12 @@ import { FloatingDecorationsComponent } from './components/floating-decorations/
       position: relative;
       flex: 1;
       width: 100%;
-      background: linear-gradient(180deg, #fdf5ef 0%, #fae6dc 25%, #f6d6c7 60%, #f0beab 100%);
+      background-color: #f7f3ee;
+      background-image: 
+        radial-gradient(ellipse 90% 55% at 50% 20%, rgba(255, 246, 238, 0.45) 0%, rgba(247, 243, 238, 0.1) 70%, rgba(235, 222, 210, 0.35) 100%),
+        url('/assets/images/seamless-card-texture.webp');
+      background-repeat: repeat;
+      background-size: 100% 100%, 380px 380px;
       overflow: hidden;
     }
 
